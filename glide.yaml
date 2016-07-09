@@ -1,0 +1,6 @@
+package: github.com/mh-cbon/go-bin-deb
+import:
+- package: github.com/urfave/cli
+  version: ^1.18.0
+- package: github.com/dustin/go-humanize
+- package: github.com/mattn/go-zglob

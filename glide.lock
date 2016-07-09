@@ -1,0 +1,27 @@
+hash: ce5e69c57bc3a869b830dff57fbddab03f429b9270869c584672a0b7f9eca9fc
+updated: 2016-07-08T19:50:00.961840241+02:00
+imports:
+- name: github.com/dustin/go-humanize
+  version: fef948f2d241bd1fd0631108ecc2c9553bae60bf
+- name: github.com/fatih/color
+  version: ""
+  repo: git@github.com:fatih/color.git
+  vcs: git
+- name: github.com/mattn/go-colorable
+  version: 9056b7a9f2d1f2d96498d6d146acd1f9d5ed3d59
+- name: github.com/mattn/go-isatty
+  version: 56b76bdf51f7708750eac80fa38b952bb9f32639
+- name: github.com/mattn/go-zglob
+  version: 2dbd7f37a45e993d5180a251b4bdd314d6333b70
+- name: github.com/mh-cbon/verbose
+  version: e6234133f9e61b35b674aef4ee3d104e5d319757
+  subpackages:
+  - color
+  - printer
+- name: github.com/urfave/cli
+  version: 1efa31f08b9333f1bd4882d61f9d668a70cd902e
+- name: golang.org/x/sys
+  version: a408501be4d17ee978c04a618e7a1b22af058c0e
+  subpackages:
+  - unix
+devImports: []

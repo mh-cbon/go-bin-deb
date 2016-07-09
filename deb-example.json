@@ -1,0 +1,110 @@
+{
+  "name": "go-deb-bin",
+  "version": "0.0.1",
+  "maintainer": "mh-cbon <some@email.com>",
+  "uploaders": [
+    "mh-cbon2 <some@email.com>",
+    "mh-cbon3 <some@email.com>"
+  ],
+  "changed-by": "mh-cbon <some@email.com>",
+  "section": "unknown",
+  "priority": "extra",
+  "arch": "all",
+  "standards-version": "3.9.6",
+  "homepage": "http://github.com/mh-cbon/go-deb-bin",
+  "vcs": [
+    {
+      "type": "vcs-browser",
+      "url": "http://github.com/mh-cbon/go-deb-bin"
+    },
+    {
+      "type": "vcs-git",
+      "url": "http://github.com/mh-cbon/go-deb-bin.git -b master"
+    }
+  ],
+  "files": [
+    {
+      "from": "path/src",
+      "to": "/usr/bin",
+      "base": "path/"
+    }
+  ],
+  "copyrights": [
+    {
+      "files": "*",
+      "copyright": "1998 Johan Hanson <johan@tiq.com>",
+      "license": "GPL-2+"
+    }
+  ],
+  "essential": false,
+  "depends": [
+    "libc6 (>= 2.2.1)",
+    "exim | mail-transport-agent"
+  ],
+  "recommends": [
+    "libc6 (>= 2.2.1)",
+    "exim | mail-transport-agent"
+  ],
+  "suggests": [
+    "libc6 (>= 2.2.1)",
+    "exim | mail-transport-agent"
+  ],
+  "enhances": [
+    "libc6 (>= 2.2.1)",
+    "exim | mail-transport-agent"
+  ],
+  "pre-depends": [
+    "libc6 (>= 2.2.1)",
+    "exim | mail-transport-agent"
+  ],
+  "build-depends": [
+    "libc6 (>= 2.2.1)",
+    "exim | mail-transport-agent"
+  ],
+  "build-depends-indep": [
+    "libc6 (>= 2.2.1)",
+    "exim | mail-transport-agent"
+  ],
+  "built-using": [
+    "gcc-4.6 (= 4.6.0-11)"
+  ],
+  "description": "short desc of the program",
+  "description-extended": "long desc of the program with multiline",
+  "package-type": "deb",
+  "compat": "9",
+  "cron-files": {
+    "hourly": "",
+    "daily": "",
+    "d": ""
+  },
+  "cron-cmds": {
+    "hourly": "",
+    "daily": "",
+    "d": ""
+  },
+  "init-file": "",
+  "default-file": "",
+  "preinst-file": "",
+  "postinst-file": "",
+  "prerm-file": "",
+  "postrm-file": "",
+  "changelog-file": "",
+  "changelog-cmd": "",
+  "rules-file": "",
+  "mans": [
+    "docs/man.page.1"
+  ],
+  "menus": [
+    {
+      "name":"go-deb-bin",
+      "description":"make a bin debian package",
+      "generic-name":"go-deb-bin",
+      "exec":"go-deb-bin -h",
+      "icon":"ico.png",
+      "type":"Application",
+      "startup-notify": false,
+      "categories":"Applications/see-menu-manual",
+      "mime-type":"make a bin debian package"
+    }
+  ]
+}
