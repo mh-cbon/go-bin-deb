@@ -1,4 +1,5 @@
 /vendor/
 /.vagrant/
 /build/
-/hello*
+/demo/build
+/go-bin-deb

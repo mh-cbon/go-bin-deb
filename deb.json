@@ -9,7 +9,7 @@
   "changed-by": "mh-cbon <some@email.com>",
   "section": "unknown",
   "priority": "extra",
-  "arch": "all",
+  "arch": "amd64",
   "standards-version": "3.9.6",
   "homepage": "http://github.com/mh-cbon/go-bin-deb",
   "vcs": [
@@ -25,19 +25,25 @@
   "files": [
     {
       "from": "hello",
-      "to": "/usr/bin",
-      "base": ""
+      "to": "/usr/bin"
     },
     {
       "from": "assets/**/**",
-      "to": "/var/hello/",
-      "base": ""
+      "to": "/usr/share/hello/"
     },
     {
       "from": "assets/**/**",
-      "to": "/var/hello/other",
+      "to": "/usr/share/hello/other",
+      "base": "assets"
+    },
+    {
+      "from": "assets/**/**",
+      "to": "/usr/share/hello/other",
       "base": "assets"
     }
+  ],
+  "conffiles": [
+    "/etc/init./svc-init.sh"
   ],
   "copyrights": [
     {
@@ -48,39 +54,8 @@
     }
   ],
   "essential": false,
-  "depends": [
-    "libc6 (>= 2.2.1)",
-    "exim | mail-transport-agent"
-  ],
-  "recommends": [
-    "libc6 (>= 2.2.1)",
-    "exim | mail-transport-agent"
-  ],
-  "suggests": [
-    "libc6 (>= 2.2.1)",
-    "exim | mail-transport-agent"
-  ],
-  "enhances": [
-    "libc6 (>= 2.2.1)",
-    "exim | mail-transport-agent"
-  ],
-  "pre-depends": [
-    "libc6 (>= 2.2.1)",
-    "exim | mail-transport-agent"
-  ],
-  "build-depends": [
-    "libc6 (>= 2.2.1)",
-    "exim | mail-transport-agent"
-  ],
-  "build-depends-indep": [
-    "libc6 (>= 2.2.1)",
-    "exim | mail-transport-agent"
-  ],
-  "built-using": "gcc-4.6 (= 4.6.0-11)",
   "description": "short desc of the program",
   "description-extended": "long desc of the program with multiline",
-  "package-type": "deb",
-  "compat": "9",
   "cron-files": {
     "hourly": "",
     "daily": "",
@@ -91,17 +66,14 @@
     "daily": "",
     "d": ""
   },
-  "init-file": "",
-  "default-file": "",
-  "preinst-file": "",
-  "postinst-file": "",
+  "init-file": "svc-init.sh",
+  "default-file": "svc-default.sh",
+  "preinst-file": "preinst.sh",
+  "postinst-file": "postinst.sh",
   "prerm-file": "",
-  "postrm-file": "",
+  "postrm-file": "postrm.sh",
   "changelog-file": "changelog",
   "rules-file": "",
-  "mans": [
-    "docs/man.page.1"
-  ],
   "menus": [
     {
       "name":"go-bin-deb",
@@ -112,7 +84,7 @@
       "type":"Application",
       "startup-notify": false,
       "categories":"Applications/see-menu-manual",
-      "mime-type":"make a bin debian package"
+      "mime-type":""
     }
   ]
 }

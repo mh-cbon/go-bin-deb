@@ -1,0 +1,62 @@
+{
+  "name": "hello",
+  "version": "!version!",
+  "maintainer": "mh-cbon <mhhcbon@gmail.com>",
+  "arch": "!arch!",
+  "files": [
+    {
+      "from": "build/!arch!/hello",
+      "to": "/usr/bin",
+      "base": "build/!arch!",
+      "fperm": "0755"
+    },
+    {
+      "from": "assets/**/**",
+      "to": "/usr/share/hello/"
+    },
+    {
+      "from": "assets/**/**",
+      "to": "/usr/share/hello/other",
+      "base": "assets"
+    },
+    {
+      "from": "assets/**/**",
+      "to": "/usr/share/hello/other",
+      "base": "assets"
+    }
+  ],
+  "copyrights": [
+    {
+      "files": "*",
+      "copyright": "2016 mh-cbon <mhhcbon@gmail.com>",
+      "license": "MIT",
+      "file": "LICENSE"
+    }
+  ],
+  "envs": {
+    "some": "value"
+  },
+  "depends": [
+    "adduser",
+    "libc6"
+  ],
+  "description": "say hello",
+  "systemd-file": "deb/hello.service",
+  "preinst-file": "deb/preinst.sh",
+  "postinst-file": "deb/postinst.sh",
+  "prerm-file": "deb/prerm.sh",
+  "postrm-file": "deb/postrm.sh",
+  "changelog-file": "changelog",
+  "menus": [
+    {
+      "name":"hello",
+      "description":"Open web brower to hello page",
+      "generic-name":"hello",
+      "exec":"xdg-open http://localhost:8080/",
+      "icon":"ico.png",
+      "type":"Application",
+      "startup-notify": false,
+      "categories":"Applications/see-menu-manual"
+    }
+  ]
+}

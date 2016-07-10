@@ -34,12 +34,22 @@ func main() {
 				cli.StringFlag{
 					Name:  "output, o",
 					Value: "",
-					Usage: "Output file for the debian package",
+					Usage: "Output directory for the debian package files",
 				},
 				cli.StringFlag{
 					Name:  "file, f",
 					Value: "deb.json",
 					Usage: "Path to the deb.json file",
+				},
+				cli.StringFlag{
+					Name:  "version",
+					Value: "",
+					Usage: "Version of the package",
+				},
+				cli.StringFlag{
+					Name:  "arch, a",
+					Value: "",
+					Usage: "Arch of the package",
 				},
 			},
 		},
@@ -61,11 +71,19 @@ func main() {
 }
 
 func generateContents (c *cli.Context) error {
-  output:= c.String("output")
+  output := c.String("output")
   wd := c.String("wd")
   file := c.String("file")
+  version := c.String("version")
+  arch := c.String("arch")
 
-  baseDir := filepath.Join(wd, "debian")
+  pkgDir := filepath.Join(wd)
+
+  if o, err := filepath.Abs(output); err!=nil {
+    return cli.NewExitError(err.Error(), 1)
+  } else {
+    output = o
+  }
 
   debJson := debian.Package{}
 
@@ -76,18 +94,28 @@ func generateContents (c *cli.Context) error {
   logger.Println("deb.json loaded")
 
   // normalize data
-  debJson.Normalize(baseDir)
+  debJson.Normalize(pkgDir, version, arch)
   logger.Println("pkg data normalized")
 
-  logger.Printf("Generating files in %s", baseDir)
-  if err := debJson.GenerateFiles(baseDir); err !=nil {
+  logger.Printf("Generating files in %s", pkgDir)
+  if err := debJson.GenerateFiles(filepath.Dir(file), pkgDir); err !=nil {
     return cli.NewExitError(err.Error(), 1)
   }
 
   logger.Printf("Building package in %s to %s", wd, output)
-  if err := buildPackage(wd, output); err !=nil {
+  if err := buildPackage(pkgDir, output); err !=nil {
     return cli.NewExitError(err.Error(), 1)
   }
+
+  logger.Printf("linting package in %s to %s", wd, output)
+  if err := lintPackage(pkgDir, output); err !=nil {
+    return cli.NewExitError(err.Error(), 1)
+  }
+
+  // logger.Printf("Copying results from %s to %s", wd, output)
+  // if err := debJson.CopyResults(wd, output); err !=nil {
+  //   return cli.NewExitError(err.Error(), 1)
+  // }
 
 
   return nil
@@ -108,7 +136,15 @@ func testPkg (c *cli.Context) error {
 }
 
 func buildPackage (wd string, output string) error {
-  oCmd := exec.Command("dpkg-deb", "--build", "debian", output)
+  oCmd := exec.Command("fakeroot", "dpkg-deb", "--build", "debian", output)
+  oCmd.Dir = wd
+  oCmd.Stdout = os.Stdout
+  oCmd.Stderr = os.Stderr
+  return oCmd.Run()
+}
+
+func lintPackage (wd string, output string) error {
+  oCmd := exec.Command("lintian", output)
   oCmd.Dir = wd
   oCmd.Stdout = os.Stdout
   oCmd.Stderr = os.Stderr

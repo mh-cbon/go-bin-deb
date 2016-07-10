@@ -3,6 +3,8 @@ package debian
 import (
 	"fmt"
 	"os"
+	"strconv"
+	"os/exec"
 	"io"
 	"strings"
 	"errors"
@@ -28,9 +30,11 @@ func (c VcsSrc) String() string {
 }
 
 type FilesInstruction struct {
-	From string `json:"from"` // Source path to the files
-	Base string `json:"base"` // Base path to copy files from
-	To   string `json:"to"`   // Target path to copy the files to
+	From string `json:"from"`          // Source path to the files
+	Base string `json:"base"`          // Base path to copy files from
+	To   string `json:"to"`            // Target path to copy the files to
+	Fperm string `json:"fperm"`          // Permissions to apply such 0755
+	Dperm string `json:"dperm"`          // Permissions to apply such 0755
 }
 type Copyright struct {
 	Files     string `json:"files"`     // A pattern to describe a files selection
@@ -53,19 +57,19 @@ type Menu struct {
 type Package struct {
 	Name                string             `json:"name"`                    // Name of the package
 	Maintainer          string             `json:"maintainer"`              // Information of the package maintainer
-	Uploaders           []string           `json:"uploaders"`               // Name of the package maintainer
+	// Uploaders           []string           `json:"uploaders"`               // Name of the package uploader
 	Changedby           string             `json:"changed-by"`              // Information of the last package maintainer
 	Section             string             `json:"section"`                 // Classification of the application area
 	Priority            string             `json:"priority"`                // Priority of the package (required,important,standard,optional,extra)
 	Arch                string             `json:"arch"`                    // Arch targeted by the package
-	StandardsVersion    string             `json:"standards-version"`       // Version of the standards the package complies with
+	// StandardsVersion    string             `json:"standards-version"`       // Version of the standards the package complies with
 	Homepage            string             `json:"homepage"`                // Url to the homepage of the program
 	SourcesUrl          string             `json:"sources-url"`             // Url to the source of the program
 	Version             string             `json:"version"`                 // Version of the package
-	Vcs                 []VcsSrc           `json:"vcs"`                     // Version of the package
+	Vcs                 []VcsSrc           `json:"vcs"`                     // Vcs information of the package
 	Files               []FilesInstruction `json:"files"`                   // Files information to copy into the package
 	CopyrightSpecUrl    string             `json:"copyrights-spec-url"`     // Url to the copyright file specification
-	Copyrights          []Copyright        `json:"copyrights"`              // Version of the package
+	Copyrights          []Copyright        `json:"copyrights"`              // Copyrights of the package
 	Essential           bool               `json:"essential"`               // Indicate if the package is an essential one
 	Depends             []string           `json:"depends"`                 // Dependency list
 	Recommends          []string           `json:"recommends"`              // Recommendation list
@@ -74,26 +78,29 @@ type Package struct {
 	PreDepends          []string           `json:"pre-depends"`             // Pre-dependency list
 	Breaks              []string           `json:"breaks"`                  // Breaks list
 	Conflicts           []string           `json:"conflits"`                // Conflicts list
+	Envs                map[string]string  `json:"envs"`                    // Environment variables to define
 	Provides            string             `json:"provides"`                // Provides
 	Replaces            string             `json:"replaces"`                // Replaces
-	BuildDepends        []string           `json:"build-depends"`           // Build-dependency list
-	BuildDependsIndep   []string           `json:"build-dependends-indeps"` // Build-dependency-indep list
-	BuildConflicts      []string           `json:"build-conflicts"`         // Build-conflicts list
-	BuildConflictsIndep []string           `json:"build-conflicts-indeps"`  // Build-conflicts-indep list
+  // BuildDepends        []string           `json:"build-depends"`           // Build-dependency list
+	// BuildDependsIndep   []string           `json:"build-dependends-indeps"` // Build-dependency-indep list
+	// BuildConflicts      []string           `json:"build-conflicts"`         // Build-conflicts list
+	// BuildConflictsIndep []string           `json:"build-conflicts-indeps"`  // Build-conflicts-indep list
 	BuiltUsing          string             `json:"built-using"`             // Built-using list
 	Description         string             `json:"description"`             // A one-line short description
 	DescriptionExtended string             `json:"description-extended"`    // A multi-line long description
 	PackageType         string             `json:"package-type"`            // Type of the package
-	Compat              string             `json:"compat"`                  // Compatibility version of the package
+	// Compat              string             `json:"compat"`                  // Compatibility version of the package
 	CronFiles           map[string]string  `json:"cron-files"`              // Cron files to use for the package
 	CronCmds            map[string]string  `json:"cron-cmds"`               // Cron string to use to generate cron files for the package
+	SystemdFile         string             `json:"systemd-file"`            // Systemd unit file
 	InitFile            string             `json:"init-file"`               // Init file describing a service for the package
 	DefaultFile         string             `json:"default-file"`            // Default init file describing a service for the package
 	PreinstFile         string             `json:"preinst-file"`            // Pre-inst script path
 	PostinstFile        string             `json:"postinst-file"`           // Post-inst script path
 	PrermFile           string             `json:"prerm-file"`              // Pre-rm script path
 	PostrmFile          string             `json:"postrm-file"`             // Post-rm script path
-	RulesFile           string             `json:"rules-file"`              // rules script path
+	// RulesFile           string             `json:"rules-file"`              // rules script path
+	Conffiles           []string           `json:"mans"`                    // A list of the configuration files
 	Mans                []string           `json:"mans"`                    // A list of man page in the package
 	ChangelogFile       string             `json:"changelog-file"`          // Post-rm to the changelog file to copy to the package
 	ChangelogCmd        string             `json:"changelog-cmd"`           // A cmd to run which generates the content of the changelog file
@@ -117,15 +124,73 @@ func (d *Package) Load (file string) error {
   return nil
 }
 
-func (d *Package) Normalize (sourceDir string) {
-  if d.Compat=="" {
-    d.Compat = "9"
+func (d *Package) Normalize (debianDir string, version string, arch string) {
+
+  d.Version = replaceTokens(d.Version, version, arch)
+  d.Arch = replaceTokens(d.Arch, version, arch)
+  d.Homepage = replaceTokens(d.Homepage, version, arch)
+  d.SourcesUrl = replaceTokens(d.SourcesUrl, version, arch)
+  d.CopyrightSpecUrl = replaceTokens(d.CopyrightSpecUrl, version, arch)
+  d.Description = replaceTokens(d.Description, version, arch)
+  d.DescriptionExtended = replaceTokens(d.DescriptionExtended, version, arch)
+  d.InitFile = replaceTokens(d.InitFile, version, arch)
+  d.SystemdFile = replaceTokens(d.SystemdFile, version, arch)
+  d.DefaultFile = replaceTokens(d.DefaultFile, version, arch)
+  d.PreinstFile = replaceTokens(d.PreinstFile, version, arch)
+  d.PostinstFile = replaceTokens(d.PostinstFile, version, arch)
+  d.PrermFile = replaceTokens(d.PrermFile, version, arch)
+  d.PostrmFile = replaceTokens(d.PostrmFile, version, arch)
+  d.ChangelogFile = replaceTokens(d.ChangelogFile, version, arch)
+  d.ChangelogCmd = replaceTokens(d.ChangelogCmd, version, arch)
+
+  for i, v := range d.Vcs {
+    d.Vcs[i].Url = replaceTokens(v.Url, version, arch)
   }
+  for i, v := range d.Files {
+    d.Files[i].From = replaceTokens(v.From, version, arch)
+    d.Files[i].Base = replaceTokens(v.Base, version, arch)
+    d.Files[i].To = replaceTokens(v.To, version, arch)
+  }
+  for i, v := range d.Copyrights {
+    d.Copyrights[i].Files = replaceTokens(v.Files, version, arch)
+    d.Copyrights[i].Copyright = replaceTokens(v.Copyright, version, arch)
+    d.Copyrights[i].License = replaceTokens(v.License, version, arch)
+    d.Copyrights[i].File = replaceTokens(v.File, version, arch)
+  }
+  for i, v := range d.CronFiles {
+    d.CronFiles[i] = replaceTokens(v, version, arch)
+  }
+  for i, v := range d.CronCmds {
+    d.CronCmds[i] = replaceTokens(v, version, arch)
+  }
+  for i, v := range d.Conffiles {
+    d.Conffiles[i] = replaceTokens(v, version, arch)
+  }
+  for i, v := range d.Mans {
+    d.Mans[i] = replaceTokens(v, version, arch)
+  }
+  for i, v := range d.Menus {
+    d.Menus[i].Name = replaceTokens(v.Name, version, arch)
+    d.Menus[i].Description = replaceTokens(v.Description, version, arch)
+    d.Menus[i].GenericName = replaceTokens(v.GenericName, version, arch)
+    d.Menus[i].Exec = replaceTokens(v.Exec, version, arch)
+    d.Menus[i].Icon = replaceTokens(v.Icon, version, arch)
+  }
+
+  // if d.Compat=="" {
+  //   d.Compat = "9"
+  // }
   if d.CopyrightSpecUrl == "" {
     d.CopyrightSpecUrl = "http://anonscm.debian.org/viewvc/dep/web/deps/dep5/copyright-format.xml?view=markup"
   }
-  if d.StandardsVersion == "" {
-    d.StandardsVersion = "3.9.6"
+  // if d.StandardsVersion == "" {
+  //   d.StandardsVersion = "3.9.5"
+  // }
+  if d.Version == "" {
+    d.Version = version
+  }
+  if d.Arch == "" {
+    d.Arch = arch
   }
   if d.PackageType == "" {
     d.PackageType = "deb"
@@ -133,126 +198,186 @@ func (d *Package) Normalize (sourceDir string) {
   if d.Changedby == "" {
     d.Changedby = d.Maintainer
   }
+  if d.Section == "" {
+    d.Section = "unknown"
+  }
+  if d.Priority == "" {
+    d.Priority = "extra"
+  }
+
+  if d.InitFile!="" && contains(d.Conffiles, d.InitFile)==false {
+    d.Conffiles = append(d.Conffiles, filepath.Join("etc", "init.d", d.Name+".sh"))
+  }
+  if d.DefaultFile!="" && contains(d.Conffiles, d.DefaultFile)==false {
+    d.Conffiles = append(d.Conffiles, filepath.Join("etc", "default", d.Name+".sh"))
+  }
+
+  if len(d.Envs)>0 {
+    d.Conffiles = append(d.Conffiles, filepath.Join("etc", "profile.d", d.Name+".sh"))
+  }
 }
 
-func (d *Package) GenerateFiles (sourceDir string) error {
+func replaceTokens(in string, version string, arch string) string {
+  in = strings.Replace(in, "!version!", version, -1)
+  in = strings.Replace(in, "!arch!", arch, -1)
+  return in
+}
 
+func (d *Package) GenerateFiles (sourceDir string, pkgDir string) error {
+
+  dataDir := filepath.Join(pkgDir, "debian")
+  debianDir := filepath.Join(pkgDir, "debian", "DEBIAN")
   // create the base structure
-  if err := os.MkdirAll(filepath.Join(sourceDir, "DEBIAN"), 0755); err!=nil {
+  if err := os.MkdirAll(filepath.Join(debianDir), 0755); err!=nil {
     return err
   }
-  logger.Println("base structure created")
+  logger.Printf("base structure created: %s", debianDir)
+
+  if err := os.MkdirAll(filepath.Join(dataDir), 0755); err!=nil {
+    return err
+  }
+  logger.Printf("data dir created: %s", dataDir)
 
   // copy the files
-  if err := d.ImportFiles(sourceDir); err != nil {
+  if err := d.ImportFiles(dataDir); err != nil {
     m := fmt.Sprintf("Could not copy the files: %s", err.Error())
     return errors.New(m)
   }
   logger.Println("files structure created")
 
   // generate shortcuts
-  if err := d.WriteShortcuts(sourceDir); err != nil {
+  if err := d.WriteShortcuts(dataDir); err != nil {
     m := fmt.Sprintf("Could not generate shortcuts: %s", err.Error())
     return errors.New(m)
   }
   logger.Println("shortcuts created")
 
+  // generate env variable file
+  if err := d.WriteEnvProfile(dataDir); err != nil {
+    m := fmt.Sprintf("Could not generate etc/profile.d/%s.sh: %s", d.Name, err.Error())
+    return errors.New(m)
+  }
+  logger.Println("env file created")
+
+  // generate the init file
+  if err := d.WriteInitFile(dataDir); err != nil {
+    m := fmt.Sprintf("Could not generate init file: %s", err.Error())
+    return errors.New(m)
+  }
+  logger.Printf("init file created\n")
+
+  // generate the unit file
+  if err := d.WriteUnitFile(dataDir); err != nil {
+    m := fmt.Sprintf("Could not generate unit file: %s", err.Error())
+    return errors.New(m)
+  }
+  logger.Printf("unit file created\n")
+
+  // generate the default init file
+  if err := d.WriteDefaultInitFile(dataDir); err != nil {
+    m := fmt.Sprintf("Could not generate default init file: %s", err.Error())
+    return errors.New(m)
+  }
+  logger.Printf("init default file created\n")
+
+  // generate the conffiles file
+  if err := d.WriteConffiles(debianDir); err != nil {
+    m := fmt.Sprintf("Could not generate conffiles file: %s", err.Error())
+    return errors.New(m)
+  }
+  logger.Printf("conffiles file created\n")
+
   // compute file size
   var size uint64
-  if s, err := d.ComputeSize(sourceDir); err != nil {
+  if s, err := d.ComputeSize(pkgDir); err != nil {
     m := fmt.Sprintf("Could not compute install size: %s", err.Error())
     return errors.New(m)
   } else {
     size = uint64(s)
   }
-  logger.Printf("size=%q\n", size)
+  logger.Printf("size=%s\n", size)
 
   // generate the control file
-  if err := d.WriteControlFile(sourceDir, uint64(size)); err != nil {
+  // if err := d.GenerateInstall(sourceDir, debianDir, dataDir); err != nil {
+  //   m := fmt.Sprintf("Could not generate install file: %s", err.Error())
+  //   return errors.New(m)
+  // }
+  // logger.Printf("install file created\n")
+
+  // generate the control file
+  if err := d.WriteControlFile(debianDir, uint64(size)); err != nil {
     m := fmt.Sprintf("Could not generate control file: %s", err.Error())
     return errors.New(m)
   }
   logger.Printf("control file created\n")
 
+  // generate the changelog file
+  //  /usr/share/doc/pkg/
+  pkgDoc := filepath.Join(dataDir, "usr", "share", "doc", d.Name)
+  if err := d.WriteChangelogFile(pkgDoc); err != nil {
+    m := fmt.Sprintf("Could not generate changelog file: %s", err.Error())
+    return errors.New(m)
+  }
+  logger.Printf("changelog file created\n")
+
   // generate the copyright file
-  if err := d.WriteCopyrightFile(sourceDir); err != nil {
+  if err := d.WriteCopyrightFile(pkgDoc); err != nil {
     m := fmt.Sprintf("Could not generate copyright file: %s", err.Error())
     return errors.New(m)
   }
   logger.Printf("copyright file created\n")
 
   // generate the compat file
-  if err := d.WriteCompatFile(sourceDir); err != nil {
-    m := fmt.Sprintf("Could not generate compat file: %s", err.Error())
-    return errors.New(m)
-  }
-  logger.Printf("compat file created\n")
+  // if err := d.WriteCompatFile(debianDir); err != nil {
+  //   m := fmt.Sprintf("Could not generate compat file: %s", err.Error())
+  //   return errors.New(m)
+  // }
+  // logger.Printf("compat file created\n")
 
   // generate the cron files
-  if err := d.WriteCronFiles(sourceDir); err != nil {
+  if err := d.WriteCronFiles(debianDir); err != nil {
     m := fmt.Sprintf("Could not generate cron files: %s", err.Error())
     return errors.New(m)
   }
   logger.Printf("cron files created\n")
 
-  // generate the init file
-  if err := d.WriteInitFile(sourceDir); err != nil {
-    m := fmt.Sprintf("Could not generate init file: %s", err.Error())
-    return errors.New(m)
-  }
-  logger.Printf("init file created\n")
-
-  // generate the default init file
-  if err := d.WriteDefaultInitFile(sourceDir); err != nil {
-    m := fmt.Sprintf("Could not generate default init file: %s", err.Error())
-    return errors.New(m)
-  }
-  logger.Printf("init default file created\n")
-
   // generate the preinst file
-  if err := d.WritePreInstFile(sourceDir); err != nil {
+  if err := d.WritePreInstFile(debianDir); err != nil {
     m := fmt.Sprintf("Could not generate preinst file: %s", err.Error())
     return errors.New(m)
   }
   logger.Printf("preinst file created\n")
 
   // generate the postinst file
-  if err := d.WritePostInstFile(sourceDir); err != nil {
+  if err := d.WritePostInstFile(debianDir); err != nil {
     m := fmt.Sprintf("Could not generate postinst file: %s", err.Error())
     return errors.New(m)
   }
   logger.Printf("postinst file created\n")
 
   // generate the prerm file
-  if err := d.WritePreRmFile(sourceDir); err != nil {
+  if err := d.WritePreRmFile(debianDir); err != nil {
     m := fmt.Sprintf("Could not generate prerm file: %s", err.Error())
     return errors.New(m)
   }
   logger.Printf("prerm file created\n")
 
   // generate the postrm file
-  if err := d.WritePostRmFile(sourceDir); err != nil {
+  if err := d.WritePostRmFile(debianDir); err != nil {
     m := fmt.Sprintf("Could not generate postrm file: %s", err.Error())
     return errors.New(m)
   }
   logger.Printf("postrm file created\n")
 
   // generate the rules file
-  if err := d.WriteRulesFile(sourceDir); err != nil {
-    m := fmt.Sprintf("Could not generate rules file: %s", err.Error())
-    return errors.New(m)
-  }
-  logger.Printf("rules file created\n")
-
-  // generate the changelog file
-  if err := d.WriteChangelogFile(sourceDir); err != nil {
-    m := fmt.Sprintf("Could not generate changelog file: %s", err.Error())
-    return errors.New(m)
-  }
-  logger.Printf("changelog file created\n")
+  // if err := d.WriteRulesFile(debianDir); err != nil {
+  //   m := fmt.Sprintf("Could not generate rules file: %s", err.Error())
+  //   return errors.New(m)
+  // }
+  // logger.Printf("rules file created\n")
 
   // generate the manpage index file
-  if err := d.WriteManPageIndexFile(sourceDir); err != nil {
+  if err := d.WriteManPageIndexFile(debianDir); err != nil {
     m := fmt.Sprintf("Could not generate man pages index file: %s", err.Error())
     return errors.New(m)
   }
@@ -261,12 +386,114 @@ func (d *Package) GenerateFiles (sourceDir string) error {
   return nil
 }
 
+func (d *Package) GenerateInstall (sourceDir string, debianDir string, dataDir string) error {
+  var err error
+  content := ""
+  if sourceDir, err = filepath.Abs(sourceDir); err!=nil {
+    return err
+  }
+  for _, fileInst := range d.Files {
+    from := fileInst.From
+    to := fileInst.To
+    base := fileInst.Base
+
+    if filepath.IsAbs(from)==false {
+      from = filepath.Join(sourceDir, from)
+    }
+    if filepath.IsAbs(to) { // to must not be absolute..
+      to = to[1:]
+    }
+    if filepath.IsAbs(base)==false {
+      base = filepath.Join(sourceDir, base)
+    }
+
+    logger.Printf("fileInst.From=%q\n", from)
+    logger.Printf("fileInst.To=%q\n", to)
+    logger.Printf("fileInst.Base=%q\n", base)
+
+    items, err := zglob.Glob(from)
+    if err!=nil {
+      m := fmt.Sprintf("Could not glob files source '%s': %s", from, err.Error())
+      return errors.New(m)
+    }
+    logger.Printf("items=%q\n", items)
+    for _, item := range items {
+      n := item
+      if len(item)>=len(base) && item[0:len(base)]==base {
+        n = item[len(base):]
+      }
+      n = filepath.Join(to, n)
+      content += fmt.Sprintf("%s %s\n", item, filepath.Dir(n))
+    }
+  }
+  for _, m := range d.Menus {
+    file := filepath.Join(dataDir, m.Name + ".desktop")
+    icon := m.Icon
+    if filepath.IsAbs(icon)==false {
+      icon = filepath.Join(sourceDir, icon)
+    }
+    content += fmt.Sprintf("%s %s\n", file, "/usr/share/application/"+d.Name+".desktop")
+    content += fmt.Sprintf("%s %s\n", icon, "/usr/share/pixmaps/"+filepath.Base(icon))
+  }
+  logger.Printf("content=\n%s\n", content)
+
+  f := filepath.Join(debianDir, "install")
+  return ioutil.WriteFile(f, []byte(content), 0644)
+}
+
+func (d *Package) WriteConffiles (debianDir string) error {
+  content := ""
+  for _, f := range d.Conffiles {
+    if filepath.IsAbs(f)==false {
+      f = "/" + f // lintian says: must not be rel.
+    }
+    content += fmt.Sprintf("%s\n", f)
+  }
+  f := filepath.Join(debianDir, "conffiles")
+  return ioutil.WriteFile(f, []byte(content), 0644)
+}
+
+func (d *Package) WriteEnvProfile (debianDir string) error {
+  content := ""
+  for k, v := range d.Envs {
+    content += fmt.Sprintf("%s=%q\n", k, v)
+  }
+  if content=="" {
+    return nil
+  }
+  f := filepath.Join(debianDir, "etc", "profile.d", d.Name + ".sh")
+  if err:=os.MkdirAll(filepath.Dir(f), 0755); err!=nil {
+    return err
+  }
+  return ioutil.WriteFile(f, []byte(content), 0644)
+}
+
 func (d *Package) ImportFiles (sourceDir string) error {
   for _, fileInst := range d.Files {
+    var fperm int32
+    var dperm int32 = 0755
+    if fileInst.Fperm!= "" {
+      if p, err := strconv.ParseInt(fileInst.Fperm, 8, 32); err != nil {
+    		return err
+    	} else {
+        fperm = int32(p)
+      }
+    }
+    if fileInst.Dperm!= "" {
+      if p, err := strconv.ParseInt(fileInst.Dperm, 8, 32); err != nil {
+    		return err
+    	} else {
+        dperm = int32(p)
+      }
+    }
     items, err := zglob.Glob(fileInst.From)
     logger.Printf("fileInst.From=%q\n", fileInst.From)
     logger.Printf("fileInst.To=%q\n", fileInst.To)
     logger.Printf("fileInst.Base=%q\n", fileInst.Base)
+    logger.Printf("fileInst.Fperm=%q\n", fileInst.Fperm)
+    logger.Printf("fileInst.fperm=%#o\n", fperm)
+    logger.Printf("fileInst.Dperm=%q\n", fileInst.Dperm)
+    logger.Printf("fileInst.dperm=%#o\n", dperm)
     if err!=nil {
       m := fmt.Sprintf("Could not glob files source '%s': %s", fileInst.From, err.Error())
       return errors.New(m)
@@ -286,15 +513,13 @@ func (d *Package) ImportFiles (sourceDir string) error {
         return errors.New(m)
       }
       if s.IsDir() {
-        err := os.MkdirAll(targetItems[i], 0755)
-        if err!=nil {
+        if err := os.MkdirAll(targetItems[i], os.FileMode(dperm)); err!=nil {
           m := fmt.Sprintf("Could not create directory file '%s': %s", targetItems[i], err.Error())
           return errors.New(m)
         }
       } else {
         d := filepath.Dir(targetItems[i])
-        err := os.MkdirAll(d, 0755)
-        if err!=nil {
+        if err := os.MkdirAll(d, os.FileMode(dperm)); err!=nil {
           m := fmt.Sprintf("Could not create directory file '%s': %s", d, err.Error())
           return errors.New(m)
         }
@@ -307,10 +532,14 @@ func (d *Package) ImportFiles (sourceDir string) error {
         return errors.New(m)
       }
       if s.IsDir()==false {
-        err := cp(targetItems[i], item)
-        if err!=nil {
+        if err := cp(targetItems[i], item); err!=nil {
           m := fmt.Sprintf("Could not copy file from '%s' to '%s': %s", item, targetItems[i], err.Error())
           return errors.New(m)
+        }
+        if fileInst.Fperm!="" {
+          if err:=os.Chmod(targetItems[i], os.FileMode(fperm)); err!=nil {
+            return err
+          }
         }
       }
     }
@@ -321,11 +550,11 @@ func (d *Package) ImportFiles (sourceDir string) error {
 func (d *Package) ComputeSize (sourceDir string) (int64, error) {
   var size int64 = 0
 
-  exclDir := filepath.Join(sourceDir, "DEBIAN")
+  // exclDir := filepath.Join(sourceDir)
   walkFn := func (path string, info os.FileInfo, err error) error {
-    if len(path)>=len(exclDir) && path[0:len(exclDir)]==exclDir {
-      return nil
-    }
+    // if len(path)>=len(exclDir) && path[0:len(exclDir)]==exclDir {
+    //   return nil
+    // }
     if err == nil {
       s, _ := os.Stat(path)
       if err==nil {
@@ -340,10 +569,10 @@ func (d *Package) ComputeSize (sourceDir string) (int64, error) {
   if err != nil {
     return size, err
   }
-  return size, nil
+  return size/1024, nil
 }
 
-func (d *Package) WriteControlFile (sourceDir string, size uint64) error {
+func (d *Package) WriteControlFile (debianDir string, size uint64) error {
 
   desc := d.Description
   if d.DescriptionExtended!="" {
@@ -361,11 +590,11 @@ func (d *Package) WriteControlFile (sourceDir string, size uint64) error {
   P += strAppend("Section", d.Section)
   P += strAppend("Priority", d.Priority)
   P += strAppend("Maintainer", d.Maintainer)
-  P += strSliceAppend("Build-Depends", d.BuildDepends, ",")
-  P += strSliceAppend("Build-Depends-Indep", d.BuildDepends, ",")
-  P += strSliceAppend("Build-Conflicts", d.BuildConflicts, ",")
-  P += strSliceAppend("Build-Conflicts-Indep", d.BuildConflictsIndep, ",")
-  P += strAppend("Standards-Version", d.StandardsVersion)
+  // P += strSliceAppend("Build-Depends", d.BuildDepends, ",")
+  // P += strSliceAppend("Build-Depends-Indep", d.BuildDepends, ",")
+  // P += strSliceAppend("Build-Conflicts", d.BuildConflicts, ",")
+  // P += strSliceAppend("Build-Conflicts-Indep", d.BuildConflictsIndep, ",")
+  // P += strAppend("Standards-Version", d.StandardsVersion)
   P += strAppend("Homepage", d.Homepage)
   P += strAppend("Description", desc)
   P += strAppend("Architecture", d.Arch)
@@ -384,13 +613,45 @@ func (d *Package) WriteControlFile (sourceDir string, size uint64) error {
   P += strAppend("Installed-Size", humanize.Bytes(size))
   P += strAppend("Package-Type", d.PackageType)
 
+  // sP := ""
+  // sP += strAppend("Source", d.Name)
+  // sP += strAppend("Section", d.Section)
+  // sP += strAppend("Priority", d.Priority)
+  // sP += strAppend("Maintainer", d.Maintainer)
+  // sP += strSliceAppend("Build-Depends", d.BuildDepends, ",")
+  // sP += strSliceAppend("Build-Depends-Indep", d.BuildDepends, ",")
+  // sP += strSliceAppend("Build-Conflicts", d.BuildConflicts, ",")
+  // sP += strSliceAppend("Build-Conflicts-Indep", d.BuildConflictsIndep, ",")
+  // sP += strAppend("Standards-Version", d.StandardsVersion)
+  // sP += strAppend("Homepage", d.Homepage)
+  // sP += vcsSliceAppend(d.Vcs)
+  // sP += "\n"
+  //
+  // bP := ""
+  // bP += strAppend("Package", d.Name)
+  // bP += strAppend("Architecture", d.Arch)
+  // bP += boolAppend("Essential", d.Essential)
+  // bP += strSliceAppend("Depends", d.Depends, ",")
+  // bP += strSliceAppend("Recommends", d.Recommends, ",")
+  // bP += strSliceAppend("Suggests", d.Suggests, ",")
+  // bP += strSliceAppend("Enhances", d.Enhances, ",")
+  // bP += strSliceAppend("Pre-Depends", d.PreDepends, ",")
+  // bP += strSliceAppend("Breaks", d.Breaks, ",")
+  // bP += strSliceAppend("Conflicts", d.Conflicts, ",")
+  // bP += strAppend("Description", desc)
+  //
+  // P = sP+bP
+
   controlContent := []byte(P)
-  control := filepath.Join(sourceDir, "DEBIAN", "control")
+  control := filepath.Join(debianDir, "control")
 
   return ioutil.WriteFile(control, controlContent, 0644)
 }
 
-func (d *Package) WriteCopyrightFile (sourceDir string) error {
+func (d *Package) WriteCopyrightFile (debianDir string) error {
+  if err := os.MkdirAll(debianDir, 0755); err!=nil {
+    return err
+  }
   content := ""
   content += strAppend("Format-Specification", d.CopyrightSpecUrl)
   content += strAppend("Name", d.Name)
@@ -414,25 +675,29 @@ func (d *Package) WriteCopyrightFile (sourceDir string) error {
     if c.License!= "" {
       t += strAppend("License", c.License)
     }
+    if c.File!= "" {
+      t += strAppend("File", c.File)
+    }
     if t!= "" {
       content += t + "\n"
     }
   }
-  file := filepath.Join(sourceDir, "DEBIAN", "copyright")
+  file := filepath.Join(debianDir, "copyright")
   return ioutil.WriteFile(file, []byte(content), 0644)
 }
 
-func (d *Package) WriteCompatFile (sourceDir string) error {
-  content := d.Compat+"\n"
-  file := filepath.Join(sourceDir, "DEBIAN", "compat")
-  return ioutil.WriteFile(file, []byte(content), 0644)
-}
+//
+// func (d *Package) WriteCompatFile (debianDir string) error {
+//   content := d.Compat+"\n"
+//   file := filepath.Join(debianDir, "compat")
+//   return ioutil.WriteFile(file, []byte(content), 0644)
+// }
 
-func (d *Package) WriteCronFiles (sourceDir string) error {
+func (d *Package) WriteCronFiles (debianDir string) error {
 
   for k, val := range d.CronFiles {
     if val!="" {
-      file := filepath.Join(sourceDir, "DEBIAN", d.Name + "-f.cron."+k)
+      file := filepath.Join(debianDir, d.Name + "-f.cron."+k)
       if err := cp(file, val); err != nil {
         m := fmt.Sprintf("Failed to copy '%s' to '%s': %s", val, file, err.Error())
         return errors.New(m)
@@ -443,7 +708,7 @@ func (d *Package) WriteCronFiles (sourceDir string) error {
   }
   for k, content := range d.CronCmds {
     if content != "" {
-      file := filepath.Join(sourceDir, "DEBIAN", d.Name + "-c.cron."+k)
+      file := filepath.Join(debianDir, d.Name + "-c.cron."+k)
       if err := ioutil.WriteFile(file, []byte(content), 0644); err != nil {
         return err
       } else {
@@ -455,15 +720,18 @@ func (d *Package) WriteCronFiles (sourceDir string) error {
   return nil
 }
 
-func (d *Package) WriteChangelogFile (sourceDir string) error {
+func (d *Package) WriteChangelogFile (debianDir string) error {
+  if err := os.MkdirAll(debianDir, 0755); err!=nil {
+    return err
+  }
 
-  file := filepath.Join(sourceDir, "DEBIAN", "changelog")
+  file := filepath.Join(debianDir, "changelog")
   if d.ChangelogFile!="" {
     if err := cp(file, d.ChangelogFile); err != nil {
       return err
     }
   } else if d.ChangelogCmd!="" {
-    cmd, err := stringexec.Command(sourceDir, d.ChangelogCmd)
+    cmd, err := stringexec.Command(debianDir, d.ChangelogCmd)
     if err != nil {
       return err
     }
@@ -476,12 +744,15 @@ func (d *Package) WriteChangelogFile (sourceDir string) error {
     }
   }
 
-  return nil
+  oCmd := exec.Command("gzip", "--best", file)
+  oCmd.Stdout = os.Stdout
+  oCmd.Stderr = os.Stderr
+  return oCmd.Run()
 }
 
-func (d *Package) WriteManPageIndexFile (sourceDir string) error {
+func (d *Package) WriteManPageIndexFile (debianDir string) error {
 
-  file := filepath.Join(sourceDir, "DEBIAN", d.Name + ".manpages")
+  file := filepath.Join(debianDir, d.Name + ".manpages")
   if len(d.Mans)>0 {
     content := strings.Join(d.Mans, "\n")
     if err := ioutil.WriteFile(file, []byte(content), 0644); err != nil {
@@ -492,7 +763,7 @@ func (d *Package) WriteManPageIndexFile (sourceDir string) error {
   return nil
 }
 
-func (d *Package) WriteShortcuts (sourceDir string) error {
+func (d *Package) WriteShortcuts (dataDir string) error {
 
   for _, m := range d.Menus {
     s := ""
@@ -535,7 +806,12 @@ func (d *Package) WriteShortcuts (sourceDir string) error {
 
       s = "[Desktop Entry]\n" + s
 
-      file := filepath.Join(sourceDir, "usr", "share", "application", m.Name + ".desktop")
+      // file := filepath.Join(dataDir, m.Name + ".desktop")
+      // if err := ioutil.WriteFile(file, []byte(s), 0644); err != nil {
+      //   return err
+      // }
+
+      file := filepath.Join(dataDir, "usr", "share", "application", m.Name + ".desktop")
       if err := os.MkdirAll(filepath.Dir(file), 0755); err != nil {
         return err
       }
@@ -543,7 +819,7 @@ func (d *Package) WriteShortcuts (sourceDir string) error {
         return err
       }
 
-      icoFile := filepath.Join(sourceDir, "usr", "share", "pixmaps", filepath.Base(m.Icon) )
+      icoFile := filepath.Join(dataDir, "usr", "share", "pixmaps", filepath.Base(m.Icon) )
       if err := os.MkdirAll(filepath.Dir(icoFile), 0755); err != nil {
         return err
       }
@@ -556,51 +832,111 @@ func (d *Package) WriteShortcuts (sourceDir string) error {
   return nil
 }
 
-func (d *Package) WriteInitFile (sourceDir string) error {
+func (d *Package) WriteUnitFile (dataDir string) error {
+  if d.SystemdFile!="" {
+    f := filepath.Join(dataDir, "lib", "systemd", "system", filepath.Base(d.SystemdFile))
+    if err:=os.MkdirAll(filepath.Dir(f), 0755); err!=nil {
+      return err
+    }
+    if err:=writeAFile(f, d.SystemdFile); err!=nil {
+      return err
+    }
+    return os.Chmod(f, 0644)
+  }
+  return nil
+}
+
+func (d *Package) WriteInitFile (dataDir string) error {
   if d.InitFile!="" {
-    return writeAFile(filepath.Join(sourceDir, d.Name+".init"), d.InitFile)
+    f := filepath.Join(dataDir, "etc", "init.d", d.Name+".sh")
+    if err:=os.MkdirAll(filepath.Dir(f), 0755); err!=nil {
+      return err
+    }
+    if err:=writeAFile(f, d.InitFile); err!=nil {
+      return err
+    }
+    return os.Chmod(f, 0755)
   }
   return nil
 }
 
-func (d *Package) WriteDefaultInitFile (sourceDir string) error {
+func (d *Package) WriteDefaultInitFile (dataDir string) error {
   if d.DefaultFile!="" {
-    return writeAFile(filepath.Join(sourceDir, d.Name+".default"), d.DefaultFile)
+    f := filepath.Join(dataDir, "etc", "default", d.Name+".sh")
+    if err:=os.MkdirAll(filepath.Dir(f), 0755); err!=nil {
+      return err
+    }
+    if err:=writeAFile(f, d.DefaultFile); err!=nil {
+      return err
+    }
+    return os.Chmod(f, 0755)
   }
   return nil
 }
 
-func (d *Package) WritePreInstFile (sourceDir string) error {
+func (d *Package) WritePreInstFile (debianDir string) error {
   if d.PreinstFile!="" {
-    return writeAFile(filepath.Join(sourceDir, "preinst"), d.PreinstFile)
+    f := filepath.Join(debianDir, "preinst")
+    if err:=writeAFile(f, d.PreinstFile); err!=nil {
+      return err
+    }
+    return os.Chmod(f, 0755)
   }
   return nil
 }
 
-func (d *Package) WritePostInstFile (sourceDir string) error {
+func (d *Package) WritePostInstFile (debianDir string) error {
   if d.PostinstFile!="" {
-    return writeAFile(filepath.Join(sourceDir, "postinst"), d.PostinstFile)
+    f := filepath.Join(debianDir, "postinst")
+    if err:=writeAFile(f, d.PostinstFile); err!=nil {
+      return err
+    }
+    return os.Chmod(f, 0755)
   }
   return nil
 }
 
-func (d *Package) WritePreRmFile (sourceDir string) error {
+func (d *Package) WritePreRmFile (debianDir string) error {
   if d.PrermFile!="" {
-    return writeAFile(filepath.Join(sourceDir, "prerm"), d.PrermFile)
+    f := filepath.Join(debianDir, "prerm")
+    if err:=writeAFile(f, d.PrermFile); err!=nil {
+      return err
+    }
+    return os.Chmod(f, 0755)
   }
   return nil
 }
 
-func (d *Package) WritePostRmFile (sourceDir string) error {
+func (d *Package) WritePostRmFile (debianDir string) error {
   if d.PostrmFile!="" {
-    return writeAFile(filepath.Join(sourceDir, "postrm"), d.PostrmFile)
+    f := filepath.Join(debianDir, "postrm")
+    if err:=writeAFile(f, d.PostrmFile); err!=nil {
+      return err
+    }
+    return os.Chmod(f, 0755)
   }
   return nil
 }
 
-func (d *Package) WriteRulesFile (sourceDir string) error {
-  if d.RulesFile!="" {
-    return writeAFile(filepath.Join(sourceDir, "rules"), d.RulesFile)
+// func (d *Package) WriteRulesFile (debianDir string) error {
+//   file := filepath.Join(debianDir, "rules")
+//   if d.RulesFile!="" {
+//     return writeAFile(file, d.RulesFile)
+//   }
+//   return nil
+//   // return ioutil.WriteFile(file, []byte(DEFRULES), 0744)
+// }
+
+func (d *Package) CopyResults (from string, to string) error {
+  items, err := zglob.Glob(from+"/"+d.Name+"*")
+  if err!=nil {
+    return err
+  }
+  for _, item := range items {
+    b := filepath.Base(item)
+    if err := cp(filepath.Join(to, b), item); err!=nil {
+      return err
+    }
   }
   return nil
 }
@@ -627,11 +963,9 @@ func strAppend(name string, value string) string {
 }
 func boolAppend(name string, value bool) string {
   ret := ""
-  v := "no"
   if value {
-    v = "yes"
+    ret = fmt.Sprintf("%s: %s\n", name, "yes")
   }
-  ret = fmt.Sprintf("%s: %s\n", name, v)
   return ret
 }
 func vcsSliceAppend(s []VcsSrc) string {
@@ -661,8 +995,6 @@ func cp(dst, src string) error {
 	if err != nil {
 		return err
 	}
-	// no need to check errors on read only file, we already got everything
-	// we need from the filesystem, so nothing can go wrong now.
 	defer s.Close()
 	d, err := os.Create(dst)
 	if err != nil {
@@ -673,4 +1005,13 @@ func cp(dst, src string) error {
 		return err
 	}
 	return d.Close()
+}
+
+func contains (s []string, v string) bool {
+  for _, k := range s {
+    if v==k {
+      return true
+    }
+  }
+  return false
 }

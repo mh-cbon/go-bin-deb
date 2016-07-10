@@ -1,6 +1,7 @@
 package debian
 
 var DEFRULES = `#!/usr/bin/make -f
+
 # See debhelper(7) (uncomment to enable)
 # output every command that modifies files on the build system.
 #DH_VERBOSE = 1
@@ -28,5 +29,4 @@ include /usr/share/dpkg/default.mk
 #override_dh_auto_configure:
 #	dh_auto_configure -- \
 #	-DCMAKE_LIBRARY_PATH=$(DEB_HOST_MULTIARCH)
-
 `
