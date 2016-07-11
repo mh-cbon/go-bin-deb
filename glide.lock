@@ -1,11 +1,12 @@
-hash: ce5e69c57bc3a869b830dff57fbddab03f429b9270869c584672a0b7f9eca9fc
-updated: 2016-07-11T16:16:58.068324695+02:00
+hash: 095160a8044143d889c77d5cf7c4563077605171bf71163e7cbebad21ebaeb36
+updated: 2016-07-11T16:35:26.388778092+02:00
 imports:
 - name: github.com/dustin/go-humanize
   version: fef948f2d241bd1fd0631108ecc2c9553bae60bf
 - name: github.com/fatih/color
   version: 533cd7fd8a85905f67a1753afb4deddc85ea174f
-  repo: https://github.com/fatih/color
+  repo: git@github.com:fatih/color.git
+  vcs: git
 - name: github.com/mattn/go-colorable
   version: 9cbef7c35391cca05f15f8181dc0b18bc9736dbb
   repo: https://github.com/mattn/go-colorable
@@ -25,4 +26,6 @@ imports:
   version: a408501be4d17ee978c04a618e7a1b22af058c0e
   subpackages:
   - unix
+- name: gopkg.in/yaml.v2
+  version: a83829b6f1293c91addabc89d0571c246397bbf4
 devImports: []
