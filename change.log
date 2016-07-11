@@ -1,3 +1,13 @@
+0.0.10
+
+  * travis: fix go install
+  * changelog: 0.0.9
+
+  - mh-cbon <mh-cbon@users.noreply.github.com>
+
+-- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 19:43:59 +0200
+
+
 0.0.9
 
   * travis: fix go install
