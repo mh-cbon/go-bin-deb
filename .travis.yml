@@ -9,8 +9,11 @@ before_install:
   - mkdir -p $GOPATH/github.com/mh-cbon
   - cd $GOPATH/github.com/mh-cbon
   - git clone https://github.com/mh-cbon/changelog.git
+  - pwd && ls -alh
   - cd changelog
+  - pwd && ls -alh
   - glide install
+  - pwd && ls -alh
   - go install
 install:
   - glide install
