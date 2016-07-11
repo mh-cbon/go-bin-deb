@@ -4,8 +4,6 @@ Create binary package for debian system, see also [the demo](demo/).
 
 Using a `json` files to declare rules, it then performs necessary operations to invoke `dpkg-deb` to build the package, then check it with the help of `lintian`.
 
-__wip__
-
 # Install
 
 ```sh
@@ -110,8 +108,6 @@ For a real world example including service, shortcuts, env, see [this](demo/deb.
 For a casual example to provide a simple binary, see [this](deb.json)
 
 # Travis recipe
-
-__wip__
 
 - get a github repo
 - get a travis account
