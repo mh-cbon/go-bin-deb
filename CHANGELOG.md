@@ -1,5 +1,17 @@
 # Changelog - go-bin-deb
 
+### 0.0.5
+
+__Releaser__: N/A
+
+__Date__: Mon 11 Jul 2016
+
+__Contributors__: mh-cbon <mh-cbon@users.noreply.github.com>
+
+##### Changes
+
+- fix travis
+- changelog: 0.0.4
 ### 0.0.4
 
 __Releaser__: N/A
