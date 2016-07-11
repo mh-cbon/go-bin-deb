@@ -9,7 +9,8 @@ __wip__
 # Install
 
 ```sh
-wget --no-check-certificate https://github.com/mh-cbon/go-bin-deb/blob/master/install.sh | sh
+wget -q -O - --no-check-certificate https://raw.githubusercontent.com/mh-cbon/go-bin-deb/master/install.sh | sh
+curl https://raw.githubusercontent.com/mh-cbon/go-bin-deb/master/install.sh | sh
 ```
 
 ```sh
