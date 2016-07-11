@@ -67,78 +67,78 @@ func main() {
 		},
 	}
 
-  app.Run(os.Args)
+	app.Run(os.Args)
 }
 
-func generateContents (c *cli.Context) error {
-  output := c.String("output")
-  wd := c.String("wd")
-  file := c.String("file")
-  version := c.String("version")
-  arch := c.String("arch")
+func generateContents(c *cli.Context) error {
+	output := c.String("output")
+	wd := c.String("wd")
+	file := c.String("file")
+	version := c.String("version")
+	arch := c.String("arch")
 
-  pkgDir := filepath.Join(wd)
+	pkgDir := filepath.Join(wd)
 
-  if o, err := filepath.Abs(output); err!=nil {
-    return cli.NewExitError(err.Error(), 1)
-  } else {
-    output = o
-  }
+	if o, err := filepath.Abs(output); err != nil {
+		return cli.NewExitError(err.Error(), 1)
+	} else {
+		output = o
+	}
 
-  debJson := debian.Package{}
+	debJson := debian.Package{}
 
-  // load the deb.json file
-  if err := debJson.Load(file); err!=nil {
-    return cli.NewExitError(err.Error(), 1)
-  }
-  logger.Println("deb.json loaded")
+	// load the deb.json file
+	if err := debJson.Load(file); err != nil {
+		return cli.NewExitError(err.Error(), 1)
+	}
+	logger.Println("deb.json loaded")
 
-  // normalize data
-  debJson.Normalize(pkgDir, version, arch)
-  logger.Println("pkg data normalized")
+	// normalize data
+	debJson.Normalize(pkgDir, version, arch)
+	logger.Println("pkg data normalized")
 
-  logger.Printf("Generating files in %s", pkgDir)
-  if err := debJson.GenerateFiles(filepath.Dir(file), pkgDir); err !=nil {
-    return cli.NewExitError(err.Error(), 1)
-  }
+	logger.Printf("Generating files in %s", pkgDir)
+	if err := debJson.GenerateFiles(filepath.Dir(file), pkgDir); err != nil {
+		return cli.NewExitError(err.Error(), 1)
+	}
 
-  logger.Printf("Building package in %s to %s", wd, output)
-  if err := buildPackage(pkgDir, output); err !=nil {
-    return cli.NewExitError(err.Error(), 1)
-  }
+	logger.Printf("Building package in %s to %s", wd, output)
+	if err := buildPackage(pkgDir, output); err != nil {
+		return cli.NewExitError(err.Error(), 1)
+	}
 
-  logger.Printf("linting package in %s to %s", wd, output)
-  lintPackage(pkgDir, output) // it does not need to fail.
+	logger.Printf("linting package in %s to %s", wd, output)
+	lintPackage(pkgDir, output) // it does not need to fail.
 
-  return nil
+	return nil
 }
 
-func testPkg (c *cli.Context) error {
-  file := c.String("file")
+func testPkg(c *cli.Context) error {
+	file := c.String("file")
 
-  debJson := debian.Package{}
+	debJson := debian.Package{}
 
-  if err := debJson.Load(file); err!=nil {
-    return cli.NewExitError(err.Error(), 1)
-  }
+	if err := debJson.Load(file); err != nil {
+		return cli.NewExitError(err.Error(), 1)
+	}
 
-  fmt.Println("File is correct")
+	fmt.Println("File is correct")
 
-  return nil
+	return nil
 }
 
-func buildPackage (wd string, output string) error {
-  oCmd := exec.Command("fakeroot", "dpkg-deb", "--build", "debian", output)
-  oCmd.Dir = wd
-  oCmd.Stdout = os.Stdout
-  oCmd.Stderr = os.Stderr
-  return oCmd.Run()
+func buildPackage(wd string, output string) error {
+	oCmd := exec.Command("fakeroot", "dpkg-deb", "--build", "debian", output)
+	oCmd.Dir = wd
+	oCmd.Stdout = os.Stdout
+	oCmd.Stderr = os.Stderr
+	return oCmd.Run()
 }
 
-func lintPackage (wd string, output string) error {
-  oCmd := exec.Command("lintian", output)
-  oCmd.Dir = wd
-  oCmd.Stdout = os.Stdout
-  oCmd.Stderr = os.Stderr
-  return oCmd.Run()
+func lintPackage(wd string, output string) error {
+	oCmd := exec.Command("lintian", output)
+	oCmd.Dir = wd
+	oCmd.Stdout = os.Stdout
+	oCmd.Stderr = os.Stderr
+	return oCmd.Run()
 }
