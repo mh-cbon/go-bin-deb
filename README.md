@@ -9,9 +9,7 @@ __wip__
 # Install
 
 ```sh
-wget --no-check-certificate https://github.com/mh-cbon/go-bin-deb/releases/download/0.0.14/go-bin-deb-amd64.deb
-sudo dpkg -i go-bin-deb-amd64.deb
-go-bin-deb -h
+wget --no-check-certificate https://github.com/mh-cbon/go-bin-deb/blob/master/install.sh | sh
 ```
 
 ```sh
