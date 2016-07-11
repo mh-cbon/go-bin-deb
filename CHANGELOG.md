@@ -1,4 +1,19 @@
-# Changelog - <no value>
+# Changelog - go-bin-deb
+
+### 0.0.14
+
+__Changes__
+
+- travis: add missing ldflags to the build
+
+
+__Contributors__
+
+- mh-cbon
+
+
+Released by mh-cbon, Mon 11 Jul 2016
+
 
 ### 0.0.13
 
