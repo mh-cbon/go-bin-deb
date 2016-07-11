@@ -664,6 +664,7 @@ func (d *Package) WriteChangelogFile(debianDir string) error {
 		if err != nil {
 			return err
 		}
+    cmd.Stdout = nil
 		content, err := cmd.Output()
 		if err != nil {
 			return err
