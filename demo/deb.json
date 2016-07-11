@@ -3,7 +3,7 @@
   "maintainer": "mh-cbon <mhhcbon@gmail.com>",
   "files": [
     {
-      "from": "build/!arch!/hello",
+      "from": "build/!arch!/!name!",
       "to": "/usr/bin",
       "base": "build/!arch!",
       "fperm": "0755"
