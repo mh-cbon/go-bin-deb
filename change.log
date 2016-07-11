@@ -1,17 +1,24 @@
-0.0.11
+0.0.12
 
-  * run changelog command into source folder of the  project
-  * changelog: 0.0.10
+  * Ensure package are built into different directories and avoid collision
 
   - mh-cbon <mh-cbon@users.noreply.github.com>
 
--- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 19:51:50 +0200
+-- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 20:03:07 +0200
+
+
+0.0.11
+
+  * run changelog command into source folder of the  project
+
+  - mh-cbon <mh-cbon@users.noreply.github.com>
+
+-- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 19:43:59 +0200
 
 
 0.0.10
 
   * travis: fix go install
-  * changelog: 0.0.9
 
   - mh-cbon <mh-cbon@users.noreply.github.com>
 
