@@ -4,3 +4,5 @@
 /demo/build
 /go-bin-deb
 /demo/*.deb
+/demo/.vagrant
+/demo/pkg-build
