@@ -1,6 +1,6 @@
 # Changelog - <no value>
 
-### 0.0.13, by mh-cbon
+### 0.0.13
 
 __Changes__
 
@@ -10,13 +10,13 @@ ensure correct debian arch when control.arch field is 386
 
 __Contributors__
 
-- @mh-cbon
+- mh-cbon
 
 
--- Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016
 
 
-### 0.0.12, by mh-cbon
+### 0.0.12
 
 __Changes__
 
@@ -25,13 +25,13 @@ __Changes__
 
 __Contributors__
 
-- @mh-cbon
+- mh-cbon
 
 
--- Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016
 
 
-### 0.0.11, by mh-cbon
+### 0.0.11
 
 __Changes__
 
@@ -40,28 +40,13 @@ __Changes__
 
 __Contributors__
 
-- @mh-cbon
+- mh-cbon
 
 
--- Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016
 
 
-### 0.0.10, by mh-cbon
-
-__Changes__
-
-- travis: fix go install
-
-
-__Contributors__
-
-- @mh-cbon
-
-
--- Mon 11 Jul 2016
-
-
-### 0.0.9, by mh-cbon
+### 0.0.10
 
 __Changes__
 
@@ -70,13 +55,28 @@ __Changes__
 
 __Contributors__
 
-- @mh-cbon
+- mh-cbon
 
 
--- Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016
 
 
-### 0.0.8, by mh-cbon
+### 0.0.9
+
+__Changes__
+
+- travis: fix go install
+
+
+__Contributors__
+
+- mh-cbon
+
+
+Released by mh-cbon, Mon 11 Jul 2016
+
+
+### 0.0.8
 
 __Changes__
 
@@ -85,13 +85,13 @@ __Changes__
 
 __Contributors__
 
-- @mh-cbon
+- mh-cbon
 
 
--- Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016
 
 
-### 0.0.7, by mh-cbon
+### 0.0.7
 
 __Changes__
 
@@ -100,13 +100,13 @@ __Changes__
 
 __Contributors__
 
-- @mh-cbon
+- mh-cbon
 
 
--- Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016
 
 
-### 0.0.6, by mh-cbon
+### 0.0.6
 
 __Changes__
 
@@ -115,28 +115,13 @@ __Changes__
 
 __Contributors__
 
-- @mh-cbon
+- mh-cbon
 
 
--- Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016
 
 
-### 0.0.5, by mh-cbon
-
-__Changes__
-
-- fix travis
-
-
-__Contributors__
-
-- @mh-cbon
-
-
--- Mon 11 Jul 2016
-
-
-### 0.0.4, by mh-cbon
+### 0.0.5
 
 __Changes__
 
@@ -145,13 +130,13 @@ __Changes__
 
 __Contributors__
 
-- @mh-cbon
+- mh-cbon
 
 
--- Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016
 
 
-### 0.0.3, by mh-cbon
+### 0.0.4
 
 __Changes__
 
@@ -160,13 +145,28 @@ __Changes__
 
 __Contributors__
 
-- @mh-cbon
+- mh-cbon
 
 
--- Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016
 
 
-### 0.0.2, by mh-cbon
+### 0.0.3
+
+__Changes__
+
+- fix travis
+
+
+__Contributors__
+
+- mh-cbon
+
+
+Released by mh-cbon, Mon 11 Jul 2016
+
+
+### 0.0.2
 
 __Changes__
 
@@ -177,13 +177,13 @@ __Changes__
 
 __Contributors__
 
-- @mh-cbon
+- mh-cbon
 
 
--- Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016
 
 
-### 0.0.1, by mh-cbon
+### 0.0.1
 
 __Changes__
 
@@ -192,10 +192,10 @@ __Changes__
 
 __Contributors__
 
-- @mh-cbon
+- mh-cbon
 
 
--- Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016
 
 
 
