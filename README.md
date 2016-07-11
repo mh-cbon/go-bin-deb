@@ -9,8 +9,8 @@ __wip__
 # Install
 
 ```sh
-mkdir -p $GOPATH/github.com/mh-cbon
-cd $GOPATH/github.com/mh-cbon
+mkdir -p $GOPATH/src/github.com/mh-cbon
+cd $GOPATH/src/github.com/mh-cbon
 git clone https://github.com/mh-cbon/go-bin-deb.git
 cd go-bin-deb
 glide install
