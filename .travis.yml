@@ -2,17 +2,19 @@ language: go
 go:
 - tip
 before_install:
-  - go install
   - sudo apt-get -qq update
   - sudo apt-get install build-essential lintian -y
   - mkdir -p ${GOPATH}/bin
+  - cd ~
   - curl https://glide.sh/get | sh
   - mkdir -p $GOPATH/src/github.com/mh-cbon
   - cd $GOPATH/src/github.com/mh-cbon
   - git clone https://github.com/mh-cbon/changelog.git
   - cd changelog
   - glide install
+  - go install
 install:
+  - cd $GOPATH/src/github.com/mh-cbon/go-bin-deb
   - glide install
   - go install
 script: echo "pass"
