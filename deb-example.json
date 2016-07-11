@@ -2,15 +2,10 @@
   "name": "go-deb-bin",
   "version": "0.0.1",
   "maintainer": "mh-cbon <some@email.com>",
-  "uploaders": [
-    "mh-cbon2 <some@email.com>",
-    "mh-cbon3 <some@email.com>"
-  ],
   "changed-by": "mh-cbon <some@email.com>",
   "section": "unknown",
   "priority": "extra",
   "arch": "all",
-  "standards-version": "3.9.6",
   "homepage": "http://github.com/mh-cbon/go-deb-bin",
   "vcs": [
     {
@@ -57,21 +52,12 @@
     "libc6 (>= 2.2.1)",
     "exim | mail-transport-agent"
   ],
-  "build-depends": [
-    "libc6 (>= 2.2.1)",
-    "exim | mail-transport-agent"
-  ],
-  "build-depends-indep": [
-    "libc6 (>= 2.2.1)",
-    "exim | mail-transport-agent"
-  ],
   "built-using": [
     "gcc-4.6 (= 4.6.0-11)"
   ],
   "description": "short desc of the program",
   "description-extended": "long desc of the program with multiline",
   "package-type": "deb",
-  "compat": "9",
   "cron-files": {
     "hourly": "",
     "daily": "",
@@ -82,6 +68,7 @@
     "daily": "",
     "d": ""
   },
+  "systemd-file": "",
   "init-file": "",
   "default-file": "",
   "preinst-file": "",
@@ -90,7 +77,6 @@
   "postrm-file": "",
   "changelog-file": "",
   "changelog-cmd": "",
-  "rules-file": "",
   "mans": [
     "docs/man.page.1"
   ],

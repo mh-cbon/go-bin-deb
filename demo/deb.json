@@ -1,8 +1,6 @@
 {
   "name": "hello",
-  "version": "!version!",
   "maintainer": "mh-cbon <mhhcbon@gmail.com>",
-  "arch": "!arch!",
   "files": [
     {
       "from": "build/!arch!/hello",
@@ -13,11 +11,6 @@
     {
       "from": "assets/**/**",
       "to": "/usr/share/hello/"
-    },
-    {
-      "from": "assets/**/**",
-      "to": "/usr/share/hello/other",
-      "base": "assets"
     },
     {
       "from": "assets/**/**",
@@ -40,7 +33,7 @@
     "adduser",
     "libc6"
   ],
-  "description": "say hello",
+  "description": "hello web server",
   "systemd-file": "deb/hello.service",
   "preinst-file": "deb/preinst.sh",
   "postinst-file": "deb/postinst.sh",
@@ -50,11 +43,12 @@
   "menus": [
     {
       "name":"hello",
-      "description":"Open web brower to hello page",
+      "description":"Open web browser to an hello page",
       "generic-name":"hello",
       "exec":"xdg-open http://localhost:8080/",
       "icon":"ico.png",
       "type":"Application",
+      "keywords":"hello",
       "startup-notify": false,
       "categories":"Applications/see-menu-manual"
     }

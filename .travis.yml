@@ -1,0 +1,26 @@
+
+language: go
+go:
+  - tip
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install build-essential lintian -y
+  - curl https://glide.sh/get | sh
+install:
+  - glide install
+  - go install
+before_deploy:
+  - mkdir -p build/{386,amd64}
+  - GOOS=linux GOARCH=386 go build -o build/386/program main.go
+  - GOOS=linux GOARCH=amd64 go build -o build/amd64/program main.go
+  - go-bin-deb generate -a 386 -v ${TRAVIS_TAG} -o ${TRAVIS_BUILD_DIR}/go-bin-deb-386.deb
+  - go-bin-deb generate -a amd64 -v ${TRAVIS_TAG} -o ${TRAVIS_BUILD_DIR}/go-bin-deb-amd64.deb
+deploy:
+  provider: releases
+  api_key: "GITHUB OAUTH TOKEN"
+  file:
+    - go-bin-deb-386.deb
+    - go-bin-deb-amd64.deb
+  skip_cleanup: true
+  on:
+    tags: true

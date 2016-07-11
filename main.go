@@ -108,15 +108,7 @@ func generateContents (c *cli.Context) error {
   }
 
   logger.Printf("linting package in %s to %s", wd, output)
-  if err := lintPackage(pkgDir, output); err !=nil {
-    return cli.NewExitError(err.Error(), 1)
-  }
-
-  // logger.Printf("Copying results from %s to %s", wd, output)
-  // if err := debJson.CopyResults(wd, output); err !=nil {
-  //   return cli.NewExitError(err.Error(), 1)
-  // }
-
+  lintPackage(pkgDir, output) // it does not need to fail.
 
   return nil
 }

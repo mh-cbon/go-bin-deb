@@ -3,3 +3,4 @@
 /build/
 /demo/build
 /go-bin-deb
+/demo/*.deb
