@@ -1,4 +1,24 @@
-# Changelog - <no value>
+# Changelog - go-bin-deb
+
+### 0.0.15
+
+__Changes__
+
+- README: add recipe for vagrant
+- README: Add recipe to test the demo package on vagrant
+- Installer: applied some improvements
+- README: clean up
+- travis: Install changelog from deb package
+- git: update ignored files
+- deb.json: make use of the new name token
+- debian/: add new token \!name\!
+
+__Contributors__
+
+- mh-cbon
+
+Released by mh-cbon, Mon 11 Jul 2016
+______________
 
 ### 0.0.14
 
