@@ -129,7 +129,7 @@ before_install:
   - sudo apt-get install build-essential lintian -y
   - curl https://glide.sh/get | sh
   - wget -q -O - --no-check-certificate https://raw.githubusercontent.com/mh-cbon/go-bin-deb/master/install.sh | sh
-  - sudo dpkg -i go-bin-deb-amd64.deb
+  - wget -q -O - --no-check-certificate https://raw.githubusercontent.com/mh-cbon/changelog/master/install.sh | sh
 install:
   - glide install
 before_deploy:
