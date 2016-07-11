@@ -1,4 +1,4 @@
-# Changelog - <no value>
+# Changelog - go-bin-deb
 
 ### 0.0.1
 
