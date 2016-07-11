@@ -128,7 +128,7 @@ before_install:
   - sudo apt-get -qq update
   - sudo apt-get install build-essential lintian -y
   - curl https://glide.sh/get | sh
-  - wget --no-check-certificate https://github.com/mh-cbon/go-bin-deb/releases/download/0.0.14/go-bin-deb-amd64.deb
+  - wget -q -O - --no-check-certificate https://raw.githubusercontent.com/mh-cbon/go-bin-deb/master/install.sh | sh
   - sudo dpkg -i go-bin-deb-amd64.deb
 install:
   - glide install
