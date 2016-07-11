@@ -1,4 +1,4 @@
-UNRELEASED
+0.0.6
 
   * fix os/exec: stdout already set
 
@@ -51,3 +51,5 @@ UNRELEASED
   - mh-cbon <mh-cbon@users.noreply.github.com>
 
 -- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 14:49:41 +0200
+
+
