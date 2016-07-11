@@ -150,38 +150,11 @@ deploy:
 
 ```sh
 # Install required dependencies to build a package
-vagrant ssh -c 'sudo apt-get install build-essential lintian -y'
+sudo apt-get install build-essential lintian -y
 # build a bin package
-vagrant ssh -c "cd /vagrant/pkg-build && dpkg-deb --build debian hello.deb"
+dpkg-deb --build debian hello.deb
 # show info of a package
-vagrant ssh -c "cd /vagrant && dpkg-deb --show hello.deb"
+dpkg-deb --show hello.deb
 # list contents of a package
-vagrant ssh -c "cd /vagrant && dpkg-deb --contents hello.deb"
-```
-
-# Testing
-
-Some commands i used to test / develop this program,
-
-```sh
-# remove the previously installed package
-vagrant ssh -c "sudo dpkg -r hello"
-
-# generate a new package
-go build -o go-bin-deb main.go && vagrant rsync && vagrant ssh -c "cd /vagrant/demo && rm -fr /tmp/test && VERBOSE=* ../go-bin-deb generate -a amd64 --version 0.0.1 -w /tmp/test -o hello-amd64.deb"
-
-# install the package
-vagrant ssh -c "sudo dpkg -i /vagrant/demo/hello-amd64.deb"
-
-# inspect the package
-vagrant ssh -c "cd /vagrant/demo && ar vx hello-amd64.deb && tar -xvf data.tar.xz && tar -xzvf control.tar.gz && ls -alh"
-
-# same with 386 arch version
-go build -o go-bin-deb main.go && vagrant rsync && vagrant ssh -c "cd /vagrant/demo && rm -fr /tmp/test && VERBOSE=* ../go-bin-deb generate -a 386 --version 0.0.1 -w /tmp/test -o hello-386.deb"
-
-# that env var should be installed by the package
-vagrant ssh -c "echo \$some"
-
-# the command should work and have appropriate permissions
-vagrant ssh -c "hello"
+dpkg-deb --contents hello.deb
 ```
