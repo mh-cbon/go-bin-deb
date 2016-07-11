@@ -1,22 +1,18 @@
 hash: 095160a8044143d889c77d5cf7c4563077605171bf71163e7cbebad21ebaeb36
-updated: 2016-07-11T16:35:26.388778092+02:00
+updated: 2016-07-11T17:02:55.148516706+02:00
 imports:
 - name: github.com/dustin/go-humanize
   version: fef948f2d241bd1fd0631108ecc2c9553bae60bf
 - name: github.com/fatih/color
-  version: 533cd7fd8a85905f67a1753afb4deddc85ea174f
-  repo: git@github.com:fatih/color.git
-  vcs: git
+  version: 87d4004f2ab62d0d255e0a38f1680aa534549fe3
 - name: github.com/mattn/go-colorable
-  version: 9cbef7c35391cca05f15f8181dc0b18bc9736dbb
-  repo: https://github.com/mattn/go-colorable
+  version: 9056b7a9f2d1f2d96498d6d146acd1f9d5ed3d59
 - name: github.com/mattn/go-isatty
   version: 56b76bdf51f7708750eac80fa38b952bb9f32639
-  repo: https://github.com/mattn/go-isatty
 - name: github.com/mattn/go-zglob
   version: 2dbd7f37a45e993d5180a251b4bdd314d6333b70
 - name: github.com/mh-cbon/verbose
-  version: e6234133f9e61b35b674aef4ee3d104e5d319757
+  version: 2b8e4118ca0737696bf6871f7cc677a985326ea2
   subpackages:
   - color
   - printer
@@ -28,4 +24,4 @@ imports:
   - unix
 - name: gopkg.in/yaml.v2
   version: a83829b6f1293c91addabc89d0571c246397bbf4
-devImports: []
+testImports: []
