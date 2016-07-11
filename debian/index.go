@@ -123,7 +123,7 @@ func (d *Package) Load(file string) error {
 
 func (d *Package) Normalize(debianDir string, version string, arch string) {
 
-  tokens := map(map[string]string)
+  tokens := make(map[string]string)
   tokens["!version!"] = version
   tokens["!arch!"] = arch
   tokens["!name!"] = d.Name
