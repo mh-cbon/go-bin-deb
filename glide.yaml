@@ -17,3 +17,4 @@ import:
 - package: github.com/dustin/go-humanize
 - package: github.com/mattn/go-zglob
 - package: gopkg.in/yaml.v2
+- package: gopkg.in/check.v1
