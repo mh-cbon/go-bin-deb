@@ -1,3 +1,19 @@
+0.0.15
+
+  * README: add recipe for vagrant
+  * README: Add recipe to test the demo package on vagrant
+  * Installer: applied some improvements
+  * README: clean up
+  * travis: Install changelog from deb package
+  * git: update ignored files
+  * deb.json: make use of the new name token
+  * debian/: add new token \!name\!
+
+  - mh-cbon <mh-cbon@users.noreply.github.com>
+
+-- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 22:39:12 +0200
+
+
 0.0.14
 
   * travis: add missing ldflags to the build
