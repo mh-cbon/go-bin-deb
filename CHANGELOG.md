@@ -1,5 +1,16 @@
 # Changelog - go-bin-deb
 
+### 0.0.7
+
+__Releaser__: N/A
+
+__Date__: Mon 11 Jul 2016
+
+__Contributors__: mh-cbon <mh-cbon@users.noreply.github.com>
+
+##### Changes
+
+- travis was missing changelog bin
 ### 0.0.6
 
 __Releaser__: N/A
