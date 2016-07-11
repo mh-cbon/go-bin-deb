@@ -123,55 +123,60 @@ func (d *Package) Load(file string) error {
 
 func (d *Package) Normalize(debianDir string, version string, arch string) {
 
-	d.Version = replaceTokens(d.Version, version, arch)
-	d.Arch = replaceTokens(d.Arch, version, arch)
-	d.Homepage = replaceTokens(d.Homepage, version, arch)
-	d.SourcesUrl = replaceTokens(d.SourcesUrl, version, arch)
-	d.CopyrightSpecUrl = replaceTokens(d.CopyrightSpecUrl, version, arch)
-	d.Description = replaceTokens(d.Description, version, arch)
-	d.DescriptionExtended = replaceTokens(d.DescriptionExtended, version, arch)
-	d.InitFile = replaceTokens(d.InitFile, version, arch)
-	d.SystemdFile = replaceTokens(d.SystemdFile, version, arch)
-	d.DefaultFile = replaceTokens(d.DefaultFile, version, arch)
-	d.PreinstFile = replaceTokens(d.PreinstFile, version, arch)
-	d.PostinstFile = replaceTokens(d.PostinstFile, version, arch)
-	d.PrermFile = replaceTokens(d.PrermFile, version, arch)
-	d.PostrmFile = replaceTokens(d.PostrmFile, version, arch)
-	d.ChangelogFile = replaceTokens(d.ChangelogFile, version, arch)
-	d.ChangelogCmd = replaceTokens(d.ChangelogCmd, version, arch)
+  tokens := map(map[string]string)
+  tokens["!version!"] = version
+  tokens["!arch!"] = arch
+  tokens["!name!"] = d.Name
+
+	d.Version = replaceTokens(d.Version, tokens)
+	d.Arch = replaceTokens(d.Arch, tokens)
+	d.Homepage = replaceTokens(d.Homepage, tokens)
+	d.SourcesUrl = replaceTokens(d.SourcesUrl, tokens)
+	d.CopyrightSpecUrl = replaceTokens(d.CopyrightSpecUrl, tokens)
+	d.Description = replaceTokens(d.Description, tokens)
+	d.DescriptionExtended = replaceTokens(d.DescriptionExtended, tokens)
+	d.InitFile = replaceTokens(d.InitFile, tokens)
+	d.SystemdFile = replaceTokens(d.SystemdFile, tokens)
+	d.DefaultFile = replaceTokens(d.DefaultFile, tokens)
+	d.PreinstFile = replaceTokens(d.PreinstFile, tokens)
+	d.PostinstFile = replaceTokens(d.PostinstFile, tokens)
+	d.PrermFile = replaceTokens(d.PrermFile, tokens)
+	d.PostrmFile = replaceTokens(d.PostrmFile, tokens)
+	d.ChangelogFile = replaceTokens(d.ChangelogFile, tokens)
+	d.ChangelogCmd = replaceTokens(d.ChangelogCmd, tokens)
 
 	for i, v := range d.Vcs {
-		d.Vcs[i].Url = replaceTokens(v.Url, version, arch)
+		d.Vcs[i].Url = replaceTokens(v.Url, tokens)
 	}
 	for i, v := range d.Files {
-		d.Files[i].From = replaceTokens(v.From, version, arch)
-		d.Files[i].Base = replaceTokens(v.Base, version, arch)
-		d.Files[i].To = replaceTokens(v.To, version, arch)
+		d.Files[i].From = replaceTokens(v.From, tokens)
+		d.Files[i].Base = replaceTokens(v.Base, tokens)
+		d.Files[i].To = replaceTokens(v.To, tokens)
 	}
 	for i, v := range d.Copyrights {
-		d.Copyrights[i].Files = replaceTokens(v.Files, version, arch)
-		d.Copyrights[i].Copyright = replaceTokens(v.Copyright, version, arch)
-		d.Copyrights[i].License = replaceTokens(v.License, version, arch)
-		d.Copyrights[i].File = replaceTokens(v.File, version, arch)
+		d.Copyrights[i].Files = replaceTokens(v.Files, tokens)
+		d.Copyrights[i].Copyright = replaceTokens(v.Copyright, tokens)
+		d.Copyrights[i].License = replaceTokens(v.License, tokens)
+		d.Copyrights[i].File = replaceTokens(v.File, tokens)
 	}
 	for i, v := range d.CronFiles {
-		d.CronFiles[i] = replaceTokens(v, version, arch)
+		d.CronFiles[i] = replaceTokens(v, tokens)
 	}
 	for i, v := range d.CronCmds {
-		d.CronCmds[i] = replaceTokens(v, version, arch)
+		d.CronCmds[i] = replaceTokens(v, tokens)
 	}
 	for i, v := range d.Conffiles {
-		d.Conffiles[i] = replaceTokens(v, version, arch)
+		d.Conffiles[i] = replaceTokens(v, tokens)
 	}
 	for i, v := range d.Mans {
-		d.Mans[i] = replaceTokens(v, version, arch)
+		d.Mans[i] = replaceTokens(v, tokens)
 	}
 	for i, v := range d.Menus {
-		d.Menus[i].Name = replaceTokens(v.Name, version, arch)
-		d.Menus[i].Description = replaceTokens(v.Description, version, arch)
-		d.Menus[i].GenericName = replaceTokens(v.GenericName, version, arch)
-		d.Menus[i].Exec = replaceTokens(v.Exec, version, arch)
-		d.Menus[i].Icon = replaceTokens(v.Icon, version, arch)
+		d.Menus[i].Name = replaceTokens(v.Name, tokens)
+		d.Menus[i].Description = replaceTokens(v.Description, tokens)
+		d.Menus[i].GenericName = replaceTokens(v.GenericName, tokens)
+		d.Menus[i].Exec = replaceTokens(v.Exec, tokens)
+		d.Menus[i].Icon = replaceTokens(v.Icon, tokens)
 	}
 
 	if d.CopyrightSpecUrl == "" {
@@ -208,9 +213,10 @@ func (d *Package) Normalize(debianDir string, version string, arch string) {
 	}
 }
 
-func replaceTokens(in string, version string, arch string) string {
-	in = strings.Replace(in, "!version!", version, -1)
-	in = strings.Replace(in, "!arch!", arch, -1)
+func replaceTokens(in string, tokens map[string]string) string {
+  for token, v := range tokens {
+  	in = strings.Replace(in, token, v, -1)
+  }
 	return in
 }
 
