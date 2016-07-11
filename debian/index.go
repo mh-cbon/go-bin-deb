@@ -286,7 +286,7 @@ func (d *Package) GenerateFiles(sourceDir string, pkgDir string) error {
 	} else {
 		size = uint64(s)
 	}
-	logger.Printf("size=%s\n", size)
+	logger.Printf("size=%d\n", size)
 
 	// generate the control file
 	if err := d.WriteControlFile(debianDir, uint64(size)); err != nil {
