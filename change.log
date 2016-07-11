@@ -1,10 +1,19 @@
+0.0.8
+
+  * travis: fix path
+
+  - mh-cbon <mh-cbon@users.noreply.github.com>
+
+-- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 19:10:39 +0200
+
+
 0.0.7
 
   * travis was missing changelog bin
 
   - mh-cbon <mh-cbon@users.noreply.github.com>
 
--- N/A; Mon, 11 Jul 2016 18:46:15 +0200
+-- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 18:46:15 +0200
 
 
 0.0.6
@@ -13,7 +22,7 @@
 
   - mh-cbon <mh-cbon@users.noreply.github.com>
 
--- N/A; Mon, 11 Jul 2016 18:32:48 +0200
+-- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 18:32:48 +0200
 
 
 0.0.5
@@ -22,7 +31,7 @@
 
   - mh-cbon <mh-cbon@users.noreply.github.com>
 
--- N/A; Mon, 11 Jul 2016 18:24:23 +0200
+-- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 18:24:23 +0200
 
 
 0.0.4
@@ -31,7 +40,7 @@
 
   - mh-cbon <mh-cbon@users.noreply.github.com>
 
--- N/A; Mon, 11 Jul 2016 18:14:49 +0200
+-- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 18:14:49 +0200
 
 
 0.0.3
@@ -40,7 +49,7 @@
 
   - mh-cbon <mh-cbon@users.noreply.github.com>
 
--- N/A; Mon, 11 Jul 2016 18:11:23 +0200
+-- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 18:11:23 +0200
 
 
 0.0.2
@@ -50,7 +59,7 @@
 
   - mh-cbon <mh-cbon@users.noreply.github.com>
 
--- N/A; Mon, 11 Jul 2016 17:11:17 +0200
+-- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 17:11:17 +0200
 
 
 0.0.1
