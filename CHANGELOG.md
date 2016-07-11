@@ -1,5 +1,16 @@
 # Changelog - go-bin-deb
 
+### 0.0.12
+
+__Releaser__: mh-cbon <mh-cbon@users.noreply.github.com>
+
+__Date__: Mon 11 Jul 2016
+
+__Contributors__: mh-cbon <mh-cbon@users.noreply.github.com>
+
+#### Changes
+
+- Ensure package are built into different directories and avoid collision
 ### 0.0.11
 
 __Releaser__: mh-cbon <mh-cbon@users.noreply.github.com>
@@ -8,10 +19,9 @@ __Date__: Mon 11 Jul 2016
 
 __Contributors__: mh-cbon <mh-cbon@users.noreply.github.com>
 
-##### Changes
+#### Changes
 
 - run changelog command into source folder of the  project
-- changelog: 0.0.10
 ### 0.0.10
 
 __Releaser__: mh-cbon <mh-cbon@users.noreply.github.com>
@@ -20,10 +30,9 @@ __Date__: Mon 11 Jul 2016
 
 __Contributors__: mh-cbon <mh-cbon@users.noreply.github.com>
 
-##### Changes
+#### Changes
 
 - travis: fix go install
-- changelog: 0.0.9
 ### 0.0.9
 
 __Releaser__: mh-cbon <mh-cbon@users.noreply.github.com>
@@ -32,7 +41,7 @@ __Date__: Mon 11 Jul 2016
 
 __Contributors__: mh-cbon <mh-cbon@users.noreply.github.com>
 
-##### Changes
+#### Changes
 
 - travis: fix go install
 ### 0.0.8
@@ -43,7 +52,7 @@ __Date__: Mon 11 Jul 2016
 
 __Contributors__: mh-cbon <mh-cbon@users.noreply.github.com>
 
-##### Changes
+#### Changes
 
 - travis: fix path
 ### 0.0.7
@@ -54,7 +63,7 @@ __Date__: Mon 11 Jul 2016
 
 __Contributors__: mh-cbon <mh-cbon@users.noreply.github.com>
 
-##### Changes
+#### Changes
 
 - travis was missing changelog bin
 ### 0.0.6
@@ -65,7 +74,7 @@ __Date__: Mon 11 Jul 2016
 
 __Contributors__: mh-cbon <mh-cbon@users.noreply.github.com>
 
-##### Changes
+#### Changes
 
 - fix os/exec: stdout already set
 ### 0.0.5
@@ -76,7 +85,7 @@ __Date__: Mon 11 Jul 2016
 
 __Contributors__: mh-cbon <mh-cbon@users.noreply.github.com>
 
-##### Changes
+#### Changes
 
 - fix travis
 ### 0.0.4
@@ -87,7 +96,7 @@ __Date__: Mon 11 Jul 2016
 
 __Contributors__: mh-cbon <mh-cbon@users.noreply.github.com>
 
-##### Changes
+#### Changes
 
 - fix travis
 ### 0.0.3
@@ -98,7 +107,7 @@ __Date__: Mon 11 Jul 2016
 
 __Contributors__: mh-cbon <mh-cbon@users.noreply.github.com>
 
-##### Changes
+#### Changes
 
 - fix travis
 ### 0.0.2
@@ -109,7 +118,7 @@ __Date__: Mon 11 Jul 2016
 
 __Contributors__: mh-cbon <mh-cbon@users.noreply.github.com>
 
-##### Changes
+#### Changes
 
 - fix various glide problems
 - fix missing vars to create MD changelog file
@@ -121,6 +130,8 @@ __Date__: Mon 11 Jul 2016
 
 __Contributors__: mh-cbon <mh-cbon@users.noreply.github.com>
 
-##### Changes
+#### Changes
 
 - Initial release
+
+
