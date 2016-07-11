@@ -660,7 +660,11 @@ func (d *Package) WriteChangelogFile(debianDir string) error {
 			return err
 		}
 	} else if d.ChangelogCmd != "" {
-		cmd, err := stringexec.Command(debianDir, d.ChangelogCmd)
+		wd, err := os.Getwd()
+		if err != nil {
+			return err
+		}
+		cmd, err := stringexec.Command(wd, d.ChangelogCmd)
 		if err != nil {
 			return err
 		}
