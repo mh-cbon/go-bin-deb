@@ -1,7 +1,15 @@
+UNRELEASED
+
+  * fix os/exec: stdout already set
+
+  - mh-cbon <mh-cbon@users.noreply.github.com>
+
+-- N/A; Mon, 11 Jul 2016 18:32:48 +0200
+
+
 0.0.5
 
   * fix travis
-  * changelog: 0.0.4
 
   - mh-cbon <mh-cbon@users.noreply.github.com>
 
@@ -43,5 +51,3 @@
   - mh-cbon <mh-cbon@users.noreply.github.com>
 
 -- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 14:49:41 +0200
-
-
