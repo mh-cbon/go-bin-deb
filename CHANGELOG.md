@@ -1,5 +1,16 @@
 # Changelog - go-bin-deb
 
+### 0.0.9
+
+__Releaser__: mh-cbon <mh-cbon@users.noreply.github.com>
+
+__Date__: Mon 11 Jul 2016
+
+__Contributors__: mh-cbon <mh-cbon@users.noreply.github.com>
+
+##### Changes
+
+- travis: fix go install
 ### 0.0.8
 
 __Releaser__: mh-cbon <mh-cbon@users.noreply.github.com>
