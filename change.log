@@ -1,3 +1,12 @@
+0.0.7
+
+  * travis was missing changelog bin
+
+  - mh-cbon <mh-cbon@users.noreply.github.com>
+
+-- N/A; Mon, 11 Jul 2016 18:46:15 +0200
+
+
 0.0.6
 
   * fix os/exec: stdout already set
