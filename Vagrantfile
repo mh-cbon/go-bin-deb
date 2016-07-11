@@ -6,9 +6,6 @@ Vagrant.configure("2") do |config|
   config.vm.define "cli" do |cli|
     cli.vm.box = "debian/jessie64"
     cli.vm.synced_folder ".", "/vagrant"
-    cli.vm.provider :virtualbox do |vb|
-      vb.gui = true
-    end
   end
 
   config.vm.define "gui" do |cli|

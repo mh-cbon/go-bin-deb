@@ -9,6 +9,12 @@ __wip__
 # Install
 
 ```sh
+wget --no-check-certificate https://github.com/mh-cbon/go-bin-deb/releases/download/0.0.14/go-bin-deb-amd64.deb
+sudo dpkg -i go-bin-deb-amd64.deb
+go-bin-deb -h
+```
+
+```sh
 mkdir -p $GOPATH/src/github.com/mh-cbon
 cd $GOPATH/src/github.com/mh-cbon
 git clone https://github.com/mh-cbon/go-bin-deb.git
@@ -123,19 +129,23 @@ before_install:
   - sudo apt-get -qq update
   - sudo apt-get install build-essential lintian -y
   - curl https://glide.sh/get | sh
+  - wget --no-check-certificate https://github.com/mh-cbon/go-bin-deb/releases/download/0.0.14/go-bin-deb-amd64.deb
+  - sudo dpkg -i go-bin-deb-amd64.deb
 install:
   - glide install
 before_deploy:
   - mkdir -p build/{386,amd64}
   - GOOS=linux GOARCH=386 go build -o build/386/program main.go
   - GOOS=linux GOARCH=amd64 go build -o build/amd64/program main.go
+  - go-bin-deb generate -a 386 --version ${TRAVIS_TAG} -w pkg-build-386/ -o ${TRAVIS_BUILD_DIR}/program-386.deb
+  - go-bin-deb generate -a amd64 --version ${TRAVIS_TAG} -w pkg-build-amd64/ -o ${TRAVIS_BUILD_DIR}/program-amd64.deb
 deploy:
   provider: releases
   api_key:
     secure: ... your own here
   file:
-    - go-bin-deb-386.deb
-    - go-bin-deb-amd64.deb
+    - program-386.deb
+    - program-amd64.deb
   skip_cleanup: true
   on:
     tags: true
