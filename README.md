@@ -107,6 +107,10 @@ For a real world example including service, shortcuts, env, see [this](demo/deb.
 
 For a casual example to provide a simple binary, see [this](deb.json)
 
+# Vagrant recipe
+
+Please check the demo app [here](demo/)
+
 # Travis recipe
 
 - get a github repo
