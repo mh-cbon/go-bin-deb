@@ -2,6 +2,7 @@ language: go
 go:
 - tip
 before_install:
+  - go install
   - sudo apt-get -qq update
   - sudo apt-get install build-essential lintian -y
   - mkdir -p ${GOPATH}/bin
@@ -11,7 +12,6 @@ before_install:
   - git clone https://github.com/mh-cbon/changelog.git
   - cd changelog
   - glide install
-  - go install
 install:
   - glide install
   - go install
