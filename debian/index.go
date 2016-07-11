@@ -556,7 +556,7 @@ func (d *Package) WriteControlFile(debianDir string, size uint64) error {
 		desc = strings.TrimSpace(desc)
 	}
 
-	arch = d.Arch
+	arch := d.Arch
 	if arch == "386" { // go style
 		arch = "i386" // deb style
 	}
@@ -570,7 +570,7 @@ func (d *Package) WriteControlFile(debianDir string, size uint64) error {
 	P += strAppend("Maintainer", d.Maintainer)
 	P += strAppend("Homepage", d.Homepage)
 	P += strAppend("Description", desc)
-	P += strAppend("Architecture", d.Arch)
+	P += strAppend("Architecture", arch)
 	P += vcsSliceAppend(d.Vcs)
 	P += boolAppend("Essential", d.Essential)
 	P += strSliceAppend("Depends", d.Depends, ",")
