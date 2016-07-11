@@ -419,9 +419,9 @@ func (d *Package) WriteConffiles(debianDir string) error {
 		}
 		content += fmt.Sprintf("%s\n", f)
 	}
-  if content=="" {
-    return nil
-  }
+	if content == "" {
+		return nil
+	}
 	f := filepath.Join(debianDir, "conffiles")
 	return ioutil.WriteFile(f, []byte(content), 0644)
 }
@@ -556,10 +556,10 @@ func (d *Package) WriteControlFile(debianDir string, size uint64) error {
 		desc = strings.TrimSpace(desc)
 	}
 
-  arch = d.Arch
-  if arch=="386" { // go style
-    arch = "i386" // deb style
-  }
+	arch = d.Arch
+	if arch == "386" { // go style
+		arch = "i386" // deb style
+	}
 
 	P := ""
 	P += strAppend("Package", d.Name)
