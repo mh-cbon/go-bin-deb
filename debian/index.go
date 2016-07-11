@@ -123,10 +123,10 @@ func (d *Package) Load(file string) error {
 
 func (d *Package) Normalize(debianDir string, version string, arch string) {
 
-  tokens := make(map[string]string)
-  tokens["!version!"] = version
-  tokens["!arch!"] = arch
-  tokens["!name!"] = d.Name
+	tokens := make(map[string]string)
+	tokens["!version!"] = version
+	tokens["!arch!"] = arch
+	tokens["!name!"] = d.Name
 
 	d.Version = replaceTokens(d.Version, tokens)
 	d.Arch = replaceTokens(d.Arch, tokens)
@@ -214,9 +214,9 @@ func (d *Package) Normalize(debianDir string, version string, arch string) {
 }
 
 func replaceTokens(in string, tokens map[string]string) string {
-  for token, v := range tokens {
-  	in = strings.Replace(in, token, v, -1)
-  }
+	for token, v := range tokens {
+		in = strings.Replace(in, token, v, -1)
+	}
 	return in
 }
 
