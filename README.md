@@ -106,11 +106,14 @@ For a casual example to provide a simple binary, see [this](deb.json)
 
 # Travis recipe
 
+__wip__
+
 - get a github repo
 - get a travis account
-- connect your github account too travis and register your repo
-- generate a secure api key at http://travis-encrypt.github.io/ or use their cli tool
-- add a `.travis.yml` to your repo
+- connect your github account to travis and register your repo
+- install travis client `gem install --user travis`
+- run `travis setup releases`
+- personalize the `.travis.yml`
 
 ```yml
 language: go
@@ -127,10 +130,15 @@ before_deploy:
   - GOOS=linux GOARCH=386 go build -o build/386/program main.go
   - GOOS=linux GOARCH=amd64 go build -o build/amd64/program main.go
 deploy:
-  ..
-after_deploy:
-  - ./after_deploy_1.sh
-  - ./after_deploy_2.sh
+  provider: releases
+  api_key:
+    secure: ... your own here
+  file:
+    - go-bin-deb-386.deb
+    - go-bin-deb-amd64.deb
+  skip_cleanup: true
+  on:
+    tags: true
 ```
 
 # useful deb commands

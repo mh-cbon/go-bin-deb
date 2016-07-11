@@ -1,7 +1,6 @@
-
 language: go
 go:
-  - tip
+- tip
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install build-essential lintian -y
@@ -17,7 +16,8 @@ before_deploy:
   - go-bin-deb generate -a amd64 -v ${TRAVIS_TAG} -o ${TRAVIS_BUILD_DIR}/go-bin-deb-amd64.deb
 deploy:
   provider: releases
-  api_key: "GITHUB OAUTH TOKEN"
+  api_key:
+    secure: HKm29gdaXNCnLkV7Wph7ysOrgGk/ej2aoR6zjMZIwC3VvxpxNmbPl6/6MNblg8WKrUnLYWbJWHW5lspcEsq7NauymCJei7a1TvVDtM25H4F0O0dJD4xbS3Hb+qhugKkZXDMLpI8uClylxfyI+dpfOO1VTigHE9GcFkYfbZW5r8cspPQmkm+aii1UAs6zLXHWEoDqXsgxamAlHw18W8IfpHs7tFEUoIF3XxL65wUmOkk6XnXF/31hh9dmYS/WvbnrjGurSfXDlWkfFwzndSEcJpqBaaYpcEjwgV9x3pYwwYEF/R+P94i0NZwI0jAS8Sh0vfjKXGA5FkPocALBEnGyTmMr7PDa1g6kqUmuV3Q3/5vdejsTFSJY+OMvVS48thH9yTQE4MGFXG9u1J8UBlsCkabnfNADPjyc9liPbWEAjC7aIqinCoxwJ92XZ23uVGiE1aDtgk+g96iKr2WcHMre2s6JXNnkn3Mb/LYqTTtMpGpZZaKaFzOZ2IKSqLZIdqhNncWX75RzYPwbpBWKbbUVfK2i6x6SekbgFn0v/kx20g/3kYDptRMO6x/XDW2fAuIzY8p/v5zOLTzRow76ssLExBGLyUeEx6NUz1o5ronLwD8DyBlZ1PcX5uXzXztk39aVT41602o7GBSP+Y9iqjTV12aNUgrV6tFF5YtmuTFVCuE=
   file:
     - go-bin-deb-386.deb
     - go-bin-deb-amd64.deb

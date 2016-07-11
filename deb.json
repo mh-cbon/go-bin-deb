@@ -1,90 +1,23 @@
 {
   "name": "go-bin-deb",
-  "version": "0.0.1",
-  "maintainer": "mh-cbon <some@email.com>",
-  "uploaders": [
-    "mh-cbon2 <some@email.com>",
-    "mh-cbon3 <some@email.com>"
-  ],
-  "changed-by": "mh-cbon <some@email.com>",
-  "section": "unknown",
-  "priority": "extra",
-  "arch": "amd64",
-  "standards-version": "3.9.6",
+  "maintainer": "mh-cbon <mh-cbon@users.noreply.github.com>",
+  "description": "Create binary package for debian system",
+  "changelog-cmd": "changelog debian --vars='{\"name\":\"go-bin-deb\", \"urgency\":\"\"}'",
   "homepage": "http://github.com/mh-cbon/go-bin-deb",
-  "vcs": [
-    {
-      "type": "vcs-browser",
-      "url": "http://github.com/mh-cbon/go-bin-deb"
-    },
-    {
-      "type": "vcs-git",
-      "url": "http://github.com/mh-cbon/go-bin-deb -b master"
-    }
-  ],
   "files": [
     {
-      "from": "hello",
-      "to": "/usr/bin"
-    },
-    {
-      "from": "assets/**/**",
-      "to": "/usr/share/hello/"
-    },
-    {
-      "from": "assets/**/**",
-      "to": "/usr/share/hello/other",
-      "base": "assets"
-    },
-    {
-      "from": "assets/**/**",
-      "to": "/usr/share/hello/other",
-      "base": "assets"
+      "from": "build/!arch!/go-bin-deb",
+      "to": "/usr/bin",
+      "base" : "build/!arch!/",
+      "fperm": "0755"
     }
-  ],
-  "conffiles": [
-    "/etc/init./svc-init.sh"
   ],
   "copyrights": [
     {
       "files": "*",
-      "copyright": "1998 Johan Hanson <johan@tiq.com>",
-      "license": "GPL-2+",
-      "file": "/usr/share/common-licenses/GPL-2"
-    }
-  ],
-  "essential": false,
-  "description": "short desc of the program",
-  "description-extended": "long desc of the program with multiline",
-  "cron-files": {
-    "hourly": "",
-    "daily": "",
-    "d": ""
-  },
-  "cron-cmds": {
-    "hourly": "",
-    "daily": "",
-    "d": ""
-  },
-  "init-file": "svc-init.sh",
-  "default-file": "svc-default.sh",
-  "preinst-file": "preinst.sh",
-  "postinst-file": "postinst.sh",
-  "prerm-file": "",
-  "postrm-file": "postrm.sh",
-  "changelog-file": "changelog",
-  "rules-file": "",
-  "menus": [
-    {
-      "name":"go-bin-deb",
-      "description":"make a bin debian package",
-      "generic-name":"go-bin-deb",
-      "exec":"go-bin-deb -h",
-      "icon":"ico.png",
-      "type":"Application",
-      "startup-notify": false,
-      "categories":"Applications/see-menu-manual",
-      "mime-type":""
+      "copyright": "2016 mh-cbon <mh-cbon@users.noreply.github.com>",
+      "license": "MIT",
+      "file": "LICENSE"
     }
   ]
 }
