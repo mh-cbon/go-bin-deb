@@ -1,5 +1,17 @@
 # Changelog - go-bin-deb
 
+### 0.0.11
+
+__Releaser__: mh-cbon <mh-cbon@users.noreply.github.com>
+
+__Date__: Mon 11 Jul 2016
+
+__Contributors__: mh-cbon <mh-cbon@users.noreply.github.com>
+
+##### Changes
+
+- run changelog command into source folder of the  project
+- changelog: 0.0.10
 ### 0.0.10
 
 __Releaser__: mh-cbon <mh-cbon@users.noreply.github.com>
