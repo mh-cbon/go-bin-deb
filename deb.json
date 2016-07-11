@@ -2,11 +2,11 @@
   "name": "go-bin-deb",
   "maintainer": "mh-cbon <mh-cbon@users.noreply.github.com>",
   "description": "Create binary package for debian system",
-  "changelog-cmd": "changelog debian --vars='{\"name\":\"go-bin-deb\", \"urgency\":\"\"}'",
-  "homepage": "http://github.com/mh-cbon/go-bin-deb",
+  "changelog-cmd": "changelog debian --vars='{\"name\":\"!name!\", \"urgency\":\"\"}'",
+  "homepage": "http://github.com/mh-cbon/!name!",
   "files": [
     {
-      "from": "build/!arch!/go-bin-deb",
+      "from": "build/!arch!/!name!",
       "to": "/usr/bin",
       "base" : "build/!arch!/",
       "fperm": "0755"
