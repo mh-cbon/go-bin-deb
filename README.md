@@ -24,6 +24,13 @@ go install
 
 A debian system, vagrant, travis, docker, whatever.
 
+# Workflow overview
+
+To create a binary package you need to
+
+- build your application binaries
+- invoke `go-bin-deb` to generate the package
+
 # Usage
 
 ```sh
