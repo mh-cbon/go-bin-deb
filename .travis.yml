@@ -38,6 +38,8 @@ deploy:
   file:
     - go-bin-deb-386.deb
     - go-bin-deb-amd64.deb
+    - go-bin-deb-386.rpm
+    - go-bin-deb-amd64.rpm
   skip_cleanup: true
   on:
     tags: true
