@@ -2,7 +2,7 @@
   "name": "go-bin-deb",
   "maintainer": "mh-cbon <mh-cbon@users.noreply.github.com>",
   "description": "Create binary package for debian system",
-  "changelog-cmd": "changelog debian --vars='{\"name\":\"!name!\", \"urgency\":\"\"}'",
+  "changelog-cmd": "changelog debian --vars='{\"name\":\"!name!\"}'",
   "homepage": "http://github.com/mh-cbon/!name!",
   "files": [
     {
