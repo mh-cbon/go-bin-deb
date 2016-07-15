@@ -6,10 +6,18 @@ Using a `json` files to declare rules, it then performs necessary operations to 
 
 # Install
 
+__deb/rpm__
+
 ```sh
-wget -q -O - --no-check-certificate https://raw.githubusercontent.com/mh-cbon/go-bin-deb/master/install.sh | sh
-curl https://raw.githubusercontent.com/mh-cbon/go-bin-deb/master/install.sh | sh
+curl -L https://raw.githubusercontent.com/mh-cbon/latest/master/install.sh \
+| GH=mh-cbon/go-bin-deb sh -xe
+# or
+wget -q -O - --no-check-certificate \
+https://raw.githubusercontent.com/mh-cbon/latest/master/install.sh \
+| GH=mh-cbon/go-bin-deb sh -xe
 ```
+
+__go__
 
 ```sh
 mkdir -p $GOPATH/src/github.com/mh-cbon
