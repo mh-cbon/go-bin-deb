@@ -25,7 +25,7 @@ else
   curl -L https://raw.githubusercontent.com/mh-cbon/latest/master/install.sh | GH=mh-cbon/go-bin-deb sh -xe
 fi
 
-rm -fr pkg-build*/
+rm -fr pkg-build/*
 mkdir -p pkg-build/{386,amd64}
 
 go-bin-deb generate -a 386 --version ${TRAVIS_TAG} -w pkg-build/386/ -o ${TRAVIS_BUILD_DIR}/${REPO}-386.deb
