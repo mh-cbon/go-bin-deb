@@ -26,8 +26,9 @@ else
   curl -L https://raw.githubusercontent.com/mh-cbon/latest/master/install.sh | GH=mh-cbon/gh-api-cli sh -xe
 fi
 
-git remote -v
 git fetch --all
+git fetch origin gh-pages
+git branch
 git config user.name "${USER}"
 git config user.email "${EMAIL}"
 if [ `git symbolic-ref --short -q HEAD | egrep 'gh-pages$'` ]; then
