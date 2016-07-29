@@ -132,34 +132,55 @@ Please check the demo app [here](demo/)
 - get a travis account
 - connect your github account to travis and register your repo
 - install travis client `gem install --user travis`
+- run `travis encrypt --add -r mh-cbon/dummy GH_TOKEN=xxxx`
 - run `travis setup releases`
 - personalize the `.travis.yml`
 
 ```yml
+sudo: required
+
+services:
+  - docker
+
 language: go
 go:
   - tip
+
+env:
+  global:
+    - MYAPP=dummy
+    - MYEMAIL=some@email.com
+    - secure: GH_TOKEN xxxx
+
 before_install:
   - sudo apt-get -qq update
-  - sudo apt-get install build-essential lintian -y
-  - curl https://glide.sh/get | sh
-  - wget -q -O - --no-check-certificate https://raw.githubusercontent.com/mh-cbon/go-bin-deb/master/install.sh | sh
-  - wget -q -O - --no-check-certificate https://raw.githubusercontent.com/mh-cbon/changelog/master/install.sh | sh
+  - mkdir -p ${GOPATH}/bin
+
 install:
-  - glide install
+  - cd $GOPATH/src/github.com/mh-cbon/$MYAPP
+  - go install
+
+script: echo "pass"
+
 before_deploy:
   - mkdir -p build/{386,amd64}
-  - GOOS=linux GOARCH=386 go build -o build/386/program main.go
-  - GOOS=linux GOARCH=amd64 go build -o build/amd64/program main.go
-  - go-bin-deb generate -a 386 --version ${TRAVIS_TAG} -w pkg-build-386/ -o ${TRAVIS_BUILD_DIR}/program-386.deb
-  - go-bin-deb generate -a amd64 --version ${TRAVIS_TAG} -w pkg-build-amd64/ -o ${TRAVIS_BUILD_DIR}/program-amd64.deb
+  - GOOS=linux GOARCH=386 go build --ldflags "-X main.VERSION=${TRAVIS_TAG}" -o build/386/$MYAPP main.go
+  - GOOS=linux GOARCH=amd64 go build --ldflags "-X main.VERSION=${TRAVIS_TAG}" -o build/amd64/$MYAPP main.go
+  - curl -L https://raw.githubusercontent.com/mh-cbon/go-bin-deb/master/create-pkg.sh | GH=mh-cbon/$MYAPP sh -xe
+  - curl -L https://raw.githubusercontent.com/mh-cbon/go-bin-rpm/master/create-pkg.sh | GH=mh-cbon/$MYAPP sh -xe
+
+after_deploy:
+  - curl -L https://raw.githubusercontent.com/mh-cbon/go-bin-deb/master/setup-repository.sh | GH=mh-cbon/$MYAPP EMAIL=$MYEMAIL sh -xe
+  - curl -L https://raw.githubusercontent.com/mh-cbon/go-bin-rpm/master/setup-repository.sh | GH=mh-cbon/$MYAPP EMAIL=$MYEMAIL sh -xe
+
 deploy:
   provider: releases
   api_key:
-    secure: ... your own here
+    secure: GH_TOKEN xxxx
+  file_glob: true
   file:
-    - program-386.deb
-    - program-amd64.deb
+    - $MYAPP-386.deb
+    - $MYAPP-amd64.deb
   skip_cleanup: true
   on:
     tags: true
