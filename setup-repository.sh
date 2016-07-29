@@ -72,7 +72,11 @@ cat <<EOT > aptly.conf
   "ppaCodename": ""
 }
 EOT
-gh-api-cli dl-assets -o ${USER} -r ${REPO} -g '*deb' -out 'pkg/%r-%v_%a.deb'
+
+set +x # disable debug output because that would display the token in clear text..
+echo "gh-api-cli dl-assets -t {GH_TOKEN} -o ${USER} -r ${REPO} -g '*deb' -out 'pkg/%r-%v_%a.deb'"
+gh-api-cli dl-assets -t "${GH_TOKEN}" -o ${USER} -r ${REPO} -g '*deb' -out 'pkg/%r-%v_%a.deb'
+set -x
 
 if [ ! -d "apt" ]; then
   mkdir apt
