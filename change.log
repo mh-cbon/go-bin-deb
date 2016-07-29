@@ -1,3 +1,41 @@
+
+UNRELEASED
+
+  * travis: update build file, add deb/rpm repositories setup
+  * source repository: use token when downloading assets
+  * souce repo: use aptly to create the repo
+  * souce repo: use aptly to create the repo
+  * source: fix description reading of rpm package
+  * source: fix description reading of rpm package
+  * source: fix description reading of rpm package
+  * source: fix description reading of rpm package
+  * support: tryfix travis
+  * support: tryfix travis
+  * support: tryfix travis
+  * support: tryfix travis
+  * support: tryfix travis
+  * support: tryfix travis
+  * support: tryfix travis
+  * support: tryfix travis
+  * support: tryfix travis
+  * support: add centralized script to generate packages and repository
+  * travis: fix missing asset deploy
+  * docker.sh: remove useless arg
+  * install: use latest script
+  * README: update install section
+  * rpm: add rpm packaging support
+  * deb: remove changelog urgency var
+  * README: add workflow overview section
+  * README: Fix missing changelog setup in travis sample
+  * demo/deb.json
+  * changelog: 0.0.15
+
+  - mh-cbon <mh-cbon@users.noreply.github.com>
+
+-- mh-cbon <mh-cbon@users.noreply.github.com>; Sat, 30 Jul 2016 00:56:40 +0200
+
+
+
 0.0.15
 
   * README: add recipe for vagrant
@@ -14,6 +52,7 @@
 -- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 22:39:12 +0200
 
 
+
 0.0.14
 
   * travis: add missing ldflags to the build
@@ -23,14 +62,16 @@
 -- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 20:40:31 +0200
 
 
+
 0.0.13
 
   * conffiles is not created if there is no configuration files,
-ensure correct debian arch when control.arch field is 386
+    ensure correct debian arch when control.arch field is 386
 
   - mh-cbon <mh-cbon@users.noreply.github.com>
 
 -- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 20:12:14 +0200
+
 
 
 0.0.12
@@ -42,6 +83,7 @@ ensure correct debian arch when control.arch field is 386
 -- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 20:03:07 +0200
 
 
+
 0.0.11
 
   * run changelog command into source folder of the  project
@@ -49,6 +91,7 @@ ensure correct debian arch when control.arch field is 386
   - mh-cbon <mh-cbon@users.noreply.github.com>
 
 -- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 19:43:59 +0200
+
 
 
 0.0.10
@@ -60,6 +103,7 @@ ensure correct debian arch when control.arch field is 386
 -- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 19:43:59 +0200
 
 
+
 0.0.9
 
   * travis: fix go install
@@ -67,6 +111,7 @@ ensure correct debian arch when control.arch field is 386
   - mh-cbon <mh-cbon@users.noreply.github.com>
 
 -- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 19:24:48 +0200
+
 
 
 0.0.8
@@ -78,6 +123,7 @@ ensure correct debian arch when control.arch field is 386
 -- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 19:10:39 +0200
 
 
+
 0.0.7
 
   * travis was missing changelog bin
@@ -85,6 +131,7 @@ ensure correct debian arch when control.arch field is 386
   - mh-cbon <mh-cbon@users.noreply.github.com>
 
 -- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 18:46:15 +0200
+
 
 
 0.0.6
@@ -96,6 +143,7 @@ ensure correct debian arch when control.arch field is 386
 -- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 18:32:48 +0200
 
 
+
 0.0.5
 
   * fix travis
@@ -103,6 +151,7 @@ ensure correct debian arch when control.arch field is 386
   - mh-cbon <mh-cbon@users.noreply.github.com>
 
 -- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 18:24:23 +0200
+
 
 
 0.0.4
@@ -114,6 +163,7 @@ ensure correct debian arch when control.arch field is 386
 -- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 18:14:49 +0200
 
 
+
 0.0.3
 
   * fix travis
@@ -121,6 +171,7 @@ ensure correct debian arch when control.arch field is 386
   - mh-cbon <mh-cbon@users.noreply.github.com>
 
 -- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 18:11:23 +0200
+
 
 
 0.0.2
@@ -131,6 +182,7 @@ ensure correct debian arch when control.arch field is 386
   - mh-cbon <mh-cbon@users.noreply.github.com>
 
 -- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 17:11:17 +0200
+
 
 
 0.0.1

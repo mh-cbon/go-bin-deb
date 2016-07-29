@@ -6,7 +6,17 @@ Using a `json` files to declare rules, it then performs necessary operations to 
 
 # Install
 
-__deb/rpm__
+__deb/ubuntu/rpm repositories__
+
+```sh
+wget -O - https://raw.githubusercontent.com/mh-cbon/latest/master/source.sh \
+| GH=mh-cbon/go-bin-deb sh -xe
+# or
+curl -L https://raw.githubusercontent.com/mh-cbon/latest/master/source.sh \
+| GH=mh-cbon/go-bin-deb sh -xe
+```
+
+__deb/ubuntu/rpm package__
 
 ```sh
 curl -L https://raw.githubusercontent.com/mh-cbon/latest/master/install.sh \
