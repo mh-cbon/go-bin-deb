@@ -1,5 +1,26 @@
 # Changelog - go-bin-deb
 
+### 0.0.16
+
+__Changes__
+
+- travis: update build file, add deb/rpm repositories setup
+- source repository: use token when downloading assets
+- souce repository: use aptly to create the repo
+- souce repository: use aptly to create the repo
+- support: add centralized script to generate packages and repository
+- packaging: remove changelog urgency var in deb.json
+- README: add workflow overview section
+- README: Fix missing changelog setup in travis sample
+
+__Contributors__
+
+- mh-cbon
+
+Released by mh-cbon, Sat 30 Jul 2016 -
+[see the diff](https://github.com/mh-cbon/go-bin-deb/compare/0.0.15...0.0.16#diff)
+______________
+
 ### 0.0.15
 
 __Changes__
@@ -17,7 +38,8 @@ __Contributors__
 
 - mh-cbon
 
-Released by mh-cbon, Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016 -
+[see the diff](https://github.com/mh-cbon/go-bin-deb/compare/0.0.14...0.0.15#diff)
 ______________
 
 ### 0.0.14
@@ -30,7 +52,8 @@ __Contributors__
 
 - mh-cbon
 
-Released by mh-cbon, Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016 -
+[see the diff](https://github.com/mh-cbon/go-bin-deb/compare/0.0.13...0.0.14#diff)
 ______________
 
 ### 0.0.13
@@ -38,13 +61,14 @@ ______________
 __Changes__
 
 - conffiles is not created if there is no configuration files,
-ensure correct debian arch when control.arch field is 386
+  ensure correct debian arch when control.arch field is 386
 
 __Contributors__
 
 - mh-cbon
 
-Released by mh-cbon, Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016 -
+[see the diff](https://github.com/mh-cbon/go-bin-deb/compare/0.0.12...0.0.13#diff)
 ______________
 
 ### 0.0.12
@@ -57,7 +81,8 @@ __Contributors__
 
 - mh-cbon
 
-Released by mh-cbon, Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016 -
+[see the diff](https://github.com/mh-cbon/go-bin-deb/compare/0.0.11...0.0.12#diff)
 ______________
 
 ### 0.0.11
@@ -70,7 +95,8 @@ __Contributors__
 
 - mh-cbon
 
-Released by mh-cbon, Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016 -
+[see the diff](https://github.com/mh-cbon/go-bin-deb/compare/0.0.10...0.0.11#diff)
 ______________
 
 ### 0.0.10
@@ -83,7 +109,8 @@ __Contributors__
 
 - mh-cbon
 
-Released by mh-cbon, Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016 -
+[see the diff](https://github.com/mh-cbon/go-bin-deb/compare/0.0.9...0.0.10#diff)
 ______________
 
 ### 0.0.9
@@ -96,7 +123,8 @@ __Contributors__
 
 - mh-cbon
 
-Released by mh-cbon, Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016 -
+[see the diff](https://github.com/mh-cbon/go-bin-deb/compare/0.0.8...0.0.9#diff)
 ______________
 
 ### 0.0.8
@@ -109,7 +137,8 @@ __Contributors__
 
 - mh-cbon
 
-Released by mh-cbon, Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016 -
+[see the diff](https://github.com/mh-cbon/go-bin-deb/compare/0.0.7...0.0.8#diff)
 ______________
 
 ### 0.0.7
@@ -122,7 +151,8 @@ __Contributors__
 
 - mh-cbon
 
-Released by mh-cbon, Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016 -
+[see the diff](https://github.com/mh-cbon/go-bin-deb/compare/0.0.6...0.0.7#diff)
 ______________
 
 ### 0.0.6
@@ -135,7 +165,8 @@ __Contributors__
 
 - mh-cbon
 
-Released by mh-cbon, Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016 -
+[see the diff](https://github.com/mh-cbon/go-bin-deb/compare/0.0.5...0.0.6#diff)
 ______________
 
 ### 0.0.5
@@ -148,7 +179,8 @@ __Contributors__
 
 - mh-cbon
 
-Released by mh-cbon, Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016 -
+[see the diff](https://github.com/mh-cbon/go-bin-deb/compare/0.0.4...0.0.5#diff)
 ______________
 
 ### 0.0.4
@@ -161,7 +193,8 @@ __Contributors__
 
 - mh-cbon
 
-Released by mh-cbon, Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016 -
+[see the diff](https://github.com/mh-cbon/go-bin-deb/compare/0.0.3...0.0.4#diff)
 ______________
 
 ### 0.0.3
@@ -174,7 +207,8 @@ __Contributors__
 
 - mh-cbon
 
-Released by mh-cbon, Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016 -
+[see the diff](https://github.com/mh-cbon/go-bin-deb/compare/0.0.2...0.0.3#diff)
 ______________
 
 ### 0.0.2
@@ -188,7 +222,8 @@ __Contributors__
 
 - mh-cbon
 
-Released by mh-cbon, Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016 -
+[see the diff](https://github.com/mh-cbon/go-bin-deb/compare/0.0.1...0.0.2#diff)
 ______________
 
 ### 0.0.1
@@ -201,7 +236,8 @@ __Contributors__
 
 - mh-cbon
 
-Released by mh-cbon, Mon 11 Jul 2016
+Released by mh-cbon, Mon 11 Jul 2016 -
+[see the diff](https://github.com/mh-cbon/go-bin-deb/compare/aa86544bec0aab4238f0b216369545c0a3bcdcfe...0.0.1#diff)
 ______________
 
 
