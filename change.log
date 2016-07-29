@@ -1,34 +1,14 @@
 
-UNRELEASED
+0.0.16
 
   * travis: update build file, add deb/rpm repositories setup
   * source repository: use token when downloading assets
-  * souce repo: use aptly to create the repo
-  * souce repo: use aptly to create the repo
-  * source: fix description reading of rpm package
-  * source: fix description reading of rpm package
-  * source: fix description reading of rpm package
-  * source: fix description reading of rpm package
-  * support: tryfix travis
-  * support: tryfix travis
-  * support: tryfix travis
-  * support: tryfix travis
-  * support: tryfix travis
-  * support: tryfix travis
-  * support: tryfix travis
-  * support: tryfix travis
-  * support: tryfix travis
+  * souce repository: use aptly to create the repo
+  * souce repository: use aptly to create the repo
   * support: add centralized script to generate packages and repository
-  * travis: fix missing asset deploy
-  * docker.sh: remove useless arg
-  * install: use latest script
-  * README: update install section
-  * rpm: add rpm packaging support
-  * deb: remove changelog urgency var
+  * packaging: remove changelog urgency var in deb.json
   * README: add workflow overview section
   * README: Fix missing changelog setup in travis sample
-  * demo/deb.json
-  * changelog: 0.0.15
 
   - mh-cbon <mh-cbon@users.noreply.github.com>
 
