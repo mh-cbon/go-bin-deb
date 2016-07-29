@@ -45,26 +45,63 @@ else
   fi
 fi
 
+
+
+
 rm -fr apt
-# mkdir -p apt/binary-{i386,amd64} # huh ... it won t work ?
-mkdir -p apt/binary-i386
-mkdir -p apt/binary-amd64
-gh-api-cli dl-assets -o ${USER} -r ${REPO} --out apt/%r-%v_%a.%e -g "*deb" --ver latest
+if [ ! -d "aptly_0.9.7_linux_amd64" ]; then
+  wget https://bintray.com/artifact/download/smira/aptly/aptly_0.9.7_linux_amd64.tar.gz
+  tar xzf aptly_0.9.7_linux_amd64.tar.gz
+  PATH=$PATH:`pwd`/aptly_0.9.7_linux_amd64/
+fi
 
+cat <<EOT > aptly.conf
+{
+  "rootDir": "`pwd`/apt",
+  "downloadConcurrency": 4,
+  "downloadSpeedLimit": 0,
+  "architectures": [],
+  "dependencyFollowSuggests": false,
+  "dependencyFollowRecommends": false,
+  "dependencyFollowAllVariants": false,
+  "dependencyFollowSource": false,
+  "gpgDisableSign": true,
+  "gpgDisableVerify": true,
+  "downloadSourcePackages": false,
+  "ppaDistributorID": "",
+  "ppaCodename": ""
+}
+EOT
+gh-api-cli dl-assets -o ${USER} -r ${REPO} -g '*deb' -out 'pkg/%r-%v_%a.deb'
 
-cd apt
-dpkg-scanpackages -a amd64 . /dev/null | gzip -9c > binary-amd64/Packages.gz
-dpkg-scanpackages -a 386 . /dev/null | gzip -9c > binary-i386/Packages.gz
+if [ ! -d "apt" ]; then
+  mkdir apt
+  cd apt
+  aptly repo create -config=../aptly.conf -distribution=all -component=main ${REPO}
+  aptly repo add -config=../aptly.conf ${REPO} ../pkg
+  aptly publish -component=contrib -config=../aptly.conf repo ${REPO}
+  aptly repo show -config=../aptly.conf -with-packages ${REPO}
+
+else
+  cd apt
+  aptly repo add -config=../aptly.conf ${REPO} ../pkg
+  aptly publish -config=../aptly.conf update all
+  aptly repo show -config=../aptly.conf -with-packages ${REPO}
+fi
 
 cat <<EOT > ${REPO}.list
-deb [trusted=yes] https://${USER}.github.io/${REPO}/apt/ /binary-\$(ARCH)/
+deb [trusted=yes] https://${USER}.github.io/${REPO}/apt/ all contrib
 EOT
+
+rm -f aptly_0.9.7_linux_amd64.tar.gz aptly.conf
+rm -fr aptly_0.9.7_linux_amd64 pkg
+
+
+
+
 
 git add -A
 git commit -m "Created debian repository"
-
-git status
-git branch
 
 set +x # disable debug output because that would display the token in clear text..
 echo "git push --force --quiet https://GH_TOKEN@github.com/${GH}.git gh-pages"
