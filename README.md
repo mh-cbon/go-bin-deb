@@ -4,6 +4,8 @@ Create binary package for debian system, see also [the demo](demo/).
 
 Using a `json` files to declare rules, it then performs necessary operations to invoke `dpkg-deb` to build the package, then check it with the help of `lintian`.
 
+This tool is part of the [go-github-release workflow](https://github.com/mh-cbon/go-github-release)
+
 # Install
 
 __deb/ubuntu/rpm repositories__
@@ -48,6 +50,7 @@ To create a binary package you need to
 
 - build your application binaries
 - invoke `go-bin-deb` to generate the package
+- create deb repositories on `travis` hosted on `gh-pages` using this [script](setup-repository.sh)
 
 # Usage
 
@@ -167,7 +170,7 @@ before_install:
   - mkdir -p ${GOPATH}/bin
 
 install:
-  - cd $GOPATH/src/github.com/mh-cbon/$MYAPP
+  - cd $GOPATH/src/github.com/YOUR_USERNAME/$MYAPP
   - go install
 
 script: echo "pass"
@@ -176,12 +179,10 @@ before_deploy:
   - mkdir -p build/{386,amd64}
   - GOOS=linux GOARCH=386 go build --ldflags "-X main.VERSION=${TRAVIS_TAG}" -o build/386/$MYAPP main.go
   - GOOS=linux GOARCH=amd64 go build --ldflags "-X main.VERSION=${TRAVIS_TAG}" -o build/amd64/$MYAPP main.go
-  - curl -L https://raw.githubusercontent.com/mh-cbon/go-bin-deb/master/create-pkg.sh | GH=mh-cbon/$MYAPP sh -xe
-  - curl -L https://raw.githubusercontent.com/mh-cbon/go-bin-rpm/master/create-pkg.sh | GH=mh-cbon/$MYAPP sh -xe
+  - curl -L https://raw.githubusercontent.com/mh-cbon/go-bin-deb/master/create-pkg.sh | GH=YOUR_USERNAME/$MYAPP sh -xe
 
 after_deploy:
-  - curl -L https://raw.githubusercontent.com/mh-cbon/go-bin-deb/master/setup-repository.sh | GH=mh-cbon/$MYAPP EMAIL=$MYEMAIL sh -xe
-  - curl -L https://raw.githubusercontent.com/mh-cbon/go-bin-rpm/master/setup-repository.sh | GH=mh-cbon/$MYAPP EMAIL=$MYEMAIL sh -xe
+  - curl -L https://raw.githubusercontent.com/mh-cbon/go-bin-deb/master/setup-repository.sh | GH=YOUR_USERNAME/$MYAPP EMAIL=$MYEMAIL sh -xe
 
 deploy:
   provider: releases
