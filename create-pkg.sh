@@ -28,7 +28,7 @@ fi
 rm -fr pkg-build/*
 mkdir -p pkg-build/{386,amd64}
 
-tree
+ls -al .
 
 go-bin-deb generate -a 386 --version ${TRAVIS_TAG} -w pkg-build/386/ -o ${TRAVIS_BUILD_DIR}/${REPO}-386.deb
 go-bin-deb generate -a amd64 --version ${TRAVIS_TAG} -w pkg-build/amd64/ -o ${TRAVIS_BUILD_DIR}/${REPO}-amd64.deb
