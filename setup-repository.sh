@@ -51,7 +51,7 @@ else
 fi
 
 
-APTLY="`pwd`/aptly_0.9.7_linux_amd64/aplty"
+APTLY="`pwd`/aptly_0.9.7_linux_amd64/aptly"
 
 echo $APTLY
 
