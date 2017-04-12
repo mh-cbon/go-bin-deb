@@ -60,7 +60,7 @@ if [ ! -d "aptly_0.9.7_linux_amd64" ]; then
 fi
 
 PATH=$PATH:`pwd`/aptly_0.9.7_linux_amd64/
-$PATH
+echo $PATH
 
 cat <<EOT > aptly.conf
 {
