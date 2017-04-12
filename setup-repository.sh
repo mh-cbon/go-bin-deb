@@ -51,7 +51,9 @@ else
 fi
 
 
+APTLY="`pwd`/aptly_0.9.7_linux_amd64/aplty"
 
+echo $APTLY 
 
 rm -fr apt
 if [ ! -d "aptly_0.9.7_linux_amd64" ]; then
@@ -59,8 +61,6 @@ if [ ! -d "aptly_0.9.7_linux_amd64" ]; then
   tar xzf aptly_0.9.7_linux_amd64.tar.gz
 fi
 
-PATH=$PATH:`pwd`/aptly_0.9.7_linux_amd64/
-echo $PATH
 
 cat <<EOT > aptly.conf
 {
@@ -91,23 +91,24 @@ if [ ! -d "apt" ]; then
   mkdir apt
   cd apt
   ls -al
-  ./aptly repo create -config=../aptly.conf -distribution=all -component=main ${REPO}
-  ./aptly repo add -config=../aptly.conf ${REPO} ../pkg
-  ./aptly publish -component=contrib -config=../aptly.conf repo ${REPO}
-  ./aptly repo show -config=../aptly.conf -with-packages ${REPO}
+  $APTLY repo create -config=../aptly.conf -distribution=all -component=main ${REPO}
+  $APTLY repo add -config=../aptly.conf ${REPO} ../pkg
+  $APTLY publish -component=contrib -config=../aptly.conf repo ${REPO}
+  $APTLY repo show -config=../aptly.conf -with-packages ${REPO}
 
 else
   cd apt
   ls -al
-  ./aptly repo add -config=../aptly.conf ${REPO} ../pkg
-  ./aptly publish -config=../aptly.conf update all
-  ./aptly repo show -config=../aptly.conf -with-packages ${REPO}
+  $APTLY repo add -config=../aptly.conf ${REPO} ../pkg
+  $APTLY publish -config=../aptly.conf update all
+  $APTLY repo show -config=../aptly.conf -with-packages ${REPO}
 fi
 
 cat <<EOT > ${REPO}.list
 deb [trusted=yes] https://${USER}.github.io/${REPO}/apt/public/ all contrib
 EOT
 
+cd ..
 ls -al
 rm -f aptly_0.9.7_linux_amd64.tar.gz
 rm -f aptly.conf
