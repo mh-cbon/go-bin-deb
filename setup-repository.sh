@@ -102,8 +102,11 @@ cat <<EOT > ${REPO}.list
 deb [trusted=yes] https://${USER}.github.io/${REPO}/apt/public/ all contrib
 EOT
 
-rm -f aptly_0.9.7_linux_amd64.tar.gz aptly.conf
-rm -fr aptly_0.9.7_linux_amd64 pkg
+ls -al 
+rm -f aptly_0.9.7_linux_amd64.tar.gz
+rm -f aptly.conf
+rm -fr aptly_0.9.7_linux_amd64
+rm -fr pkg
 
 
 
