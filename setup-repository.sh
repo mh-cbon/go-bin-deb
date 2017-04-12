@@ -85,9 +85,12 @@ echo "gh-api-cli dl-assets -t {GH_TOKEN} -o ${USER} -r ${REPO} -g '*deb' -out 'p
 gh-api-cli dl-assets -t "${GH_TOKEN}" -o ${USER} -r ${REPO} -g '*deb' -out 'pkg/%r-%v_%a.deb'
 set -x
 
+ls -al
+
 if [ ! -d "apt" ]; then
   mkdir apt
   cd apt
+  ls -al
   ./aptly repo create -config=../aptly.conf -distribution=all -component=main ${REPO}
   ./aptly repo add -config=../aptly.conf ${REPO} ../pkg
   ./aptly publish -component=contrib -config=../aptly.conf repo ${REPO}
@@ -95,6 +98,7 @@ if [ ! -d "apt" ]; then
 
 else
   cd apt
+  ls -al
   ./aptly repo add -config=../aptly.conf ${REPO} ../pkg
   ./aptly publish -config=../aptly.conf update all
   ./aptly repo show -config=../aptly.conf -with-packages ${REPO}
