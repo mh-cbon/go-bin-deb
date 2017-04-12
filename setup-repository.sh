@@ -53,7 +53,7 @@ fi
 
 APTLY="`pwd`/aptly_0.9.7_linux_amd64/aplty"
 
-echo $APTLY 
+echo $APTLY
 
 rm -fr apt
 if [ ! -d "aptly_0.9.7_linux_amd64" ]; then
@@ -61,6 +61,8 @@ if [ ! -d "aptly_0.9.7_linux_amd64" ]; then
   tar xzf aptly_0.9.7_linux_amd64.tar.gz
 fi
 
+ls -al .
+ls -al aptly_0.9.7_linux_amd64
 
 cat <<EOT > aptly.conf
 {
