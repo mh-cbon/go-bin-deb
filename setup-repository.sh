@@ -57,8 +57,10 @@ rm -fr apt
 if [ ! -d "aptly_0.9.7_linux_amd64" ]; then
   wget https://bintray.com/artifact/download/smira/aptly/aptly_0.9.7_linux_amd64.tar.gz
   tar xzf aptly_0.9.7_linux_amd64.tar.gz
-  PATH=$PATH:`pwd`/aptly_0.9.7_linux_amd64/
 fi
+
+PATH=$PATH:`pwd`/aptly_0.9.7_linux_amd64/
+$PATH
 
 cat <<EOT > aptly.conf
 {
@@ -86,23 +88,23 @@ set -x
 if [ ! -d "apt" ]; then
   mkdir apt
   cd apt
-  aptly repo create -config=../aptly.conf -distribution=all -component=main ${REPO}
-  aptly repo add -config=../aptly.conf ${REPO} ../pkg
-  aptly publish -component=contrib -config=../aptly.conf repo ${REPO}
-  aptly repo show -config=../aptly.conf -with-packages ${REPO}
+  ./aptly repo create -config=../aptly.conf -distribution=all -component=main ${REPO}
+  ./aptly repo add -config=../aptly.conf ${REPO} ../pkg
+  ./aptly publish -component=contrib -config=../aptly.conf repo ${REPO}
+  ./aptly repo show -config=../aptly.conf -with-packages ${REPO}
 
 else
   cd apt
-  aptly repo add -config=../aptly.conf ${REPO} ../pkg
-  aptly publish -config=../aptly.conf update all
-  aptly repo show -config=../aptly.conf -with-packages ${REPO}
+  ./aptly repo add -config=../aptly.conf ${REPO} ../pkg
+  ./aptly publish -config=../aptly.conf update all
+  ./aptly repo show -config=../aptly.conf -with-packages ${REPO}
 fi
 
 cat <<EOT > ${REPO}.list
 deb [trusted=yes] https://${USER}.github.io/${REPO}/apt/public/ all contrib
 EOT
 
-ls -al 
+ls -al
 rm -f aptly_0.9.7_linux_amd64.tar.gz
 rm -f aptly.conf
 rm -fr aptly_0.9.7_linux_amd64
