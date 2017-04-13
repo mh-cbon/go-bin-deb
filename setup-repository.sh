@@ -42,10 +42,10 @@ fi
 
 
 cd ${REPOPATH}/..
-DREPOPATH="${DREPOPATH}/D/"
+DREPOPATH="${REPOPATH}/D/"
 rm -fr ${DREPOPATH}
 
-remove exisitng repo
+# remove exisitng repo
 
 # clone it again
 git clone https://github.com/${USER}/${REPO}.git ${DREPOPATH}
