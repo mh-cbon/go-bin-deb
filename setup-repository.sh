@@ -11,32 +11,46 @@
 # GH=$1
 # EMAIL=$2
 
-REPO=`echo ${GH} | cut -d '/' -f 2`
-USER=`echo ${GH} | cut -d '/' -f 1`
-
 if ["${GH_TOKEN}" == ""]; then
   echo "GH_TOKEN is not properly set. Check your travis file."
   exit 1
 fi
 
+if ["${GH}" == ""]; then
+  echo "GH is not properly set. Check your travis file."
+  exit 1
+fi
+
+REPO=`echo ${GH} | cut -d '/' -f 2`
+USER=`echo ${GH} | cut -d '/' -f 1`
+
 # clean up build.
 rm -fr ${REPO}-*.rpm
 rm -fr ${REPO}-*.deb
 
+# prepare the machine
 sudo apt-get install build-essential -y
 
+# install gh-api-cli to dld assets
 if type "gh-api-cli" > /dev/null; then
   echo "gh-api-cli already installed"
 else
   curl -L https://raw.githubusercontent.com/mh-cbon/latest/master/install.sh | GH=mh-cbon/gh-api-cli sh -xe
 fi
 
-cd ..
-rm -fr ${REPO}
-git clone https://github.com/${USER}/${REPO}.git ${REPO}
-cd ${REPO}
-git config user.name "${USER}"
-git config user.email "${EMAIL}"
+# remove exisitng repo
+# cd ..
+# rm -fr ${REPO}
+
+# clone it again
+# git clone https://github.com/${USER}/${REPO}.git ${REPO}
+
+# move into, configure git
+# cd ${REPO}
+# git config user.name "${USER}"
+# git config user.email "${EMAIL}"
+
+# ensure gh-pages is setup
 if [ `git symbolic-ref --short -q HEAD | egrep 'gh-pages$'` ]; then
   echo "already on gh-pages"
 else
@@ -50,20 +64,17 @@ else
   fi
 fi
 
-
+# prepare aptly to generate an apt repo
 APTLY="`pwd`/aptly_0.9.7_linux_amd64/aptly"
 
-echo $APTLY
-
+# clean up first
 rm -fr apt
 if [ ! -d "aptly_0.9.7_linux_amd64" ]; then
   wget https://bintray.com/artifact/download/smira/aptly/aptly_0.9.7_linux_amd64.tar.gz
   tar xzf aptly_0.9.7_linux_amd64.tar.gz
 fi
 
-ls -al .
-ls -al aptly_0.9.7_linux_amd64
-
+# make an aptly.conf
 cat <<EOT > aptly.conf
 {
   "rootDir": "`pwd`/apt",
@@ -82,17 +93,16 @@ cat <<EOT > aptly.conf
 }
 EOT
 
+# dld assets to put in the new repo
 set +x # disable debug output because that would display the token in clear text..
 echo "gh-api-cli dl-assets -t {GH_TOKEN} -o ${USER} -r ${REPO} -g '*deb' -out 'pkg/%r-%v_%a.deb'"
 gh-api-cli dl-assets -t "${GH_TOKEN}" -o ${USER} -r ${REPO} -g '*deb' -out 'pkg/%r-%v_%a.deb'
 set -x
 
-ls -al
-
+# execute aptly
 if [ ! -d "apt" ]; then
   mkdir apt
   cd apt
-  ls -al
   $APTLY repo create -config=../aptly.conf -distribution=all -component=main ${REPO}
   $APTLY repo add -config=../aptly.conf ${REPO} ../pkg
   $APTLY publish -component=contrib -config=../aptly.conf repo ${REPO}
@@ -100,24 +110,22 @@ if [ ! -d "apt" ]; then
 
 else
   cd apt
-  ls -al
   $APTLY repo add -config=../aptly.conf ${REPO} ../pkg
   $APTLY publish -config=../aptly.conf update all
   $APTLY repo show -config=../aptly.conf -with-packages ${REPO}
 fi
 
+# finalize the repo
 cat <<EOT > ${REPO}.list
 deb [trusted=yes] https://${USER}.github.io/${REPO}/apt/public/ all contrib
 EOT
 
+# clean up.
 cd ..
-ls -al
 rm -f aptly_0.9.7_linux_amd64.tar.gz
 rm -f aptly.conf
 rm -fr aptly_0.9.7_linux_amd64
 rm -fr pkg
-
-
 
 
 

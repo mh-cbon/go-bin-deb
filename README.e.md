@@ -1,13 +1,8 @@
-# go-bin-deb
+# {{.Name}}
 
-[![travis Status](https://travis-ci.org/mh-cbon/go-bin-deb.svg?branch=master)](https://travis-ci.org/mh-cbon/go-bin-deb)
-[![Go Report Card](https://goreportcard.com/badge/github.com/mh-cbon/go-bin-deb)](https://goreportcard.com/report/github.com/mh-cbon/go-bin-deb)
+{{template "badge/travis" .}}{{template "badge/goreport" .}}{{template "badge/godoc" .}}
 
-[![GoDoc](https://godoc.org/github.com/mh-cbon/go-bin-deb?status.svg)](http://godoc.org/github.com/mh-cbon/go-bin-deb)
-
-
-Package go-bin-deb creates binary package for debian system
-
+{{pkgdoc}}
 
 Using a `json` files to declare rules,
 it then performs necessary operations to invoke `dpkg-deb` to build a package,
@@ -17,59 +12,20 @@ This tool is part of the [go-github-release workflow](https://github.com/mh-cbon
 
 See [the demo](demo/).
 
-# TOC
-- [Install](#install)
-  - [Glide](#glide)
-  - [linux rpm/deb repository](#linux-rpmdeb-repository)
-  - [linux rpm/deb standalone package](#linux-rpmdeb-standalone-package)
-- [Requirements](#requirements)
-- [Usage](#usage)
-  - [Workflow overview](#workflow-overview)
-  - [Json file](#json-file)
-- [CLI](#cli)
-- [generate](#generate)
-- [test](#test)
-- [Recipes](#recipes)
-  - [Installing generated package](#installing-generated-package)
-  - [Vagrant recipe](#vagrant-recipe)
-  - [Travis recipe](#travis-recipe)
-  - [useful deb commands](#useful-deb-commands)
-  - [Release the project](#release-the-project)
-- [History](#history)
+# {{toc 5}}
 
 # Install
 
-Check the [release page](https://github.com/mh-cbon/go-bin-deb/releases)!
+{{template "gh/releases" .}}
 
 #### Glide
-
-```sh
-mkdir -p $GOPATH/src/github.com/mh-cbon/go-bin-deb
-cd $GOPATH/src/github.com/mh-cbon/go-bin-deb
-git clone https://github.com/mh-cbon/go-bin-deb.git .
-glide install
-go install
-```
-
+{{template "glide/install" .}}
 
 #### linux rpm/deb repository
-```sh
-wget -O - https://raw.githubusercontent.com/mh-cbon/latest/master/source.sh \
-| GH=mh-cbon/go-bin-deb sh -xe
-# or
-curl -L https://raw.githubusercontent.com/mh-cbon/latest/master/source.sh \
-| GH=mh-cbon/go-bin-deb sh -xe
-```
+{{template "linux/gh_src_repo" .}}
 
 #### linux rpm/deb standalone package
-```sh
-curl -L https://raw.githubusercontent.com/mh-cbon/latest/master/install.sh \
-| GH=mh-cbon/go-bin-deb sh -xe
-# or
-wget -q -O - --no-check-certificate \
-https://raw.githubusercontent.com/mh-cbon/latest/master/install.sh \
-| GH=mh-cbon/go-bin-deb sh -xe
-```
+{{template "linux/gh_pkg" .}}
 
 # Requirements
 
@@ -94,59 +50,13 @@ For a real world example including service, shortcuts, env, see [this](demo/deb.
 For a casual example to provide a simple binary, see [this](deb.json)
 
 # CLI
-
-###### $ go-bin-deb -help
-```sh
-NAME:
-   go-bin-deb - Generate a binary debian package
-
-USAGE:
-   go-bin-deb <cmd> <options>
-   
-VERSION:
-   0.0.0
-   
-COMMANDS:
-     generate  Generate the contents of the package
-     test      Test the package json file
-     help, h   Shows a list of commands or help for one command
-
-GLOBAL OPTIONS:
-   --help, -h     show help
-   --version, -v  print the version
-```
+{{exec "go-bin-deb" "-help" | color "sh"}}
 
 ### generate
-
-###### $ go-bin-deb generate -help
-```sh
-NAME:
-   go-bin-deb generate - Generate the contents of the package
-
-USAGE:
-   go-bin-deb generate [command options] [arguments...]
-
-OPTIONS:
-   --wd value, -w value      Working directory to prepare the package (default: "pkg-build")
-   --output value, -o value  Output directory for the debian package files
-   --file value, -f value    Path to the deb.json file (default: "deb.json")
-   --version value           Version of the package
-   --arch value, -a value    Arch of the package
-```
+{{exec "go-bin-deb" "generate" "-help" | color "sh"}}
 
 ### test
-
-###### $ go-bin-deb test -help
-```sh
-NAME:
-   go-bin-deb test - Test the package json file
-
-USAGE:
-   go-bin-deb test [command options] [arguments...]
-
-OPTIONS:
-   --file value, -f value  Path to the deb.json file (default: "deb.json")
-```
+{{exec "go-bin-deb" "test" "-help" | color "sh"}}
 
 # Recipes
 
@@ -262,4 +172,3 @@ gump patch # bump
 # History
 
 [CHANGELOG](CHANGELOG.md)
-

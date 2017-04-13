@@ -1,3 +1,4 @@
+// Package go-bin-deb creates binary package for debian system
 package main
 
 import (

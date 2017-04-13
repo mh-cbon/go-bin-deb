@@ -9,8 +9,11 @@ go:
 
 env:
   global:
-    - MYAPP=go-bin-deb
-    - MYEMAIL=mh-cbon@users.noreply.github.com
+    - GH=mh-cbon/go-bin-deb
+    - APP=go-bin-deb
+    - EMAIL=mh-cbon@users.noreply.github.com
+    - MYAPP=go-bin-deb # to clean
+    - MYEMAIL=mh-cbon@users.noreply.github.com # to clean
     - secure: F2a7VU+pXR/ogfiLiNed5FLgN+4yx+dsJBxg/eQlY/0mpZtoxGUrLpOWKanPF3iy/vNkCrVPtJWyGmtOE3gnGQLUjmPupfBH/WgCKihSXRQs8gu+ZrwzMAgr9lZY8qoLy1qZ1mAj/ZWJALPx4f1ydIV2Hqa1ICcFbbcQjbX92smdVB7FExW/vxIVlsoYuYfuhzgyRfW/DQu5IUt+snQYFBoMu9PVPjMAnetb3+FnZ7ARGfpUPeKfzBo2+RZGNna78c6JZcNZqf3EWHaSV2ur8ZK2XSTs7rvzuCst+ybtQSCDBQXkHXFCPa3V6FuUIVWFj4zDWuHlKQwB0otbzWhSPOAb3OnGBbBa9JXL3kVdUJsec73jIKQ1jFhwF0cQPETGA23vNDY/AA6em3YfvYj13tbGw1ZZkThX2fMQ88aJmmaG5pBZLAVZhOYfrxJQP053zxvSjMkCzqIwrguuoZE7DyH7C72OWGTVYAbgSuqYXgubsmb1VTf6rKFJReEor7w6ZxDQFBR0fPZo1Ja5ntIXcild20t8UWrXGRqWvMZEpVAdgKHQUffMe9UYLuyPaL/CCsjO/F/Od3iSWBbqLQPt/VszIz2CxB8ce4ye+EqdAT6Zfa5BDt6z2IW5vK/wQmHhgr+Nt8twbE1IhjgrQr2tYd7e0pIpvRNVyeiBxZ+UD8o=
 
 before_install:
@@ -20,22 +23,24 @@ before_install:
   - curl https://glide.sh/get | sh
 
 install:
-  - cd $GOPATH/src/github.com/mh-cbon/$MYAPP
+  - cd $GOPATH/src/github.com/mh-cbon/$APP
   - glide install
   - go install
 
-script: echo "pass"
+script:
+  - echo "pass"
+  - wget -O - https://raw.githubusercontent.com/mh-cbon/gh-pages/master/all.sh | sh -x
 
 before_deploy:
   - mkdir -p build/{386,amd64}
-  - GOOS=linux GOARCH=386 go build --ldflags "-X main.VERSION=${TRAVIS_TAG}" -o build/386/$MYAPP main.go
-  - GOOS=linux GOARCH=amd64 go build --ldflags "-X main.VERSION=${TRAVIS_TAG}" -o build/amd64/$MYAPP main.go
-  - curl -L https://raw.githubusercontent.com/mh-cbon/go-bin-deb/master/create-pkg.sh | GH=mh-cbon/$MYAPP sh -xe
-  - curl -L https://raw.githubusercontent.com/mh-cbon/go-bin-rpm/master/create-pkg.sh | GH=mh-cbon/$MYAPP sh -xe
+  - GOOS=linux GOARCH=386 go build --ldflags "-X main.VERSION=${TRAVIS_TAG}" -o build/386/$APP main.go
+  - GOOS=linux GOARCH=amd64 go build --ldflags "-X main.VERSION=${TRAVIS_TAG}" -o build/amd64/$APP main.go
+  - curl -L https://raw.githubusercontent.com/mh-cbon/go-bin-deb/master/create-pkg.sh | GH=mh-cbon/$APP sh -xe
+  - curl -L https://raw.githubusercontent.com/mh-cbon/go-bin-rpm/master/create-pkg.sh | GH=mh-cbon/$APP sh -xe
 
 after_deploy:
-  - curl -L https://raw.githubusercontent.com/mh-cbon/go-bin-deb/master/setup-repository.sh | GH=mh-cbon/$MYAPP EMAIL=$MYEMAIL sh -xe
-  - curl -L https://raw.githubusercontent.com/mh-cbon/go-bin-rpm/master/setup-repository.sh | GH=mh-cbon/$MYAPP EMAIL=$MYEMAIL sh -xe
+  - curl -L https://raw.githubusercontent.com/mh-cbon/go-bin-deb/master/setup-repository.sh | GH=mh-cbon/$APP EMAIL=$EMAIL sh -xe
+  - curl -L https://raw.githubusercontent.com/mh-cbon/go-bin-rpm/master/setup-repository.sh | GH=mh-cbon/$APP EMAIL=$EMAIL sh -xe
 
 deploy:
   provider: releases
