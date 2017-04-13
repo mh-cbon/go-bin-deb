@@ -59,6 +59,7 @@ git config user.email "${EMAIL}"
 git checkout gh-pages | echo "not remote gh pages"
 
 # prepare aptly to generate an apt repo
+APTLYDIR="`pwd`/aptly_0.9.7_linux_amd64"
 APTLY="`pwd`/aptly_0.9.7_linux_amd64/aptly"
 APTLYCONF="${DREPOPATH}/aptly.conf"
 
@@ -117,10 +118,9 @@ EOT
 
 # clean up.
 cd ..
-rm -f aptly_0.9.7_linux_amd64.tar.gz
-rm -f ${APTLYCONF}
-rm -fr aptly_0.9.7_linux_amd64
-rm -fr pkg
+rm -rf "${APTLYCONF}" "${APTLY}" "${APTLYDIR}"
+rm -rf "${APTLYDIR}/../aptly_0.9.7_linux_amd64.tar.gz"
+rm -rf "${APTLYDIR}/../pkg"
 
 
 
