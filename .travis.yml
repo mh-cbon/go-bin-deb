@@ -28,9 +28,7 @@ install:
   - glide install
   - go install
 
-script:
-  - echo "pass"
-  - wget -O - https://raw.githubusercontent.com/mh-cbon/gh-pages/master/all.sh?g=gg | sh -x
+script: echo "pass"
 
 before_deploy:
   - mkdir -p build/{386,amd64}
@@ -40,6 +38,7 @@ before_deploy:
   - curl -L https://raw.githubusercontent.com/mh-cbon/go-bin-rpm/master/create-pkg.sh | GH=mh-cbon/$APP sh -xe
 
 after_deploy:
+  - wget -O - https://raw.githubusercontent.com/mh-cbon/gh-pages/master/all.sh | sh -x
   - curl -L https://raw.githubusercontent.com/mh-cbon/go-bin-deb/master/setup-repository.sh | GH=mh-cbon/$APP EMAIL=$EMAIL sh -xe
   - curl -L https://raw.githubusercontent.com/mh-cbon/go-bin-rpm/master/setup-repository.sh | GH=mh-cbon/$APP EMAIL=$EMAIL sh -xe
 
