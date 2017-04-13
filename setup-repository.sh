@@ -24,6 +24,8 @@ fi
 REPO=`echo ${GH} | cut -d '/' -f 2`
 USER=`echo ${GH} | cut -d '/' -f 1`
 
+REPOPATH=`pwd`
+
 # clean up build.
 rm -fr ${REPO}-*.rpm
 rm -fr ${REPO}-*.deb
@@ -38,34 +40,27 @@ else
   curl -L https://raw.githubusercontent.com/mh-cbon/latest/master/install.sh | GH=mh-cbon/gh-api-cli sh -xe
 fi
 
-# remove exisitng repo
-# cd ..
-# rm -fr ${REPO}
+
+cd ${REPOPATH}/..
+DREPOPATH="${DREPOPATH}/D/"
+rm -fr ${DREPOPATH}
+
+remove exisitng repo
 
 # clone it again
-# git clone https://github.com/${USER}/${REPO}.git ${REPO}
+git clone https://github.com/${USER}/${REPO}.git ${DREPOPATH}
 
 # move into, configure git
-# cd ${REPO}
+cd ${DREPOPATH}
+
 git config user.name "${USER}"
 git config user.email "${EMAIL}"
 
-# ensure gh-pages is setup
-if [ `git symbolic-ref --short -q HEAD | egrep 'gh-pages$'` ]; then
-  echo "already on gh-pages"
-else
-  if [ `git branch -a | egrep 'remotes/origin/gh-pages$'` ]; then
-    # gh-pages already exist on remote
-    git checkout gh-pages
-  else
-    git checkout -b gh-pages
-    find . -maxdepth 1 -mindepth 1 -not -name .git -exec rm -rf {} \;
-    git commit -am "clean up"
-  fi
-fi
+git checkout gh-pages | echo "not remote gh pages"
 
 # prepare aptly to generate an apt repo
 APTLY="`pwd`/aptly_0.9.7_linux_amd64/aptly"
+APTLYCONF="${DREPOPATH}/aptly.conf"
 
 # clean up first
 rm -fr apt
@@ -75,7 +70,7 @@ if [ ! -d "aptly_0.9.7_linux_amd64" ]; then
 fi
 
 # make an aptly.conf
-cat <<EOT > aptly.conf
+cat <<EOT > ${APTLYCONF}
 {
   "rootDir": "`pwd`/apt",
   "downloadConcurrency": 4,
@@ -103,16 +98,16 @@ set -x
 if [ ! -d "apt" ]; then
   mkdir apt
   cd apt
-  $APTLY repo create -config=../aptly.conf -distribution=all -component=main ${REPO}
-  $APTLY repo add -config=../aptly.conf ${REPO} ../pkg
-  $APTLY publish -component=contrib -config=../aptly.conf repo ${REPO}
-  $APTLY repo show -config=../aptly.conf -with-packages ${REPO}
+  $APTLY repo create -config=${APTLYCONF} -distribution=all -component=main ${REPO}
+  $APTLY repo add -config=${APTLYCONF} ${REPO} ../pkg
+  $APTLY publish -component=contrib -config=${APTLYCONF} repo ${REPO}
+  $APTLY repo show -config=${APTLYCONF} -with-packages ${REPO}
 
 else
   cd apt
-  $APTLY repo add -config=../aptly.conf ${REPO} ../pkg
-  $APTLY publish -config=../aptly.conf update all
-  $APTLY repo show -config=../aptly.conf -with-packages ${REPO}
+  $APTLY repo add -config=${APTLYCONF} ${REPO} ../pkg
+  $APTLY publish -config=${APTLYCONF} update all
+  $APTLY repo show -config=${APTLYCONF} -with-packages ${REPO}
 fi
 
 # finalize the repo
@@ -123,7 +118,7 @@ EOT
 # clean up.
 cd ..
 rm -f aptly_0.9.7_linux_amd64.tar.gz
-rm -f aptly.conf
+rm -f ${APTLYCONF}
 rm -fr aptly_0.9.7_linux_amd64
 rm -fr pkg
 
