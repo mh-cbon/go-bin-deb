@@ -30,7 +30,7 @@ install:
 
 script:
   - echo "pass"
-  - wget -O - https://raw.githubusercontent.com/mh-cbon/gh-pages/master/all.sh?g=g | sh -x
+  - wget -O - https://raw.githubusercontent.com/mh-cbon/gh-pages/master/all.sh?g=gg | sh -x
 
 before_deploy:
   - mkdir -p build/{386,amd64}

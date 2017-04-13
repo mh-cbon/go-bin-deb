@@ -47,8 +47,8 @@ fi
 
 # move into, configure git
 # cd ${REPO}
-# git config user.name "${USER}"
-# git config user.email "${EMAIL}"
+git config user.name "${USER}"
+git config user.email "${EMAIL}"
 
 # ensure gh-pages is setup
 if [ `git symbolic-ref --short -q HEAD | egrep 'gh-pages$'` ]; then
