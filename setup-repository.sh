@@ -118,9 +118,11 @@ EOT
 
 # clean up.
 cd ..
-rm -rf "${APTLYCONF}" "${APTLY}" "${APTLYDIR}"
 rm -rf "${APTLYDIR}/../aptly_0.9.7_linux_amd64.tar.gz"
 rm -rf "${APTLYDIR}/../pkg"
+rm -rf "${APTLYCONF}"
+rm -rf "${APTLY}"
+rm -rf "${APTLYDIR}"
 
 
 
