@@ -1,4 +1,15 @@
 
+0.0.18
+
+  * go vet
+  * fix apt repository
+
+  - mh-cbon <mh-cbon@users.noreply.github.com>
+
+-- mh-cbon <mh-cbon@users.noreply.github.com>; Tue, 18 Apr 2017 22:42:01 +0200
+
+
+
 0.0.17
 
   * support: updated all support script
@@ -59,6 +70,8 @@
 
   * conffiles is not created if there is no configuration files,
     ensure correct debian arch when control.arch field is 386
+
+
 
 
 
