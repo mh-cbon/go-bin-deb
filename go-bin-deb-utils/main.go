@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -103,9 +104,8 @@ func requireArg(val, n string, env ...string) {
 }
 
 func isTravis() bool {
-	fmt.Println(`os.Getenv("CI")`, os.Getenv("CI"))
-	fmt.Println(`os.Getenv("TRAVIS")`, os.Getenv("TRAVIS"))
-	return os.Getenv("CI") == "TRUE" && os.Getenv("TRAVIS") == "TRUE"
+	return strings.ToLower(os.Getenv("CI")) == "true" &&
+		strings.ToLower(os.Getenv("TRAVIS")) == "true"
 }
 
 func isVagrant() bool {
