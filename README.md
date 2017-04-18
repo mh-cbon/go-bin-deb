@@ -1,10 +1,7 @@
+emd gen README.e.md
 # go-bin-deb
 
-[![travis Status](https://travis-ci.org/mh-cbon/go-bin-deb.svg?branch=master)](https://travis-ci.org/mh-cbon/go-bin-deb)
-[![Go Report Card](https://goreportcard.com/badge/github.com/mh-cbon/go-bin-deb)](https://goreportcard.com/report/github.com/mh-cbon/go-bin-deb)
-
-[![GoDoc](https://godoc.org/github.com/mh-cbon/go-bin-deb?status.svg)](http://godoc.org/github.com/mh-cbon/go-bin-deb)
-
+[![travis Status](https://travis-ci.org/mh-cbon/go-bin-deb.svg?branch=master)](https://travis-ci.org/mh-cbon/go-bin-deb)[![Go Report Card](https://goreportcard.com/badge/github.com/mh-cbon/go-bin-deb)](https://goreportcard.com/report/github.com/mh-cbon/go-bin-deb)[![GoDoc](https://godoc.org/github.com/mh-cbon/go-bin-deb?status.svg)](http://godoc.org/github.com/mh-cbon/go-bin-deb)
 
 Package go-bin-deb creates binary package for debian system
 
@@ -27,8 +24,8 @@ See [the demo](demo/).
   - [Workflow overview](#workflow-overview)
   - [Json file](#json-file)
 - [CLI](#cli)
-- [generate](#generate)
-- [test](#test)
+  - [generate](#generate)
+  - [test](#test)
 - [Recipes](#recipes)
   - [Installing generated package](#installing-generated-package)
   - [Vagrant recipe](#vagrant-recipe)
@@ -42,7 +39,6 @@ See [the demo](demo/).
 Check the [release page](https://github.com/mh-cbon/go-bin-deb/releases)!
 
 #### Glide
-
 ```sh
 mkdir -p $GOPATH/src/github.com/mh-cbon/go-bin-deb
 cd $GOPATH/src/github.com/mh-cbon/go-bin-deb
@@ -50,7 +46,6 @@ git clone https://github.com/mh-cbon/go-bin-deb.git .
 glide install
 go install
 ```
-
 
 #### linux rpm/deb repository
 ```sh
@@ -94,8 +89,7 @@ For a real world example including service, shortcuts, env, see [this](demo/deb.
 For a casual example to provide a simple binary, see [this](deb.json)
 
 # CLI
-
-###### $ go-bin-deb -help
+go-bin-deb -help
 ```sh
 NAME:
    go-bin-deb - Generate a binary debian package
@@ -117,8 +111,7 @@ GLOBAL OPTIONS:
 ```
 
 ### generate
-
-###### $ go-bin-deb generate -help
+go-bin-deb generate -help
 ```sh
 NAME:
    go-bin-deb generate - Generate the contents of the package
@@ -135,8 +128,7 @@ OPTIONS:
 ```
 
 ### test
-
-###### $ go-bin-deb test -help
+go-bin-deb test -help
 ```sh
 NAME:
    go-bin-deb test - Test the package json file
@@ -262,4 +254,4 @@ gump patch # bump
 # History
 
 [CHANGELOG](CHANGELOG.md)
-
+[32m ✔ Success[0m
