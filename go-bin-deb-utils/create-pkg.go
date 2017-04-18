@@ -78,9 +78,9 @@ func CreatePackage(reposlug, ghToken, email, version, archs, outbuild string, pu
 		}
 		exec(`gh-api-cli rm-assets --owner %v --repository %v --ver %v -t %v --glob %v`, user, name, version, ghToken, "*.deb")
 		exec(`gh-api-cli upload-release-asset --owner %v --repository %v --ver %v -t %v --glob %q`, user, name, version, ghToken, outbuild+"/*.deb")
+		exec(`rm -f %v`, outbuild+"/*.deb")
 	}
 
-	exec(`rm -f %v`, outbuild+"/*.deb")
 }
 
 var alwaysHide = map[string]string{}
