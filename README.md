@@ -1,4 +1,3 @@
-emd gen README.e.md
 # go-bin-deb
 
 [![travis Status](https://travis-ci.org/mh-cbon/go-bin-deb.svg?branch=master)](https://travis-ci.org/mh-cbon/go-bin-deb) [![Go Report Card](https://goreportcard.com/badge/github.com/mh-cbon/go-bin-deb)](https://goreportcard.com/report/github.com/mh-cbon/go-bin-deb) [![GoDoc](https://godoc.org/github.com/mh-cbon/go-bin-deb?status.svg)](http://godoc.org/github.com/mh-cbon/go-bin-deb) [![MIT License](http://img.shields.io/badge/License-MIT-yellow.svg)](../LICENSE)
@@ -254,4 +253,3 @@ gump patch # bump
 # History
 
 [CHANGELOG](CHANGELOG.md)
-[32m ✔ Success[0m
