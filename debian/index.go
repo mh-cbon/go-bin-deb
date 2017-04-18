@@ -97,7 +97,7 @@ type Package struct {
 	PostinstFile        string             `json:"postinst-file"`        // Post-inst script path
 	PrermFile           string             `json:"prerm-file"`           // Pre-rm script path
 	PostrmFile          string             `json:"postrm-file"`          // Post-rm script path
-	Conffiles           []string           `json:"mans"`                 // A list of the configuration files
+	Conffiles           []string           `json:"conf-files"`           // A list of the configuration files
 	Mans                []string           `json:"mans"`                 // A list of man page in the package
 	ChangelogFile       string             `json:"changelog-file"`       // Post-rm to the changelog file to copy to the package
 	ChangelogCmd        string             `json:"changelog-cmd"`        // A cmd to run which generates the content of the changelog file
