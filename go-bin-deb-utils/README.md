@@ -1,13 +1,9 @@
----
-License: MIT
-LicenseFile: LICENSE
-LicenseColor: yellow
----
-# {{.Name}}
+# go-bin-deb-utils
 
-{{template "license/shields" .}}
+[![<no value> License](http://img.shields.io/badge/License-<no value>-blue.svg)](LICENSE)
 
-{{pkgdoc}}
+go-bin-deb-utils is a cli tool to generate debian package and repos.
+
 
 # Usage
 
