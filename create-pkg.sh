@@ -13,7 +13,7 @@ if [ "${GH}" = "mh-cbon/go-bin-deb" ]; then
   git branch -aav
   git fetch -u --all
   git branch -aav
-  git pull
+  git pull origin master
   git checkout master
   git pull
   ls -al
