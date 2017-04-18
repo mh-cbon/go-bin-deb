@@ -12,6 +12,7 @@ import (
 	"github.com/urfave/cli"
 )
 
+// VERSION is the last build number.
 var VERSION = "0.0.0"
 var logger = verbose.Auto()
 
@@ -86,20 +87,20 @@ func generateContents(c *cli.Context) error {
 		output = o
 	}
 
-	debJson := debian.Package{}
+	debJSON := debian.Package{}
 
 	// load the deb.json file
-	if err := debJson.Load(file); err != nil {
+	if err := debJSON.Load(file); err != nil {
 		return cli.NewExitError(err.Error(), 1)
 	}
 	logger.Println("deb.json loaded")
 
 	// normalize data
-	debJson.Normalize(pkgDir, version, arch)
+	debJSON.Normalize(pkgDir, version, arch)
 	logger.Println("pkg data normalized")
 
 	logger.Printf("Generating files in %s", pkgDir)
-	if err := debJson.GenerateFiles(filepath.Dir(file), pkgDir); err != nil {
+	if err := debJSON.GenerateFiles(filepath.Dir(file), pkgDir); err != nil {
 		return cli.NewExitError(err.Error(), 1)
 	}
 
@@ -117,9 +118,9 @@ func generateContents(c *cli.Context) error {
 func testPkg(c *cli.Context) error {
 	file := c.String("file")
 
-	debJson := debian.Package{}
+	debJSON := debian.Package{}
 
-	if err := debJson.Load(file); err != nil {
+	if err := debJSON.Load(file); err != nil {
 		return cli.NewExitError(err.Error(), 1)
 	}
 
