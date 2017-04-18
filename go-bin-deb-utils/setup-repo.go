@@ -74,6 +74,8 @@ func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push b
 		removeAll(to)
 		removeAll(to + ".*") // handle aptly_0.9.7_linux_amd64.tar.gz.1
 	}
+	to := filepath.Join(repoPath, "aptly_0.9.7_linux_amd64.tar.gz")
+	removeAll(to + ".*") // handle aptly_0.9.7_linux_amd64.tar.gz.1
 
 	conf := `{
 	  "rootDir": "` + repoPath + `/apt",
