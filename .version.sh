@@ -14,7 +14,7 @@ PREVERSION=
   666 changelog md -o CHANGELOG.md --vars='{"name":"go-bin-deb"}'
   666 commit -q -m "changelog: !newversion!" -f CHANGELOG.md
 
-POSTVERION=
+POSTVERSION=
   666 git push
   666 git push --tags
   666 gh-api-cli create-release -n release -o mh-cbon -r go-bin-deb \
