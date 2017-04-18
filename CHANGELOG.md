@@ -1,5 +1,21 @@
 # Changelog - go-bin-deb
 
+### 0.0.17
+
+__Changes__
+
+- support: updated all support script
+- deploy: update helper script to generate repo source to ensure GH_TOKEN is not empty
+- release script: create-release add changelog support, add draft support
+
+__Contributors__
+
+- mh-cbon
+
+Released by mh-cbon, Tue 18 Apr 2017 -
+[see the diff](https://github.com/mh-cbon/go-bin-deb/compare/0.0.16...0.0.17#diff)
+______________
+
 ### 0.0.16
 
 __Changes__
@@ -62,6 +78,9 @@ __Changes__
 
 - conffiles is not created if there is no configuration files,
   ensure correct debian arch when control.arch field is 386
+
+
+
 
 __Contributors__
 
