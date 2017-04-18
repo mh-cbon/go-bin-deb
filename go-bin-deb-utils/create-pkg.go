@@ -51,7 +51,7 @@ func CreatePackage(reposlug, ghToken, email, version, archs, outbuild string, pu
 		panic(err)
 	}
 
-	exec(`ls -al`)
+	exec(`ls -al %v`, repoPath)
 	exec(`ls -al %v`, outbuild)
 
 	for _, arch := range strings.Split(archs, ",") {
