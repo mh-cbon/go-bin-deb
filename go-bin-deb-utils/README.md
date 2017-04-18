@@ -1,6 +1,6 @@
 # go-bin-deb-utils
 
-[![<no value> License](http://img.shields.io/badge/License-<no value>-blue.svg)](LICENSE)
+[![MIT License](http://img.shields.io/badge/License-MIT-yellow.svg)](../LICENSE)
 
 go-bin-deb-utils is a cli tool to generate debian package and repos.
 
