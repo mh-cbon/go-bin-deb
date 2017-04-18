@@ -1,6 +1,11 @@
+---
+License: MIT
+LicenseFile: ../LICENSE
+LicenseColor: yellow
+---
 # {{.Name}}
 
-{{template "badge/travis" .}}{{template "badge/goreport" .}}{{template "badge/godoc" .}}
+{{template "badge/travis" .}} {{template "badge/goreport" .}} {{template "badge/godoc" .}} {{template "license/shields" .}}
 
 {{pkgdoc}}
 
