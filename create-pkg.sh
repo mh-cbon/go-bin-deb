@@ -11,7 +11,8 @@
 if [ "${GH}" = "mh-cbon/go-bin-deb" ]; then
   git remote -vv
   git branch -aav
-  git fetch
+  git fetch -u --all
+  git branch -aav
   git pull
   git checkout master
   git pull
