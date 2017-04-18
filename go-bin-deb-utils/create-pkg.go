@@ -51,6 +51,8 @@ func CreatePackage(reposlug, ghToken, email, version, archs, outbuild string, pu
 		panic(err)
 	}
 
+	exec(`ls -al %v`, outbuild)
+
 	for _, arch := range strings.Split(archs, ",") {
 		arch = strings.TrimSpace(arch)
 		arch = strings.ToLower(arch)
@@ -63,6 +65,9 @@ func CreatePackage(reposlug, ghToken, email, version, archs, outbuild string, pu
 		workDir := filepath.Join(dir, arch)
 		outFile := fmt.Sprintf("%v-%v.deb", name, arch)
 		out := filepath.Join(outbuild, outFile)
+
+		exec(`ls -al`)
+		exec(`ls -al %v`, workDir)
 
 		os.MkdirAll(workDir, os.ModePerm)
 		exec(`go-bin-deb generate -a %v --version %v -w %v -o %v`, arch, version, workDir, out)
