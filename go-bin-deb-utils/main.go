@@ -81,8 +81,10 @@ func main() {
 
 	// execute some common setup, in case.
 	alwaysHide[ghToken] = "$GH_TOKEN"
-	os.RemoveAll(out)
+
+	// os.RemoveAll(out)
 	os.MkdirAll(out, os.ModePerm)
+
 	if version == "LAST" {
 		version = latestGhRelease(reposlug)
 	}
