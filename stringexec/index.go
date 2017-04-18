@@ -7,7 +7,7 @@ import (
 	"runtime"
 )
 
-// Return a new exec.Cmd object for the given command string
+// Command Return a new exec.Cmd object for the given command string
 func Command(cwd string, cmd string) (*exec.Cmd, error) {
 	if runtime.GOOS == "windows" {
 		return ExecStringWindows(cwd, cmd)
@@ -15,6 +15,7 @@ func Command(cwd string, cmd string) (*exec.Cmd, error) {
 	return ExecStringFriendlyUnix(cwd, cmd)
 }
 
+// ExecStringWindows exec given string on windows os
 func ExecStringWindows(cwd string, cmd string) (*exec.Cmd, error) {
 	dir, err := ioutil.TempDir("", "stringexec")
 	if err != nil {
@@ -33,6 +34,7 @@ func ExecStringWindows(cwd string, cmd string) (*exec.Cmd, error) {
 	return oCmd, nil
 }
 
+// ExecStringFriendlyUnix exec given string on linux like os
 func ExecStringFriendlyUnix(cwd string, cmd string) (*exec.Cmd, error) {
 	oCmd := exec.Command("sh", []string{"-c", cmd}...)
 	oCmd.Dir = cwd
