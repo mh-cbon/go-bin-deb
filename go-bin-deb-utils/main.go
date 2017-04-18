@@ -105,8 +105,14 @@ func mkdirAll(f string) error {
 	return os.MkdirAll(f, os.ModePerm)
 }
 func removeAll(f string) error {
+	if f == "" {
+		panic("nop")
+	}
+	if f == "." {
+		panic("nop .")
+	}
 	fmt.Println("removeAll", f)
-	return tryexec("rm -fr %q", f)
+	return tryexec("rm -fr %v", f)
 }
 func chdir(f string) error {
 	fmt.Println("Chdir", f)
