@@ -11,7 +11,7 @@ import (
 )
 
 // CreatePackage creates a debian package
-func CreatePackage(reposlug, GH_TOKEN, email, version, archs, outbuild string, push bool) {
+func CreatePackage(reposlug, ghToken, email, version, archs, outbuild string, push bool) {
 
 	x := strings.Split(reposlug, "/")
 	user := x[0]
@@ -75,8 +75,8 @@ func CreatePackage(reposlug, GH_TOKEN, email, version, archs, outbuild string, p
 		if tryexec(`gh-api-cli -v`) != nil {
 			exec(`latest -repo=%v`, "mh-cbon/gh-api-cli")
 		}
-		exec(`gh-api-cli rm-assets --owner %v --repository %v --ver %v -t %v --glob %v`, user, name, version, GH_TOKEN, "*.deb")
-		exec(`gh-api-cli upload-release-asset --owner %v --repository %v --ver %v -t %v --glob %q`, user, name, version, GH_TOKEN, outbuild+"/*.deb")
+		exec(`gh-api-cli rm-assets --owner %v --repository %v --ver %v -t %v --glob %v`, user, name, version, ghToken, "*.deb")
+		exec(`gh-api-cli upload-release-asset --owner %v --repository %v --ver %v -t %v --glob %q`, user, name, version, ghToken, outbuild+"/*.deb")
 	}
 }
 

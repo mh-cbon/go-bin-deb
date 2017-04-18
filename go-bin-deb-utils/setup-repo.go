@@ -12,7 +12,7 @@ import (
 )
 
 // SetupRepo creates a debian repository
-func SetupRepo(reposlug, GH_TOKEN, email, version, archs, outbuild string, push bool) {
+func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push bool) {
 
 	x := strings.Split(reposlug, "/")
 	user := x[0]
@@ -93,7 +93,7 @@ func SetupRepo(reposlug, GH_TOKEN, email, version, archs, outbuild string, push 
 	}`
 	writeFile(aptlyConf, conf)
 
-	exec(`gh-api-cli dl-assets -t %q -o %v -r %v -g '*deb' -out '%v/%%r-%%v_%%a.deb'`, GH_TOKEN, user, name, pkgDir)
+	exec(`gh-api-cli dl-assets -t %q -o %v -r %v -g '*deb' -out '%v/%%r-%%v_%%a.deb'`, ghToken, user, name, pkgDir)
 
 	os.MkdirAll(aptDir, os.ModePerm)
 	os.Chdir(aptDir)
@@ -122,7 +122,7 @@ func SetupRepo(reposlug, GH_TOKEN, email, version, archs, outbuild string, push 
 	if push {
 		exec(`git add -A`)
 		exec(`git commit -m "debian repository"`)
-		gU := fmt.Sprintf(`https://%v@github.com/%v.git`, GH_TOKEN, reposlug)
+		gU := fmt.Sprintf(`https://%v@github.com/%v.git`, ghToken, reposlug)
 		exec(`git push --force --quiet %q gh-pages`, gU)
 	}
 }
