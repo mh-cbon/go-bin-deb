@@ -73,6 +73,7 @@ func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push b
 		dlURL(u, to)
 		exec(`tar xzf ` + to)
 		os.RemoveAll(to)
+		os.RemoveAll(to + ".*") // handle aptly_0.9.7_linux_amd64.tar.gz.1
 	}
 
 	conf := `{

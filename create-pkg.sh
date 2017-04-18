@@ -9,13 +9,8 @@
 # | GH=YOUR/REPO sh -xe
 
 if [ "${GH}" = "mh-cbon/go-bin-deb" ]; then
-  git remote -vv
-  git branch -aav
-  git fetch -u --all
-  git branch -aav
   git pull origin master
-  git checkout master
-  git pull
+  git checkout -b master
   ls -al
   go run go-bin-deb-utils/*go create-packages -repo=$GH
 else
