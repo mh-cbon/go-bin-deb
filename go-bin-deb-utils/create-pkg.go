@@ -31,20 +31,25 @@ func CreatePackage(reposlug, ghToken, email, version, archs, outbuild string, pu
 
 	os.Chdir(repoPath)
 	fmt.Println("Chdir", repoPath)
+	exec(`ls -al %v`, repoPath)
 
 	exec(`sudo apt-get install build-essential lintian curl -y`)
+	exec(`ls -al %v`, repoPath)
 
 	if tryexec(`latest -v`) != nil {
 		exec(`go get -u github.com/mh-cbon/latest`)
 	}
+	exec(`ls -al %v`, repoPath)
 
 	if tryexec(`changelog -v`) != nil {
 		exec(`latest -repo=%v`, "mh-cbon/changelog")
 	}
+	exec(`ls -al %v`, repoPath)
 
 	if tryexec(`go-bin-deb -v`) != nil {
 		exec(`latest -repo=%v`, "mh-cbon/go-bin-deb")
 	}
+	exec(`ls -al %v`, repoPath)
 
 	dir, err := ioutil.TempDir("", "go-bin-deb")
 	if err != nil {
@@ -52,7 +57,6 @@ func CreatePackage(reposlug, ghToken, email, version, archs, outbuild string, pu
 	}
 
 	exec(`ls -al %v`, repoPath)
-	exec(`ls -al %v`, outbuild)
 
 	for _, arch := range strings.Split(archs, ",") {
 		arch = strings.TrimSpace(arch)
