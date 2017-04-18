@@ -1,5 +1,20 @@
 # Changelog - go-bin-deb
 
+### 0.0.18
+
+__Changes__
+
+- go vet
+- fix apt repository
+
+__Contributors__
+
+- mh-cbon
+
+Released by mh-cbon, Tue 18 Apr 2017 -
+[see the diff](https://github.com/mh-cbon/go-bin-deb/compare/0.0.17...0.0.18#diff)
+______________
+
 ### 0.0.17
 
 __Changes__
@@ -78,6 +93,8 @@ __Changes__
 
 - conffiles is not created if there is no configuration files,
   ensure correct debian arch when control.arch field is 386
+
+
 
 
 
