@@ -10,7 +10,7 @@
 
 if [ "${GH}" = "mh-cbon/go-bin-deb" ]; then
   git remote -vv
-  git branc -aav
+  git branch -aav
   git fetch origin
   git checkout -b master
   git pull origin
