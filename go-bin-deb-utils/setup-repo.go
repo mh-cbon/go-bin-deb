@@ -116,6 +116,7 @@ func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push b
 
 	tryexec(`git status`)
 
+	fmt.Println("push", push)
 	if push {
 		exec(`git add -A`)
 		exec(`git commit -m "debian repository"`)

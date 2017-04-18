@@ -1,4 +1,61 @@
 
+UNRELEASED
+
+  * support: updated all support script
+  * support: updated all support script
+  * support: updated all support script
+  * support: updated all support script
+  * support: updated all support script
+  * support: updated all support script
+  * support: updated all support script
+  * support: updated all support script
+  * support: updated all support script
+  * support: updated all support script
+  * support: updated all support script
+  * support: updated all support script
+  * support: updated all support script
+  * support: updated all support script
+  * support: updated all support script
+  * support: updated all support script
+  * support: updated all support script
+  * support: updated all support script
+  * support: updated all support script
+  * support: updated all support script
+  * support: updated all support script
+  * support: updated all support script
+  * support: updated all support script
+  * support: updated all support script
+  * go vet
+  * update
+  * update
+  * update
+  * update
+  * update
+  * update
+  * update
+  * update
+  * update
+  * update
+  * tryfix
+  * tryfix
+  * tryfix
+  * tryfix
+  * tryfix
+  * tryfix
+  * tryfix
+  * createpkg script: add tree
+  * createpkg script: add tree
+  * deploy: update helper script to generate repo source to ensure GH_TOKEN is not empty
+  * README
+  * release script: create-release add changelog support, add draft support
+  * changelog: 0.0.16
+
+  - mh-cbon <mh-cbon@users.noreply.github.com>
+
+-- mh-cbon <mh-cbon@users.noreply.github.com>; Tue, 18 Apr 2017 22:04:14 +0200
+
+
+
 0.0.16
 
   * travis: update build file, add deb/rpm repositories setup
@@ -47,6 +104,7 @@
 
   * conffiles is not created if there is no configuration files,
     ensure correct debian arch when control.arch field is 386
+
 
   - mh-cbon <mh-cbon@users.noreply.github.com>
 
