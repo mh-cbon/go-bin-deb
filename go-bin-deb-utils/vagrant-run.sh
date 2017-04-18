@@ -37,7 +37,7 @@ mkdir -p ${GOPATH}/bin
 
 set +x
 # everything here will be replicated into the CI build file (.travis.yml)
-export GHTOKEN="$GHTOKEN"
+export GH_TOKEN="$GH_TOKEN"
 NAME="go-bin-deb"
 export REPO="mh-cbon/$NAME"
 export EMAIL="mh-cbon@users.noreply.github.com"

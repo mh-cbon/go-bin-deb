@@ -17,13 +17,13 @@ func main() {
 	// basic arg parsing
 	var reposlug string
 	var email string
-	var ghToken string
+	var GH_TOKEN string
 	var version string
 	var archs string
 	var out string
 
 	flag.StringVar(&reposlug, "repo", "", "The repo slug such USER/REPO.")
-	flag.StringVar(&ghToken, "ghtoken", "", "The ghtoken to write on your repository.")
+	flag.StringVar(&GH_TOKEN, "GH_TOKEN", "", "The GH_TOKEN to write on your repository.")
 	flag.StringVar(&email, "email", "", "Your gh email.")
 	flag.StringVar(&version, "version", "", "The package version.")
 	flag.StringVar(&archs, "archs", "386,amd64", "The archs to build.")
@@ -38,8 +38,8 @@ func main() {
 	if reposlug == "" {
 		reposlug = os.Getenv("REPO")
 	}
-	if ghToken == "" {
-		ghToken = os.Getenv("GHTOKEN")
+	if GH_TOKEN == "" {
+		GH_TOKEN = os.Getenv("GH_TOKEN")
 	}
 
 	// ci fallback
@@ -63,7 +63,7 @@ func main() {
 
 	// integrity check
 	requireArg(reposlug, "repo", "REPO")
-	requireArg(ghToken, "ghtoken", "GHTOKEN")
+	requireArg(GH_TOKEN, "GH_TOKEN", "GH_TOKEN")
 	requireArg(email, "email", "EMAIL")
 	if isTravis() {
 		requireArg(version, "version", "TRAVIS_TAG")
@@ -75,7 +75,7 @@ func main() {
 	}
 
 	// execute some common setup, in case.
-	alwaysHide[ghToken] = "$GHTOKEN"
+	alwaysHide[GH_TOKEN] = "$GH_TOKEN"
 	os.RemoveAll(out)
 	os.MkdirAll(out, os.ModePerm)
 	if version == "LAST" {
@@ -84,10 +84,10 @@ func main() {
 
 	// execute the action
 	if action == "create-packages" {
-		CreatePackage(reposlug, ghToken, email, version, archs, out, *push)
+		CreatePackage(reposlug, GH_TOKEN, email, version, archs, out, *push)
 
 	} else if action == "setup-repository" {
-		SetupRepo(reposlug, ghToken, email, version, archs, out, *push)
+		SetupRepo(reposlug, GH_TOKEN, email, version, archs, out, *push)
 	}
 }
 

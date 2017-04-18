@@ -8,11 +8,11 @@ go-bin-deb-utils is a cli tool to generate debian package and repos.
 # Usage
 
 ```sh
-export GHTOKEN=`gh-api-cli get-auth -n release`
+export GH_TOKEN=`gh-api-cli get-auth -n release`
 
 vagrant up cli
 
-vagrant rsync cli && vagrant ssh cli -c "export GHTOKEN=$GHTOKEN; sh /vagrant/vagrant-run.sh"
+vagrant rsync cli && vagrant ssh cli -c "export GH_TOKEN=$GH_TOKEN; sh /vagrant/vagrant-run.sh"
 
 vagrant destroy cli -f
 ```
