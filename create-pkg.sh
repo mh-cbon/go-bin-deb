@@ -9,8 +9,12 @@
 # | GH=YOUR/REPO sh -xe
 
 if [ "${GH}" = "mh-cbon/go-bin-deb" ]; then
+  oldp=`pwd`
   git pull origin master
   git checkout -b master
+  cd ..
+  cd $oldp
+
     # go get -u github.com/mh-cbon/go-bin-deb/go-bin-deb-utils
   # go run go-bin-deb-utils/*go create-packages -repo=$GH
 # else
