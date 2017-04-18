@@ -52,7 +52,7 @@ func CreatePackage(reposlug, ghToken, email, version, archs, outbuild string, pu
 	}
 
 	exec(`ls -al`)
-	exec(`ls -al %q`, outbuild)
+	exec(`ls -al %v`, outbuild)
 
 	for _, arch := range strings.Split(archs, ",") {
 		arch = strings.TrimSpace(arch)

@@ -71,10 +71,11 @@ func main() {
 	if isTravis() {
 		requireArg(version, "version", "TRAVIS_TAG")
 		requireArg(out, "out", "TRAVIS_BUILD_DIR")
-	}
-	if isVagrant() {
+	} else if isVagrant() {
 		requireArg(version, "version", "VERSION")
 		requireArg(out, "out", "BUILD_DIR")
+	} else {
+		panic("nop, no such ci system...")
 	}
 
 	// execute some common setup, in case.
@@ -102,6 +103,8 @@ func requireArg(val, n string, env ...string) {
 }
 
 func isTravis() bool {
+	fmt.Println(`os.Getenv("CI")`, os.Getenv("CI"))
+	fmt.Println(`os.Getenv("TRAVIS")`, os.Getenv("TRAVIS"))
 	return os.Getenv("CI") == "TRUE" && os.Getenv("TRAVIS") == "TRUE"
 }
 
