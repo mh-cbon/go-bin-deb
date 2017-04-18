@@ -33,8 +33,8 @@ func main() {
 	flag.CommandLine.Parse(os.Args[2:])
 
 	// os.Env fallback
-	email = readEnv(ghToken, "EMAIL", "MYEMAIL")
-	reposlug = readEnv(ghToken, "REPO")
+	email = readEnv(email, "EMAIL", "MYEMAIL")
+	reposlug = readEnv(reposlug, "REPO")
 	ghToken = readEnv(ghToken, "GH_TOKEN")
 
 	// ci fallback
