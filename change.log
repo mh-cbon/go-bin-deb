@@ -1,5 +1,5 @@
 
-UNRELEASED
+0.0.17
 
   * support: updated all support script
   * deploy: update helper script to generate repo source to ensure GH_TOKEN is not empty
@@ -59,6 +59,7 @@ UNRELEASED
 
   * conffiles is not created if there is no configuration files,
     ensure correct debian arch when control.arch field is 386
+
 
 
   - mh-cbon <mh-cbon@users.noreply.github.com>
@@ -185,3 +186,5 @@ UNRELEASED
   - mh-cbon <mh-cbon@users.noreply.github.com>
 
 -- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 14:49:41 +0200
+
+
