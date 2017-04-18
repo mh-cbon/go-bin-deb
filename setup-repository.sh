@@ -9,4 +9,4 @@
 # | GH=YOUR/REPO sh -xe
 
 go get -u github.com/mh-cbon/go-bin-deb/go-bin-deb-utils
-go-bin-deb-utils setup-repository -push -repo=$REPO
+go-bin-deb-utils setup-repository -push -repo=$GH

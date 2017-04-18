@@ -20,29 +20,29 @@ import (
 
 var logger = verbose.Auto()
 
-type VcsSrc struct {
+type vcsSrc struct {
 	Type string `json:"type"` // Type identifier of the vcs source
-	Url  string `json:"url"`  // Url-like to the vcs source
+	URL  string `json:"url"`  // Url-like to the vcs source
 }
 
-func (c VcsSrc) String() string {
-	return c.Type + ": " + c.Url
+func (c vcsSrc) String() string {
+	return c.Type + ": " + c.URL
 }
 
-type FilesInstruction struct {
+type filesInstruction struct {
 	From  string `json:"from"`  // Source path to the files
 	Base  string `json:"base"`  // Base path to copy files from
 	To    string `json:"to"`    // Target path to copy the files to
 	Fperm string `json:"fperm"` // Permissions to apply such 0755
 	Dperm string `json:"dperm"` // Permissions to apply such 0755
 }
-type Copyright struct {
+type copyright struct {
 	Files     string `json:"files"`     // A pattern to describe a files selection
 	Copyright string `json:"copyright"` // the text of the copyright
 	License   string `json:"license"`   // License to apply to the selected files
 	File      string `json:"file"`      // Path to the file containing the license content
 }
-type Menu struct {
+type menu struct {
 	Name            string `json:"name"`           // Name of the shortcut
 	Description     string `json:"description"`    //
 	GenericName     string `json:"generic-name"`   //
@@ -59,6 +59,7 @@ type Menu struct {
 	MimeType        string `json:"mime-type"`      // ; separated list
 }
 
+// Package contaisn informtation about a debian package to build
 type Package struct {
 	Name                string             `json:"name"`                 // Name of the package
 	Maintainer          string             `json:"maintainer"`           // Information of the package maintainer
@@ -67,12 +68,12 @@ type Package struct {
 	Priority            string             `json:"priority"`             // Priority of the package (required,important,standard,optional,extra)
 	Arch                string             `json:"arch"`                 // Arch targeted by the package
 	Homepage            string             `json:"homepage"`             // Url to the homepage of the program
-	SourcesUrl          string             `json:"sources-url"`          // Url to the source of the program
+	SourcesURL          string             `json:"sources-url"`          // Url to the source of the program
 	Version             string             `json:"version"`              // Version of the package
-	Vcs                 []VcsSrc           `json:"vcs"`                  // Vcs information of the package
-	Files               []FilesInstruction `json:"files"`                // Files information to copy into the package
-	CopyrightSpecUrl    string             `json:"copyrights-spec-url"`  // Url to the copyright file specification
-	Copyrights          []Copyright        `json:"copyrights"`           // Copyrights of the package
+	Vcs                 []vcsSrc           `json:"vcs"`                  // Vcs information of the package
+	Files               []filesInstruction `json:"files"`                // Files information to copy into the package
+	CopyrightSpecURL    string             `json:"copyrights-spec-url"`  // Url to the copyright file specification
+	Copyrights          []copyright        `json:"copyrights"`           // Copyrights of the package
 	Essential           bool               `json:"essential"`            // Indicate if the package is an essential one
 	Depends             []string           `json:"depends"`              // Dependency list
 	Recommends          []string           `json:"recommends"`           // Recommendation list
@@ -101,9 +102,10 @@ type Package struct {
 	Mans                []string           `json:"mans"`                 // A list of man page in the package
 	ChangelogFile       string             `json:"changelog-file"`       // Post-rm to the changelog file to copy to the package
 	ChangelogCmd        string             `json:"changelog-cmd"`        // A cmd to run which generates the content of the changelog file
-	Menus               []Menu             `json:"menus"`                // Desktop shortcuts
+	Menus               []menu             `json:"menus"`                // Desktop shortcuts
 }
 
+// Load given deb.json file
 func (d *Package) Load(file string) error {
 	if _, err := os.Stat(file); os.IsNotExist(err) {
 		m := fmt.Sprintf("json file '%s' does not exist: %s", file, err.Error())
@@ -121,6 +123,7 @@ func (d *Package) Load(file string) error {
 	return nil
 }
 
+// Normalize current metadata
 func (d *Package) Normalize(debianDir string, version string, arch string) {
 
 	tokens := make(map[string]string)
@@ -131,8 +134,8 @@ func (d *Package) Normalize(debianDir string, version string, arch string) {
 	d.Version = replaceTokens(d.Version, tokens)
 	d.Arch = replaceTokens(d.Arch, tokens)
 	d.Homepage = replaceTokens(d.Homepage, tokens)
-	d.SourcesUrl = replaceTokens(d.SourcesUrl, tokens)
-	d.CopyrightSpecUrl = replaceTokens(d.CopyrightSpecUrl, tokens)
+	d.SourcesURL = replaceTokens(d.SourcesURL, tokens)
+	d.CopyrightSpecURL = replaceTokens(d.CopyrightSpecURL, tokens)
 	d.Description = replaceTokens(d.Description, tokens)
 	d.DescriptionExtended = replaceTokens(d.DescriptionExtended, tokens)
 	d.InitFile = replaceTokens(d.InitFile, tokens)
@@ -146,7 +149,7 @@ func (d *Package) Normalize(debianDir string, version string, arch string) {
 	d.ChangelogCmd = replaceTokens(d.ChangelogCmd, tokens)
 
 	for i, v := range d.Vcs {
-		d.Vcs[i].Url = replaceTokens(v.Url, tokens)
+		d.Vcs[i].URL = replaceTokens(v.URL, tokens)
 	}
 	for i, v := range d.Files {
 		d.Files[i].From = replaceTokens(v.From, tokens)
@@ -179,8 +182,8 @@ func (d *Package) Normalize(debianDir string, version string, arch string) {
 		d.Menus[i].Icon = replaceTokens(v.Icon, tokens)
 	}
 
-	if d.CopyrightSpecUrl == "" {
-		d.CopyrightSpecUrl = "http://anonscm.debian.org/viewvc/dep/web/deps/dep5/copyright-format.xml?view=markup"
+	if d.CopyrightSpecURL == "" {
+		d.CopyrightSpecURL = "http://anonscm.debian.org/viewvc/dep/web/deps/dep5/copyright-format.xml?view=markup"
 	}
 	if d.Version == "" {
 		d.Version = version
@@ -220,6 +223,7 @@ func replaceTokens(in string, tokens map[string]string) string {
 	return in
 }
 
+// GenerateFiles from sourceDir to pkgDir
 func (d *Package) GenerateFiles(sourceDir string, pkgDir string) error {
 
 	dataDir := filepath.Join(pkgDir, "debian")
@@ -362,6 +366,7 @@ func (d *Package) GenerateFiles(sourceDir string, pkgDir string) error {
 	return nil
 }
 
+// GenerateInstall generates install file.
 func (d *Package) GenerateInstall(sourceDir string, debianDir string, dataDir string) error {
 	var err error
 	content := ""
@@ -417,6 +422,7 @@ func (d *Package) GenerateInstall(sourceDir string, debianDir string, dataDir st
 	return ioutil.WriteFile(f, []byte(content), 0644)
 }
 
+// WriteConffiles updates the debian directory
 func (d *Package) WriteConffiles(debianDir string) error {
 	content := ""
 	for _, f := range d.Conffiles {
@@ -432,6 +438,7 @@ func (d *Package) WriteConffiles(debianDir string) error {
 	return ioutil.WriteFile(f, []byte(content), 0644)
 }
 
+// WriteEnvProfile generates an etc/profile.d/plg.name.sh
 func (d *Package) WriteEnvProfile(debianDir string) error {
 	content := ""
 	for k, v := range d.Envs {
@@ -447,6 +454,7 @@ func (d *Package) WriteEnvProfile(debianDir string) error {
 	return ioutil.WriteFile(f, []byte(content), 0644)
 }
 
+// ImportFiles add files to the package.
 func (d *Package) ImportFiles(sourceDir string) error {
 	for _, fileInst := range d.Files {
 		var fperm int32
@@ -526,6 +534,7 @@ func (d *Package) ImportFiles(sourceDir string) error {
 	return nil
 }
 
+// ComputeSize returns size of a directory
 func (d *Package) ComputeSize(sourceDir string) (int64, error) {
 	var size int64 = 0
 
@@ -551,6 +560,7 @@ func (d *Package) ComputeSize(sourceDir string) (int64, error) {
 	return size / 1024, nil
 }
 
+// WriteControlFile writes the control file.
 func (d *Package) WriteControlFile(debianDir string, size uint64) error {
 
 	desc := d.Description
@@ -598,15 +608,16 @@ func (d *Package) WriteControlFile(debianDir string, size uint64) error {
 	return ioutil.WriteFile(control, controlContent, 0644)
 }
 
+// WriteCopyrightFile writes the copyright file.
 func (d *Package) WriteCopyrightFile(debianDir string) error {
 	if err := os.MkdirAll(debianDir, 0755); err != nil {
 		return err
 	}
 	content := ""
-	content += strAppend("Format-Specification", d.CopyrightSpecUrl)
+	content += strAppend("Format-Specification", d.CopyrightSpecURL)
 	content += strAppend("Name", d.Name)
 	content += strAppend("Maintainer", d.Maintainer)
-	sourcesUrl := d.SourcesUrl
+	sourcesUrl := d.SourcesURL
 	if sourcesUrl == "" {
 		sourcesUrl = d.Homepage
 	}
@@ -636,6 +647,7 @@ func (d *Package) WriteCopyrightFile(debianDir string) error {
 	return ioutil.WriteFile(file, []byte(content), 0644)
 }
 
+// WriteCronFiles writes the cron file.
 func (d *Package) WriteCronFiles(debianDir string) error {
 
 	for k, val := range d.CronFiles {
@@ -663,6 +675,7 @@ func (d *Package) WriteCronFiles(debianDir string) error {
 	return nil
 }
 
+// WriteChangelogFile writes the changelog file.
 func (d *Package) WriteChangelogFile(debianDir string) error {
 	if err := os.MkdirAll(debianDir, 0755); err != nil {
 		return err
@@ -698,6 +711,7 @@ func (d *Package) WriteChangelogFile(debianDir string) error {
 	return oCmd.Run()
 }
 
+// WriteManPageIndexFile writes the map page index file.
 func (d *Package) WriteManPageIndexFile(debianDir string) error {
 
 	file := filepath.Join(debianDir, d.Name+".manpages")
@@ -711,6 +725,7 @@ func (d *Package) WriteManPageIndexFile(debianDir string) error {
 	return nil
 }
 
+// WriteShortcuts writes the application shortcuts.
 func (d *Package) WriteShortcuts(dataDir string) error {
 
 	for _, m := range d.Menus {
@@ -805,6 +820,7 @@ func (d *Package) WriteShortcuts(dataDir string) error {
 	return nil
 }
 
+// WriteUnitFile writes the unit.d file.
 func (d *Package) WriteUnitFile(dataDir string) error {
 	if d.SystemdFile != "" {
 		f := filepath.Join(dataDir, "lib", "systemd", "system", filepath.Base(d.SystemdFile))
@@ -819,6 +835,7 @@ func (d *Package) WriteUnitFile(dataDir string) error {
 	return nil
 }
 
+// WriteInitFile writes the etc/init.d file.
 func (d *Package) WriteInitFile(dataDir string) error {
 	if d.InitFile != "" {
 		f := filepath.Join(dataDir, "etc", "init.d", d.Name+".sh")
@@ -833,6 +850,7 @@ func (d *Package) WriteInitFile(dataDir string) error {
 	return nil
 }
 
+// WriteDefaultInitFile writes the etc/default file.
 func (d *Package) WriteDefaultInitFile(dataDir string) error {
 	if d.DefaultFile != "" {
 		f := filepath.Join(dataDir, "etc", "default", d.Name+".sh")
@@ -847,6 +865,7 @@ func (d *Package) WriteDefaultInitFile(dataDir string) error {
 	return nil
 }
 
+// WritePreInstFile writes the preinst file.
 func (d *Package) WritePreInstFile(debianDir string) error {
 	if d.PreinstFile != "" {
 		f := filepath.Join(debianDir, "preinst")
@@ -858,6 +877,7 @@ func (d *Package) WritePreInstFile(debianDir string) error {
 	return nil
 }
 
+// WritePostInstFile writes the postinst file.
 func (d *Package) WritePostInstFile(debianDir string) error {
 	if d.PostinstFile != "" {
 		f := filepath.Join(debianDir, "postinst")
@@ -869,6 +889,7 @@ func (d *Package) WritePostInstFile(debianDir string) error {
 	return nil
 }
 
+// WritePreRmFile writes the prerm file.
 func (d *Package) WritePreRmFile(debianDir string) error {
 	if d.PrermFile != "" {
 		f := filepath.Join(debianDir, "prerm")
@@ -880,6 +901,7 @@ func (d *Package) WritePreRmFile(debianDir string) error {
 	return nil
 }
 
+// WritePostRmFile writes the postrm file.
 func (d *Package) WritePostRmFile(debianDir string) error {
 	if d.PostrmFile != "" {
 		f := filepath.Join(debianDir, "postrm")
@@ -891,6 +913,7 @@ func (d *Package) WritePostRmFile(debianDir string) error {
 	return nil
 }
 
+// CopyResults copy the packages to the path..
 func (d *Package) CopyResults(from string, to string) error {
 	items, err := zglob.Glob(from + "/" + d.Name + "*")
 	if err != nil {
@@ -930,7 +953,7 @@ func boolAppend(name string, value bool) string {
 	}
 	return ret
 }
-func vcsSliceAppend(s []VcsSrc) string {
+func vcsSliceAppend(s []vcsSrc) string {
 	ret := ""
 	for _, k := range s {
 		ret += structAppend(k)
