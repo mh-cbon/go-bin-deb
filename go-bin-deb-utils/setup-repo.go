@@ -23,15 +23,14 @@ func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push b
 	fmt.Println("repoPath", repoPath)
 
 	if _, err := os.Stat(repoPath); os.IsNotExist(err) {
-		os.MkdirAll(repoPath, os.ModePerm)
-		os.Chdir(repoPath)
+		mkdirAll(repoPath)
+		chdir(repoPath)
 		exec(`git clone https://github.com/%v.git .`, reposlug)
 		exec(`git config user.name %v`, user)
 		exec(`git config user.email %v`, email)
 	}
 
-	os.Chdir(repoPath)
-	fmt.Println("Chdir", repoPath)
+	chdir(repoPath)
 
 	exec(`sudo apt-get install build-essential -y`)
 
@@ -65,15 +64,15 @@ func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push b
 	aptlyBin := filepath.Join(aptlyDir, "aptly")
 	aptlyConf := filepath.Join(repoPath, "aptly.conf")
 
-	os.RemoveAll(aptDir)
+	removeAll(aptDir)
 
 	if _, s := os.Stat(aptlyDir); os.IsNotExist(s) {
 		to := filepath.Join(repoPath, "aptly_0.9.7_linux_amd64.tar.gz")
 		u := "https://bintray.com/artifact/download/smira/aptly/" + "aptly_0.9.7_linux_amd64.tar.gz"
 		dlURL(u, to)
 		exec(`tar xzf ` + to)
-		os.RemoveAll(to)
-		os.RemoveAll(to + ".*") // handle aptly_0.9.7_linux_amd64.tar.gz.1
+		removeAll(to)
+		removeAll(to + ".*") // handle aptly_0.9.7_linux_amd64.tar.gz.1
 	}
 
 	conf := `{
@@ -95,9 +94,8 @@ func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push b
 
 	exec(`gh-api-cli dl-assets -t %q -o %v -r %v -g '*deb' -out '%v/%%r-%%v_%%a.deb'`, ghToken, user, name, pkgDir)
 
-	os.MkdirAll(aptDir, os.ModePerm)
-	os.Chdir(aptDir)
-	fmt.Println("Chdir", aptDir)
+	mkdirAll(aptDir)
+	chdir(aptDir)
 
 	exec(`%v repo create -config=%v -distribution=all -component=main %v`, aptlyBin, aptlyConf, reposlug)
 	exec(`%v repo add -config=%v %v %v`, aptlyBin, aptlyConf, reposlug, pkgDir)
@@ -108,11 +106,10 @@ func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push b
 	listContent := fmt.Sprintf("deb [trusted=yes] https://%v.github.io/%v/apt/public/ all contrib\n", user, name)
 	writeFile(listFile, listContent)
 
-	os.Chdir(repoPath)
-	fmt.Println("Chdir", repoPath)
-	os.RemoveAll(aptlyConf)
-	os.RemoveAll(aptlyDir)
-	os.RemoveAll(pkgDir)
+	chdir(repoPath)
+	removeAll(aptlyConf)
+	removeAll(aptlyDir)
+	removeAll(pkgDir)
 
 	exec(`ls -al .`)
 	exec(`ls -al apt`)
@@ -128,6 +125,7 @@ func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push b
 }
 
 func writeFile(f, content string) {
+	fmt.Println("writeFile", f)
 	err := ioutil.WriteFile(f, []byte(content), os.ModePerm)
 	if err != nil {
 		panic(err)
@@ -136,6 +134,7 @@ func writeFile(f, content string) {
 
 func getURL(u string) []byte {
 	response, err := http.Get(u)
+	fmt.Println("getURL", u)
 	if err != nil {
 		panic(err)
 	}
@@ -149,7 +148,7 @@ func getURL(u string) []byte {
 }
 
 func dlURL(u, to string) bool {
-	fmt.Println("dl ", u)
+	fmt.Println("dlURL ", u)
 	fmt.Println("to ", to)
 	response, err := http.Get(u)
 	if err != nil {

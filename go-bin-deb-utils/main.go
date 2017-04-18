@@ -33,36 +33,19 @@ func main() {
 	flag.CommandLine.Parse(os.Args[2:])
 
 	// os.Env fallback
-	if email == "" {
-		email = os.Getenv("EMAIL")
-	}
-	if email == "" {
-		email = os.Getenv("MYEMAIL")
-	}
-	if reposlug == "" {
-		reposlug = os.Getenv("REPO")
-	}
-	if ghToken == "" {
-		ghToken = os.Getenv("GH_TOKEN")
-	}
+	email = readEnv(ghToken, "EMAIL", "MYEMAIL")
+	reposlug = readEnv(ghToken, "REPO")
+	ghToken = readEnv(ghToken, "GH_TOKEN")
 
 	// ci fallback
 	// todo: make use of pre defined ci env
 	if isTravis() {
-		if version == "" {
-			version = os.Getenv("TRAVIS_TAG")
-		}
-		if out == "" {
-			out = os.Getenv("TRAVIS_BUILD_DIR")
-		}
+		version = readEnv(version, "TRAVIS_TAG")
+		out = readEnv(out, "TRAVIS_BUILD_DIR")
 	}
 	if isVagrant() {
-		if version == "" {
-			version = os.Getenv("VERSION")
-		}
-		if out == "" {
-			out = os.Getenv("BUILD_DIR")
-		}
+		version = readEnv(version, "VERSION")
+		out = readEnv(out, "BUILD_DIR")
 	}
 
 	// integrity check
@@ -82,8 +65,8 @@ func main() {
 	// execute some common setup, in case.
 	alwaysHide[ghToken] = "$GH_TOKEN"
 
-	// os.RemoveAll(out)
-	os.MkdirAll(out, os.ModePerm)
+	// removeAll(out)
+	mkdirAll(out)
 
 	if version == "LAST" {
 		version = latestGhRelease(reposlug)
@@ -105,13 +88,37 @@ func requireArg(val, n string, env ...string) {
 	}
 }
 
+func readEnv(c string, k ...string) string {
+	if c == "" {
+		for _, kk := range k {
+			c = os.Getenv(kk)
+			if c != "" {
+				break
+			}
+		}
+	}
+	return c
+}
+
+func mkdirAll(f string) error {
+	fmt.Println("mkdirAll", f)
+	return os.MkdirAll(f, os.ModePerm)
+}
+func removeAll(f string) error {
+	fmt.Println("removeAll", f)
+	return os.RemoveAll(f)
+}
+func chdir(f string) error {
+	fmt.Println("Chdir", f)
+	return os.Chdir(f)
+}
+
 func isTravis() bool {
 	return strings.ToLower(os.Getenv("CI")) == "true" &&
 		strings.ToLower(os.Getenv("TRAVIS")) == "true"
 }
 
 func isVagrant() bool {
-	fmt.Println(os.Getenv("VAGRANT_CWD"))
 	_, s := os.Stat("/vagrant/")
 	return !os.IsNotExist(s)
 }
@@ -119,7 +126,7 @@ func isVagrant() bool {
 func latestGhRelease(repo string) string {
 	ret := ""
 	u := fmt.Sprintf(`https://api.github.com/repos/%v/releases/latest`, repo)
-	fmt.Println("url", u)
+	fmt.Println("latestGhRelease", u)
 	r := getURL(u)
 	k := map[string]interface{}{}
 	json.Unmarshal(r, &k)
@@ -129,5 +136,6 @@ func latestGhRelease(repo string) string {
 	} else {
 		panic("latest version not found")
 	}
+	fmt.Println("latestGhRelease", ret)
 	return ret
 }

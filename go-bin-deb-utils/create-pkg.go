@@ -22,34 +22,28 @@ func CreatePackage(reposlug, ghToken, email, version, archs, outbuild string, pu
 	fmt.Println("repoPath", repoPath)
 
 	if _, err := os.Stat(repoPath); os.IsNotExist(err) {
-		os.MkdirAll(repoPath, os.ModePerm)
-		os.Chdir(repoPath)
+		mkdirAll(repoPath)
+		chdir(repoPath)
 		exec(`git clone https://github.com/%v.git .`, reposlug)
 		exec(`git config user.name %v`, user)
 		exec(`git config user.email %v`, email)
 	}
 
-	os.Chdir(repoPath)
-	fmt.Println("Chdir", repoPath)
-	exec(`ls -al %v`, repoPath)
+	chdir(repoPath)
 
 	exec(`sudo apt-get install build-essential lintian curl -y`)
-	exec(`ls -al %v`, repoPath)
 
 	if tryexec(`latest -v`) != nil {
 		exec(`go get -u github.com/mh-cbon/latest`)
 	}
-	exec(`ls -al %v`, repoPath)
 
 	if tryexec(`changelog -v`) != nil {
 		exec(`latest -repo=%v`, "mh-cbon/changelog")
 	}
-	exec(`ls -al %v`, repoPath)
 
 	if tryexec(`go-bin-deb -v`) != nil {
 		exec(`latest -repo=%v`, "mh-cbon/go-bin-deb")
 	}
-	exec(`ls -al %v`, repoPath)
 
 	dir, err := ioutil.TempDir("", "go-bin-deb")
 	if err != nil {
@@ -71,10 +65,7 @@ func CreatePackage(reposlug, ghToken, email, version, archs, outbuild string, pu
 		outFile := fmt.Sprintf("%v-%v.deb", name, arch)
 		out := filepath.Join(outbuild, outFile)
 
-		os.MkdirAll(workDir, os.ModePerm)
-		exec(`ls -al %v`, workDir)
-
-		os.MkdirAll(workDir, os.ModePerm)
+		mkdirAll(workDir)
 		exec(`go-bin-deb generate -a %v --version %v -w %v -o %v`, arch, version, workDir, out)
 	}
 
@@ -88,6 +79,8 @@ func CreatePackage(reposlug, ghToken, email, version, archs, outbuild string, pu
 		exec(`gh-api-cli rm-assets --owner %v --repository %v --ver %v -t %v --glob %v`, user, name, version, ghToken, "*.deb")
 		exec(`gh-api-cli upload-release-asset --owner %v --repository %v --ver %v -t %v --glob %q`, user, name, version, ghToken, outbuild+"/*.deb")
 	}
+
+	exec(`rm -f %v`, outbuild+"/*.deb")
 }
 
 var alwaysHide = map[string]string{}
