@@ -61,21 +61,18 @@ func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push b
 	aptDir := filepath.Join(repoPath, "apt")
 	pkgDir := filepath.Join(repoPath, "pkg")
 	aptlyDir := filepath.Join(repoPath, "aptly_0.9.7_linux_amd64")
+	aptlyGz := filepath.Join(repoPath, "aptly_0.9.7_linux_amd64.tar.gz")
 	aptlyBin := filepath.Join(aptlyDir, "aptly")
 	aptlyConf := filepath.Join(repoPath, "aptly.conf")
 
 	removeAll(aptDir)
 
 	if _, s := os.Stat(aptlyDir); os.IsNotExist(s) {
-		to := filepath.Join(repoPath, "aptly_0.9.7_linux_amd64.tar.gz")
 		u := "https://bintray.com/artifact/download/smira/aptly/" + "aptly_0.9.7_linux_amd64.tar.gz"
-		dlURL(u, to)
-		exec(`tar xzf ` + to)
-		removeAll(to)
-		removeAll(to + ".*") // handle aptly_0.9.7_linux_amd64.tar.gz.1
+		dlURL(u, aptlyGz)
+		exec(`tar xzf ` + aptlyGz)
+		removeAll(aptlyGz)
 	}
-	to := filepath.Join(repoPath, "aptly_0.9.7_linux_amd64.tar.gz")
-	removeAll(to + ".*") // handle aptly_0.9.7_linux_amd64.tar.gz.1
 
 	conf := `{
 	  "rootDir": "` + repoPath + `/apt",
@@ -109,6 +106,8 @@ func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push b
 	writeFile(listFile, listContent)
 
 	chdir(repoPath)
+	removeAll(aptlyGz)
+	removeAll(aptlyGz + ".*") // handle aptly_0.9.7_linux_amd64.tar.gz.1
 	removeAll(aptlyConf)
 	removeAll(aptlyDir)
 	removeAll(pkgDir)

@@ -106,7 +106,7 @@ func mkdirAll(f string) error {
 }
 func removeAll(f string) error {
 	fmt.Println("removeAll", f)
-	return os.RemoveAll(f)
+	return tryexec("rm -fr %q", f)
 }
 func chdir(f string) error {
 	fmt.Println("Chdir", f)
