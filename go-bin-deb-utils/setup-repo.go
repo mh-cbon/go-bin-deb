@@ -21,7 +21,7 @@ func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push b
 	setupGitRepo(repoPath, reposlug, user, email)
 	chdir(repoPath)
 
-	exec(`sudo apt-get install build-essential -y`)
+	maybesudo(`apt-get install build-essential -y`)
 
 	if tryexec(`latest -v`) != nil {
 		exec(`git clone https://github.com/mh-cbon/latest.git %v/src/github.com/mh-cbon/latest`, gopath)

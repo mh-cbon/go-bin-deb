@@ -14,6 +14,13 @@ import (
 	"github.com/mh-cbon/go-bin-deb/stringexec"
 )
 
+func maybesudo(w string, params ...interface{}) error {
+	if tryexec(`sudo %v`, w) != nil {
+		return tryexec(`%v`, w)
+	}
+	return nil
+}
+
 func pushAssetsGh(version, ghToken, outbuild, glob string) {
 	if tryexec(`gh-api-cli -v`) != nil {
 		exec(`latest -repo=%v`, "mh-cbon/gh-api-cli")
