@@ -3,25 +3,20 @@
 set -e
 set -x
 
-# install go, specific to vagrant
-if type "go" > /dev/null; then
-  echo "go already installed"
-else
-  sudo mkdir -p /go/
-  sudo chown -R vagrant:vagrant -R /go
-  cd /go/
-  [ -f "go1.8.1.linux-amd64.tar.gz" ] || wget https://storage.googleapis.com/golang/go1.8.1.linux-amd64.tar.gz
-  [ -d "go" ] || tar -xf go1.8.1.linux-amd64.tar.gz
-  ls -al .
-  ls -al ./go/bin
-  export GOROOT=/go/go/
-  export PATH=$PATH:$GOROOT/bin
-  cd ~
-fi
-
-export GOROOT=/go/go/
+export GOINSTALL="/go"
+export GOROOT=${GOINSTALL}/go/
 export PATH=$PATH:$GOROOT/bin
 
+getgo="https://raw.githubusercontent.com/mh-cbon/latest/master/get-go.sh?d=`date +%F_%T`"
+# install go, specific to vagrant
+if type "wget" > /dev/null; then
+  wget $getgo | sh -xe
+fi
+if type "curl" > /dev/null; then
+  curl $getgo | sh -xe
+fi
+
+echo "$PATH"
 go version
 go env
 
@@ -70,12 +65,31 @@ BINBUILD_DIR="$GOPATH/src/github.com/$REPO/build"
 rm -fr "$BINBUILD_DIR"
 mkdir -p "$BINBUILD_DIR/{386,amd64}"
 
+PKGBUILD_DIR="$GOPATH/src/github.com/$REPO/apt"
+
+# build the packages
+set +x
+echo ""
+echo "# =================================================="
+echo "# =================================================="
+set -x
 f="-X main.VERSION=${VERSION}"
 GOOS=linux GOARCH=386 go build --ldflags "$f" -o "$BINBUILD_DIR/386/go-bin-deb" $k
 GOOS=linux GOARCH=amd64 go build --ldflags "$f" -o "$BINBUILD_DIR/amd64/go-bin-deb" $k
-
-# build the packages
 go run /vagrant/*go create-packages -push -repo=$REPO
-go run /vagrant/*go setup-repository -push -repo=$REPO
+
+set +x
+echo ""
+echo "# =================================================="
+echo "# =================================================="
+set -x
+go run /vagrant/*go setup-repository -out="${PKGBUILD_DIR}" -push -repo=$REPO
+
+set +x
+echo ""
+echo "# =================================================="
+echo "# =================================================="
+echo "      All Done!"
+set -x
 
 #

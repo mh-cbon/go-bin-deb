@@ -2,12 +2,8 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
-	"fmt"
-	"log"
 	"os"
-	"strings"
 )
 
 func main() {
@@ -79,69 +75,4 @@ func main() {
 	} else if action == "setup-repository" {
 		SetupRepo(reposlug, ghToken, email, version, archs, out, *push)
 	}
-}
-
-func requireArg(val, n string, env ...string) {
-	if val == "" {
-		log.Printf("missing argument -%v or env %q\n", n, env)
-		os.Exit(1)
-	}
-}
-
-func readEnv(c string, k ...string) string {
-	if c == "" {
-		for _, kk := range k {
-			c = os.Getenv(kk)
-			if c != "" {
-				break
-			}
-		}
-	}
-	return c
-}
-
-func mkdirAll(f string) error {
-	fmt.Println("mkdirAll", f)
-	return os.MkdirAll(f, os.ModePerm)
-}
-func removeAll(f string) error {
-	if f == "" {
-		panic("nop")
-	}
-	if f == "." {
-		panic("nop .")
-	}
-	fmt.Println("removeAll", f)
-	return tryexec("rm -fr %v", f)
-}
-func chdir(f string) error {
-	fmt.Println("Chdir", f)
-	return os.Chdir(f)
-}
-
-func isTravis() bool {
-	return strings.ToLower(os.Getenv("CI")) == "true" &&
-		strings.ToLower(os.Getenv("TRAVIS")) == "true"
-}
-
-func isVagrant() bool {
-	_, s := os.Stat("/vagrant/")
-	return !os.IsNotExist(s)
-}
-
-func latestGhRelease(repo string) string {
-	ret := ""
-	u := fmt.Sprintf(`https://api.github.com/repos/%v/releases/latest`, repo)
-	fmt.Println("latestGhRelease", u)
-	r := getURL(u)
-	k := map[string]interface{}{}
-	json.Unmarshal(r, &k)
-
-	if x, ok := k["tag_name"]; ok {
-		ret = x.(string)
-	} else {
-		panic("latest version not found")
-	}
-	fmt.Println("latestGhRelease", ret)
-	return ret
 }

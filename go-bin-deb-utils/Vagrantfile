@@ -5,23 +5,11 @@ Vagrant.configure("2") do |config|
 
   config.ssh.forward_env = ["GH_TOKEN"]
 
-  config.vm.define "cli" do |cli|
-    cli.vm.box = "debian/jessie64"
-    cli.vm.synced_folder "../", "/gopath/src/github.com/mh-cbon/go-bin-deb", type: "rsync",
+    config.vm.box = "debian/jessie64"
+    config.vm.synced_folder "../", "/gopath/src/github.com/mh-cbon/go-bin-deb", type: "rsync",
       rsync__chown:false,
       rsync__auto:true
-    cli.vm.provision "shell",
+    config.vm.provision "shell",
       inline: "sudo apt-get install wget curl git -y"
-  end
-
-  config.vm.define "gui" do |cli|
-    cli.vm.box = "mrlesmithjr/jessie64-desktop-gnome"
-    cli.vm.synced_folder ".", "/vagrant"
-    cli.vm.provider :virtualbox do |vb|
-      vb.customize ["modifyvm", :id, "--usb", "on"]
-      vb.customize ["modifyvm", :id, "--usbehci", "off"]
-      # vb.gui = true
-    end
-  end
 
 end

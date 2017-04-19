@@ -1,11 +1,7 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
-	"io"
-	"io/ioutil"
-	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
@@ -22,44 +18,31 @@ func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push b
 	repoPath := filepath.Join(gopath, "src", "github.com", reposlug)
 	fmt.Println("repoPath", repoPath)
 
-	if _, err := os.Stat(repoPath); os.IsNotExist(err) {
-		mkdirAll(repoPath)
-		chdir(repoPath)
-		exec(`git clone https://github.com/%v.git .`, reposlug)
-		exec(`git config user.name %v`, user)
-		exec(`git config user.email %v`, email)
-	}
-
+	setupGitRepo(repoPath, reposlug, user, email)
 	chdir(repoPath)
 
 	exec(`sudo apt-get install build-essential -y`)
 
 	if tryexec(`latest -v`) != nil {
-		exec(`go get -u github.com/mh-cbon/latest`)
+		exec(`git clone https://github.com/mh-cbon/latest.git %v/src/github.com/mh-cbon/latest`, gopath)
+		exec(`go install github.com/mh-cbon/latest`)
 	}
 	if tryexec(`gh-api-cli -v`) != nil {
 		exec(`latest -repo=%v`, "mh-cbon/gh-api-cli")
 	}
 
-	tryexec(`git remote rm origin`)
-	tryexec(`git remote add origin https://github.com/%v.git`, reposlug)
+	resetGit(repoPath)
 	tryexec(`git remote -vv`)
 	tryexec(`git branch -aav`)
-
-	tryexec("yes | git fetch")
-	if tryexec(`git checkout gh-pages`) != nil {
-		exec(`git checkout -b gh-pages`)
-	}
-	exec(`git reset HEAD --hard`)
-	exec(`git clean -ffx`)
-	exec(`git clean -ffd`)
-	exec(`git clean -ffX`)
+	getBranchGit(repoPath, reposlug, "gh-pages", "deborigin")
+	tryexec(`git remote -vv`)
+	tryexec(`git branch -aav`)
+	resetGit(repoPath)
 	exec(`git status`)
 
 	tryexec(`ls -al`)
 
 	aptDir := filepath.Join(repoPath, "apt")
-	pkgDir := filepath.Join(repoPath, "pkg")
 	aptlyDir := filepath.Join(repoPath, "aptly_0.9.7_linux_amd64")
 	aptlyGz := filepath.Join(repoPath, "aptly_0.9.7_linux_amd64.tar.gz")
 	aptlyBin := filepath.Join(aptlyDir, "aptly")
@@ -91,13 +74,13 @@ func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push b
 	}`
 	writeFile(aptlyConf, conf)
 
-	exec(`gh-api-cli dl-assets -t %q -o %v -r %v -g '*deb' -out '%v/%%r-%%v_%%a.deb'`, ghToken, user, name, pkgDir)
+	exec(`gh-api-cli dl-assets -t %q -o %v -r %v -g '*deb' -out '%v/%%r-%%v_%%a.deb'`, ghToken, user, name, outbuild)
 
 	mkdirAll(aptDir)
 	chdir(aptDir)
 
 	exec(`%v repo create -config=%v -distribution=all -component=main %v`, aptlyBin, aptlyConf, reposlug)
-	exec(`%v repo add -config=%v %v %v`, aptlyBin, aptlyConf, reposlug, pkgDir)
+	exec(`%v repo add -config=%v %v %v`, aptlyBin, aptlyConf, reposlug, outbuild)
 	exec(`%v publish -component=contrib -config=%v repo %v`, aptlyBin, aptlyConf, reposlug)
 	exec(`%v repo show -config=%v -with-packages %v`, aptlyBin, aptlyConf, reposlug)
 
@@ -110,7 +93,6 @@ func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push b
 	removeAll(aptlyGz + ".*") // handle aptly_0.9.7_linux_amd64.tar.gz.1
 	removeAll(aptlyConf)
 	removeAll(aptlyDir)
-	removeAll(pkgDir)
 
 	exec(`ls -al .`)
 	exec(`ls -al apt`)
@@ -119,52 +101,7 @@ func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push b
 
 	fmt.Println("push", push)
 	if push {
-		exec(`git add -A`)
-		exec(`git commit -m "debian repository"`)
-		gU := fmt.Sprintf(`https://%v@github.com/%v.git`, ghToken, reposlug)
-		exec(`git push --force --quiet %q gh-pages`, gU)
+		commitPushGit(repoPath, ghToken, reposlug, "gh-pages", "debian repository")
+		removeAll(outbuild)
 	}
-}
-
-func writeFile(f, content string) {
-	fmt.Println("writeFile", f)
-	err := ioutil.WriteFile(f, []byte(content), os.ModePerm)
-	if err != nil {
-		panic(err)
-	}
-}
-
-func getURL(u string) []byte {
-	response, err := http.Get(u)
-	fmt.Println("getURL", u)
-	if err != nil {
-		panic(err)
-	}
-	defer response.Body.Close()
-	var ret bytes.Buffer
-	_, err = io.Copy(&ret, response.Body)
-	if err != nil {
-		panic(err)
-	}
-	return ret.Bytes()
-}
-
-func dlURL(u, to string) bool {
-	fmt.Println("dlURL ", u)
-	fmt.Println("to ", to)
-	response, err := http.Get(u)
-	if err != nil {
-		panic(err)
-	}
-	defer response.Body.Close()
-	f, err := os.Create(to)
-	if err != nil {
-		panic(err)
-	}
-	defer f.Close()
-	_, err = io.Copy(f, response.Body)
-	if err != nil {
-		panic(err)
-	}
-	return true
 }

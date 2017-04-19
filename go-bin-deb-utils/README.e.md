@@ -14,11 +14,11 @@ LicenseColor: yellow
 ```sh
 export GH_TOKEN=`gh-api-cli get-auth -n release`
 
-vagrant up cli
+vagrant up
 
-vagrant rsync cli && vagrant ssh cli -c "export GH_TOKEN=$GH_TOKEN; sh /vagrant/vagrant-run.sh"
+vagrant rsync && vagrant ssh -c "export GH_TOKEN=$GH_TOKEN; sh /vagrant/vagrant-run.sh"
 
-vagrant destroy cli -f
+vagrant destroy -f
 ```
 
 # See also

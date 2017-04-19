@@ -13,5 +13,10 @@ if [ "${GH}" = "mh-cbon/go-bin-deb" ]; then
   git checkout -b master
 fi
 
-go get -u github.com/mh-cbon/go-bin-deb/go-bin-deb-utils
+if ["${GH_TOKEN}" = ""]; then
+  echo "GH_TOKEN is not properly set. Check your travis file."
+  exit 1
+fi
+
+yes | go get -u github.com/mh-cbon/go-bin-deb/go-bin-deb-utils
 go-bin-deb-utils create-packages -push -repo=$GH
