@@ -6,8 +6,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-
-	"github.com/mh-cbon/go-bin-deb/stringexec"
 )
 
 // CreatePackage creates a debian package
@@ -21,20 +19,14 @@ func CreatePackage(reposlug, ghToken, email, version, archs, outbuild string, pu
 	repoPath := filepath.Join(gopath, "src", "github.com", reposlug)
 	fmt.Println("repoPath", repoPath)
 
-	if _, err := os.Stat(repoPath); os.IsNotExist(err) {
-		mkdirAll(repoPath)
-		chdir(repoPath)
-		exec(`git clone https://github.com/%v.git .`, reposlug)
-		exec(`git config user.name %v`, user)
-		exec(`git config user.email %v`, email)
-	}
-
+	setupGitRepo(repoPath, reposlug, user, email)
 	chdir(repoPath)
 
 	exec(`sudo apt-get install build-essential lintian curl -y`)
 
 	if tryexec(`latest -v`) != nil {
-		exec(`go get -u github.com/mh-cbon/latest`)
+		exec(`git clone https://github.com/mh-cbon/latest.git %v/src/github.com/mh-cbon/latest`, gopath)
+		exec(`go install github.com/mh-cbon/latest`)
 	}
 
 	if tryexec(`changelog -v`) != nil {
@@ -73,46 +65,7 @@ func CreatePackage(reposlug, ghToken, email, version, archs, outbuild string, pu
 	exec(`ls -al %v`, outbuild)
 
 	if push == true {
-		if tryexec(`gh-api-cli -v`) != nil {
-			exec(`latest -repo=%v`, "mh-cbon/gh-api-cli")
-		}
-		exec(`gh-api-cli rm-assets --owner %v --repository %v --ver %v -t %v --glob %q`, user, name, version, ghToken, "*.deb")
-		exec(`gh-api-cli upload-release-asset --owner %v --repository %v --ver %v -t %v --glob %q`, user, name, version, ghToken, outbuild+"/*.deb")
-		exec(`rm -f %v`, outbuild+"/*.deb")
+		pushAssetsGh(version, ghToken, outbuild, "*.deb")
 	}
 
-}
-
-var alwaysHide = map[string]string{}
-
-func clean(s string) string {
-	for search, replace := range alwaysHide {
-		s = strings.Replace(s, search, replace, -1)
-	}
-	return s
-}
-
-func tryexec(w string, params ...interface{}) error {
-	w = fmt.Sprintf(w, params...)
-	cwd, err := os.Getwd()
-	if err != nil {
-		return err
-	}
-	fmt.Println("exec", clean(w))
-	cmd, err := stringexec.Command(cwd, w)
-	if err != nil {
-		return err
-	}
-	// out, err := cmd.CombinedOutput()
-	// sout := string(out)
-	// fmt.Println(clean(sout))
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	return cmd.Run()
-}
-
-func exec(w string, params ...interface{}) {
-	if err := tryexec(w, params...); err != nil {
-		panic(err)
-	}
 }
