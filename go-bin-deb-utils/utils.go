@@ -15,6 +15,7 @@ import (
 )
 
 func maybesudo(w string, params ...interface{}) error {
+	w = fmt.Sprintf(w, params...)
 	if tryexec(`sudo %v`, w) != nil {
 		return tryexec(`%v`, w)
 	}
