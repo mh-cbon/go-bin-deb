@@ -8,7 +8,7 @@ import (
 )
 
 // SetupRepo creates a debian repository
-func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push bool) {
+func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push, keep bool) {
 
 	x := strings.Split(reposlug, "/")
 	user := x[0]
@@ -102,6 +102,8 @@ func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push b
 	fmt.Println("push", push)
 	if push {
 		commitPushGit(repoPath, ghToken, reposlug, "gh-pages", "debian repository")
-		removeAll(outbuild)
+		if keep == false {
+			removeAll(outbuild)
+		}
 	}
 }

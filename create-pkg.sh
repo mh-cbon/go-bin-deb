@@ -14,4 +14,4 @@ if [ "${GH}" = "mh-cbon/go-bin-deb" ]; then
 fi
 
 go get -u github.com/mh-cbon/go-bin-deb/go-bin-deb-utils
-go-bin-deb-utils create-packages -push -repo=$GH
+go-bin-deb-utils create-packages -push -keep -repo=$GH
