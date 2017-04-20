@@ -87,6 +87,7 @@ func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push, 
 	listFile := fmt.Sprintf(`%v.list`, name)
 	listContent := fmt.Sprintf("deb [trusted=yes] https://%v.github.io/%v/apt/public/ all contrib\n", user, name)
 	writeFile(listFile, listContent)
+	exec(`rm -f %v/*.deb`, outbuild)
 
 	chdir(repoPath)
 	removeAll(aptlyGz)
