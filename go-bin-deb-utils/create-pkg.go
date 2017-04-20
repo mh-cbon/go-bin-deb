@@ -22,7 +22,7 @@ func CreatePackage(reposlug, ghToken, email, version, archs, outbuild string, pu
 	setupGitRepo(repoPath, reposlug, user, email)
 	chdir(repoPath)
 
-	maybesudo(`apt-get install build-essential lintian curl -y`)
+	maybesudo(`apt-get install build-essential lintian curl -y --quiet`)
 
 	if tryexec(`latest -v`) != nil {
 		exec(`git clone https://github.com/mh-cbon/latest.git %v/src/github.com/mh-cbon/latest`, gopath)
@@ -63,6 +63,8 @@ func CreatePackage(reposlug, ghToken, email, version, archs, outbuild string, pu
 
 	exec(`ls -al .`)
 	exec(`ls -al %v`, outbuild)
+	exec(`ls -al %v`, dir)
+	exec(`ls -al %v/*/*`, dir)
 
 	if push == true {
 		pushAssetsGh(version, ghToken, outbuild, "*.deb")
