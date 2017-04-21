@@ -107,8 +107,9 @@ func readEnv(c string, k ...string) string {
 
 func isDir(f string) bool {
 	x, err := os.Stat(f)
-	fmt.Println("isDir", x.IsDir() && !os.IsNotExist(err))
-	return x.IsDir() && !os.IsNotExist(err)
+	ret := !os.IsNotExist(err) && x.IsDir()
+	fmt.Println("isDir", ret)
+	return ret
 }
 
 func mkdirAll(f string) error {
@@ -260,3 +261,56 @@ func dlURL(u, to string) bool {
 	}
 	return true
 }
+
+// jff
+type concurrency struct {
+	stoponerr  bool
+	ops        chan func() error
+	opsdone    int
+	opslen     int
+	finished   chan error
+	controller chan bool
+	errors     []error
+}
+
+func concurrent(n int) *concurrency {
+	c := &concurrency{
+		ops:        make(chan func() error),
+		controller: make(chan bool, n),
+		finished:   make(chan error),
+	}
+	go c.loop()
+	return c
+}
+func (c *concurrency) add(fn func() error) {
+	c.opslen++
+	c.ops <- fn
+}
+func (c *concurrency) loop() {
+	for op := range c.ops {
+		fn := op
+		go func() {
+			c.controller <- true
+			err := fn()
+			<-c.controller
+			if err != nil {
+				c.errors = append(c.errors, err)
+			}
+			c.opsdone++
+			if c.opsdone >= c.opslen {
+				c.finished <- err
+			} else if c.stoponerr && err != nil {
+				c.finished <- err
+			}
+		}()
+	}
+}
+func (c *concurrency) wait() error {
+	err := <-c.finished
+	close(c.controller)
+	close(c.finished)
+	close(c.ops)
+	return err
+}
+
+// jff

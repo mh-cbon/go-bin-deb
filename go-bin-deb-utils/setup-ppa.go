@@ -85,34 +85,32 @@ func SetupPpa(reposlug, ghToken, email, version, archs, srepos, outbuild string,
 	}`
 	writeFile(aptlyConf, conf)
 
-	t := make(chan string, 2)
-	d := make(chan bool)
-	go func() {
-		for cmd := range t {
-			go func(c string) {
-				exec(c)
-				d <- true
-			}(cmd)
-		}
-	}()
-
-	outP := "%%r-%%v_%%a.deb"
+	outP := "%r-%v_%a.deb"
+	dlDir := filepath.Join(filepath.Dir(outbuild), filepath.Base(outbuild)+"_tmp")
+	mkdirAll(dlDir)
+	fmt.Println("Downloading ...")
+	cct := concurrent(3)
 	for _, repo := range repos {
 		y := strings.Split(strings.TrimSpace(repo), "/")
-		t <- fmt.Sprintf(`gh-api-cli dl-assets -t %q -o %v -r %v -g '*deb' -out '%v/%v'`, ghToken, y[0], y[1], outbuild, outP)
+		cct.add(func() error {
+			exec(`gh-api-cli dl-assets -t %q -o %v -r %v -g '*deb' -out '%v/%v'`, ghToken, y[0], y[1], dlDir, outP)
+			return nil
+		})
 	}
-	close(t)
-	for range repos {
-		<-d
+	cct.wait()
+
+	if !isDir(outbuild) {
+		mkdirAll(outbuild)
+		chdir(outbuild)
+
+		exec(`%v repo create -config=%v -distribution=all -component=main %v`, aptlyBin, aptlyConf, reposlug)
+		exec(`%v repo add -config=%v %v %v`, aptlyBin, aptlyConf, reposlug, dlDir)
+		exec(`%v publish -component=contrib -config=%v repo %v`, aptlyBin, aptlyConf, reposlug)
+	} else {
+		chdir(outbuild)
+		exec(`%v repo add -config=%v %v %v`, aptlyBin, aptlyConf, reposlug, dlDir)
+		exec(`%v publish update -component=contrib -config=%v repo %v`, aptlyBin, aptlyConf, reposlug)
 	}
-	close(d)
-
-	mkdirAll(outbuild)
-	chdir(outbuild)
-
-	exec(`%v repo create -config=%v -distribution=all -component=main %v`, aptlyBin, aptlyConf, reposlug)
-	exec(`%v repo add -config=%v %v %v`, aptlyBin, aptlyConf, reposlug, outbuild)
-	exec(`%v publish -component=contrib -config=%v repo %v`, aptlyBin, aptlyConf, reposlug)
 	exec(`%v repo show -config=%v -with-packages %v`, aptlyBin, aptlyConf, reposlug)
 
 	listFile := fmt.Sprintf(`%v/%v.list`, outbuild, name)
@@ -121,6 +119,7 @@ func SetupPpa(reposlug, ghToken, email, version, archs, srepos, outbuild string,
 	exec(`rm -f %v/*.deb`, outbuild)
 
 	chdir(repoPath)
+	removeAll(dlDir)
 	removeAll(aptlyGz)
 	removeAll(aptlyGz + ".*") // handle aptly_0.9.7_linux_amd64.tar.gz.1
 	removeAll(aptlyConf)

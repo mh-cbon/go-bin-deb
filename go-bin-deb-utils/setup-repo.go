@@ -71,35 +71,20 @@ func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push, 
 	}`
 	writeFile(aptlyConf, conf)
 
-	exec(`gh-api-cli dl-assets -t %q -o %v -r %v -g '*deb' -out '%v/%%r-%%v_%%a.deb'`, ghToken, user, name, outbuild)
+	dlDir := filepath.Join(filepath.Dir(outbuild), filepath.Base(outbuild)+"_tmp")
+	mkdirAll(dlDir)
+	exec(`gh-api-cli dl-assets -t %q -o %v -r %v -g '*deb' -out '%v/%%r-%%v_%%a.deb'`, ghToken, user, name, dlDir)
 
-	/*
-	   -# execute aptly
-	   -if [ ! -d "apt" ]; then
-	   -  mkdir apt
-	   -  cd apt
-	   -  $APTLY repo create -config=${APTLYCONF} -distribution=all -component=main ${REPO}
-	   -  $APTLY repo add -config=${APTLYCONF} ${REPO} ../pkg
-	   -  $APTLY publish -component=contrib -config=${APTLYCONF} repo ${REPO}
-	   -  $APTLY repo show -config=${APTLYCONF} -with-packages ${REPO}
-	   -
-	   -else
-	   -  cd apt
-	   -  $APTLY repo add -config=${APTLYCONF} ${REPO} ../pkg
-	   -  $APTLY publish -config=${APTLYCONF} update all
-	   -  $APTLY repo show -config=${APTLYCONF} -with-packages ${REPO}
-	   -fi
-	*/
 	if !isDir(outbuild) {
 		mkdirAll(outbuild)
 		chdir(outbuild)
 
 		exec(`%v repo create -config=%v -distribution=all -component=main %v`, aptlyBin, aptlyConf, reposlug)
-		exec(`%v repo add -config=%v %v %v`, aptlyBin, aptlyConf, reposlug, outbuild)
+		exec(`%v repo add -config=%v %v %v`, aptlyBin, aptlyConf, reposlug, dlDir)
 		exec(`%v publish -component=contrib -config=%v repo %v`, aptlyBin, aptlyConf, reposlug)
 	} else {
 		chdir(outbuild)
-		exec(`%v repo add -config=%v %v %v`, aptlyBin, aptlyConf, reposlug, outbuild)
+		exec(`%v repo add -config=%v %v %v`, aptlyBin, aptlyConf, reposlug, dlDir)
 		exec(`%v publish update -component=contrib -config=%v repo %v`, aptlyBin, aptlyConf, reposlug)
 	}
 	exec(`%v repo show -config=%v -with-packages %v`, aptlyBin, aptlyConf, reposlug)
@@ -110,6 +95,7 @@ func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push, 
 	exec(`rm -f %v/*.deb`, outbuild)
 
 	chdir(repoPath)
+	removeAll(dlDir)
 	removeAll(aptlyGz)
 	removeAll(aptlyGz + ".*") // handle aptly_0.9.7_linux_amd64.tar.gz.1
 	removeAll(aptlyConf)

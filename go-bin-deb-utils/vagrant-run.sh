@@ -26,7 +26,7 @@ export PATH=$PATH:/gopath/bin
 sudo chown -R vagrant:vagrant -R $GOPATH
 mkdir -p ${GOPATH}/bin
 
-[ -d "$GOPATH" ] || echo "$GOPATH does not exists, do you run vagrant ?"
+[ -d "$GOPATH" ] || echo "$GOPATH does not exists"
 [ -d "$GOPATH" ] || exit 1;
 
 
@@ -69,7 +69,7 @@ mkdir -p "$BINBUILD_DIR/{386,amd64}"
 PKGBUILD_DIR="$GOPATH/src/github.com/$REPO/apt"
 PPABUILD_DIR="$GOPATH/src/github.com/$REPO/ppa"
 
-rm -fr $PKGBUILD_DIR $PPABUILD_DIR
+# rm -fr $PKGBUILD_DIR $PPABUILD_DIR
 
 # build the packages
 set +x
@@ -87,7 +87,7 @@ echo ""
 echo "# =================================================="
 echo "# =================================================="
 set -x
-go-bin-deb-utils setup-repository -out="${PKGBUILD_DIR}" -repo=$REPO
+go-bin-deb-utils setup-repository -out="${PKGBUILD_DIR}" -push -repo=$REPO
 
 set +x
 echo ""
