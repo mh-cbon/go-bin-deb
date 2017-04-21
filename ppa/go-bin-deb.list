@@ -1,0 +1,1 @@
+deb [trusted=yes] https://mh-cbon.github.io/go-bin-deb/ppa/public/ all contrib
