@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  
+  <head>
+  <meta charset="UTF-8">
+  <title>go-bin-deb</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#157878">
+  <link rel="stylesheet" href="/go-bin-deb//css/normalize.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/go-bin-deb//css/cayman.css">
+</head>
+
+  <body>
+    <section class="page-header">
+  <h1 class="project-name">go-bin-deb</h1>
+  <h2 class="project-tagline">Create binary package for debian system</h2>
+  <a href="http://github.com/mh-cbon/go-bin-deb" class="btn">View on GitHub</a>
+  <a href="http://github.com/mh-cbon/go-bin-deb/zipball/gh-pages" class="btn">Download .zip</a>
+  <a href="http://github.com/mh-cbon/go-bin-deb/tarball/gh-pages" class="btn">Download .tar.gz</a>
+</section>
+
+
+    <section class="main-content">
+      
+      <p>emd gen -in README.e.md</p>
+<h1 id="go-bin-deb">go-bin-deb</h1>
+
+<p><a href="https://travis-ci.org/mh-cbon/go-bin-deb"><img src="https://travis-ci.org/mh-cbon/go-bin-deb.svg?branch=master" alt="travis Status" /></a> <a href="https://goreportcard.com/report/github.com/mh-cbon/go-bin-deb"><img src="https://goreportcard.com/badge/github.com/mh-cbon/go-bin-deb" alt="Go Report Card" /></a> <a href="http://godoc.org/github.com/mh-cbon/go-bin-deb"><img src="https://godoc.org/github.com/mh-cbon/go-bin-deb?status.svg" alt="GoDoc" /></a> <a href="../LICENSE"><img src="http://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT License" /></a></p>
+
+<p>Package go-bin-deb creates binary package for debian system</p>
+
+<p>Using a <code class="highlighter-rouge">json</code> files to declare rules,
+it then performs necessary operations to invoke <code class="highlighter-rouge">dpkg-deb</code> to build a package,
+then check it with the help of <code class="highlighter-rouge">lintian</code>.</p>
+
+<p>This tool is part of the <a href="https://github.com/mh-cbon/go-github-release">go-github-release workflow</a></p>
+
+<p>See <a href="demo/">the demo</a>.</p>
+
+<h1 id="toc">TOC</h1>
+<ul>
+  <li><a href="#install">Install</a>
+    <ul>
+      <li><a href="#glide">Glide</a></li>
+      <li><a href="#linux-rpmdeb-repository">linux rpm/deb repository</a></li>
+      <li><a href="#linux-rpmdeb-standalone-package">linux rpm/deb standalone package</a></li>
+    </ul>
+  </li>
+  <li><a href="#requirements">Requirements</a></li>
+  <li><a href="#usage">Usage</a>
+    <ul>
+      <li><a href="#workflow-overview">Workflow overview</a></li>
+      <li><a href="#json-file">Json file</a></li>
+    </ul>
+  </li>
+  <li><a href="#cli">CLI</a>
+    <ul>
+      <li><a href="#generate">generate</a></li>
+      <li><a href="#test">test</a></li>
+    </ul>
+  </li>
+  <li><a href="#recipes">Recipes</a>
+    <ul>
+      <li><a href="#installing-generated-package">Installing generated package</a></li>
+      <li><a href="#vagrant-recipe">Vagrant recipe</a></li>
+      <li><a href="#travis-recipe">Travis recipe</a></li>
+      <li><a href="#useful-deb-commands">useful deb commands</a></li>
+      <li><a href="#release-the-project">Release the project</a></li>
+    </ul>
+  </li>
+  <li><a href="#history">History</a></li>
+</ul>
+
+<h1 id="install">Install</h1>
+
+<p>Check the <a href="https://github.com/mh-cbon/go-bin-deb/releases">release page</a>!</p>
+
+<h4 id="glide">Glide</h4>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>mkdir -p <span class="nv">$GOPATH</span>/src/github.com/mh-cbon/go-bin-deb
+<span class="nb">cd</span> <span class="nv">$GOPATH</span>/src/github.com/mh-cbon/go-bin-deb
+git clone https://github.com/mh-cbon/go-bin-deb.git .
+glide install
+go install
+</code></pre>
+</div>
+
+<h4 id="linux-rpmdeb-repository">linux rpm/deb repository</h4>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>wget -O - https://raw.githubusercontent.com/mh-cbon/latest/master/source.sh <span class="se">\</span>
+| <span class="nv">GH</span><span class="o">=</span>mh-cbon/go-bin-deb sh -xe
+<span class="c"># or</span>
+curl -L https://raw.githubusercontent.com/mh-cbon/latest/master/source.sh <span class="se">\</span>
+| <span class="nv">GH</span><span class="o">=</span>mh-cbon/go-bin-deb sh -xe
+</code></pre>
+</div>
+
+<h4 id="linux-rpmdeb-standalone-package">linux rpm/deb standalone package</h4>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>curl -L https://raw.githubusercontent.com/mh-cbon/latest/master/install.sh <span class="se">\</span>
+| <span class="nv">GH</span><span class="o">=</span>mh-cbon/go-bin-deb sh -xe
+<span class="c"># or</span>
+wget -q -O - --no-check-certificate <span class="se">\</span>
+https://raw.githubusercontent.com/mh-cbon/latest/master/install.sh <span class="se">\</span>
+| <span class="nv">GH</span><span class="o">=</span>mh-cbon/go-bin-deb sh -xe
+</code></pre>
+</div>
+
+<h1 id="requirements">Requirements</h1>
+
+<p>A debian system, vagrant, travis, docker, whatever.</p>
+
+<h1 id="usage">Usage</h1>
+
+<h2 id="workflow-overview">Workflow overview</h2>
+
+<p>To create a binary package you need to</p>
+
+<ul>
+  <li>build your application binaries</li>
+  <li>invoke <code class="highlighter-rouge">go-bin-deb</code> to generate the package</li>
+  <li>create deb repositories on <code class="highlighter-rouge">travis</code> hosted on <code class="highlighter-rouge">gh-pages</code> using this <a href="setup-repository.sh">script</a></li>
+</ul>
+
+<h2 id="json-file">Json file</h2>
+
+<p>For a reference of all fields, see <a href="deb-example.json">this</a></p>
+
+<p>For a real world example including service, shortcuts, env, see <a href="demo/deb.json">this</a></p>
+
+<p>For a casual example to provide a simple binary, see <a href="deb.json">this</a></p>
+
+<h1 id="cli">CLI</h1>
+<p>go-bin-deb -help</p>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>NAME:
+   go-bin-deb - Generate a binary debian package
+
+USAGE:
+   go-bin-deb &lt;cmd&gt; &lt;options&gt;
+   
+VERSION:
+   0.0.0
+   
+COMMANDS:
+     generate  Generate the contents of the package
+     <span class="nb">test      </span>Test the package json file
+     <span class="nb">help</span>, h   Shows a list of commands or <span class="nb">help </span><span class="k">for </span>one <span class="nb">command
+
+</span>GLOBAL OPTIONS:
+   --help, -h     show <span class="nb">help</span>
+   --version, -v  print the version
+</code></pre>
+</div>
+
+<h3 id="generate">generate</h3>
+<p>go-bin-deb generate -help</p>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>NAME:
+   go-bin-deb generate - Generate the contents of the package
+
+USAGE:
+   go-bin-deb generate <span class="o">[</span><span class="nb">command </span>options] <span class="o">[</span>arguments...]
+
+OPTIONS:
+   --wd value, -w value      Working directory to prepare the package <span class="o">(</span>default: <span class="s2">"pkg-build"</span><span class="o">)</span>
+   --output value, -o value  Output directory <span class="k">for </span>the debian package files
+   --file value, -f value    Path to the deb.json file <span class="o">(</span>default: <span class="s2">"deb.json"</span><span class="o">)</span>
+   --version value           Version of the package
+   --arch value, -a value    Arch of the package
+</code></pre>
+</div>
+
+<h3 id="test">test</h3>
+<p>go-bin-deb test -help</p>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>NAME:
+   go-bin-deb <span class="nb">test</span> - Test the package json file
+
+USAGE:
+   go-bin-deb <span class="nb">test</span> <span class="o">[</span><span class="nb">command </span>options] <span class="o">[</span>arguments...]
+
+OPTIONS:
+   --file value, -f value  Path to the deb.json file <span class="o">(</span>default: <span class="s2">"deb.json"</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<h1 id="recipes">Recipes</h1>
+
+<h3 id="installing-generated-package">Installing generated package</h3>
+
+<p><strong>TLDR</strong></p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="c"># install a package with dependencies</span>
+dpkg -i mypackage.deb
+apt-get install --fix-missing
+<span class="c"># or</span>
+gdebi mypackage.deb
+</code></pre>
+</div>
+
+<p>On debian system to install a package <code class="highlighter-rouge">.deb</code> file, you should use <code class="highlighter-rouge">dpkg -i</code> and not <code class="highlighter-rouge">apt-get i</code>.</p>
+
+<p>But, <code class="highlighter-rouge">dpkg</code> does not install dependencies by itself, thus you will need to execute an extra command
+<code class="highlighter-rouge">apt-get i --fix-missing</code> to locate and install missing dependencies ater you installed your own <code class="highlighter-rouge">.deb</code>.</p>
+
+<p>An alternative is to use <code class="highlighter-rouge">gdebi</code>, which appears to be bale to all of that in one command.</p>
+
+<p>Finally, if one provides a web interface to host the package, it should be no problem to use a regular <code class="highlighter-rouge">apt-get</code>.</p>
+
+<p>PS: To remove the package <code class="highlighter-rouge">dpkg -r</code>.</p>
+
+<h3 id="vagrant-recipe">Vagrant recipe</h3>
+
+<p>Please check the demo app <a href="demo/">here</a></p>
+
+<h3 id="travis-recipe">Travis recipe</h3>
+
+<ul>
+  <li>get a github repo</li>
+  <li>create a token in your settings</li>
+  <li>get a travis account</li>
+  <li>connect your github account to travis and register your repo</li>
+  <li>install travis client <code class="highlighter-rouge">gem install --user travis</code></li>
+  <li>run <code class="highlighter-rouge">travis encrypt --add -r your/repo GH_TOKEN=xxxx</code></li>
+  <li>run <code class="highlighter-rouge">travis setup releases</code></li>
+  <li>personalize the <code class="highlighter-rouge">.travis.yml</code></li>
+</ul>
+
+<div class="language-yml highlighter-rouge"><pre class="highlight"><code><span class="s">sudo</span><span class="pi">:</span> <span class="s">required</span>
+
+<span class="s">services</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">docker</span>
+
+<span class="s">language</span><span class="pi">:</span> <span class="s">go</span>
+<span class="s">go</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">tip</span>
+
+<span class="s">env</span><span class="pi">:</span>
+  <span class="s">global</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">MYAPP=dummy</span>
+    <span class="pi">-</span> <span class="s">MYEMAIL=some@email.com</span>
+    <span class="pi">-</span> <span class="s">secure</span><span class="pi">:</span> <span class="s">GH_TOKEN xxxx</span>
+
+<span class="s">before_install</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">sudo apt-get -qq update</span>
+  <span class="pi">-</span> <span class="s">mkdir -p ${GOPATH}/bin</span>
+
+<span class="s">install</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">cd $GOPATH/src/github.com/YOUR_USERNAME/$MYAPP</span>
+  <span class="pi">-</span> <span class="s">go install</span>
+
+<span class="s">script</span><span class="pi">:</span> <span class="s">echo "pass"</span>
+
+<span class="c1"># build the app, build the package</span>
+<span class="s">before_deploy</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">mkdir -p build/{386,amd64}</span>
+  <span class="pi">-</span> <span class="s">GOOS=linux GOARCH=386 go build --ldflags "-X main.VERSION=${TRAVIS_TAG}" -o build/386/$MYAPP main.go</span>
+  <span class="pi">-</span> <span class="s">GOOS=linux GOARCH=amd64 go build --ldflags "-X main.VERSION=${TRAVIS_TAG}" -o build/amd64/$MYAPP main.go</span>
+  <span class="pi">-</span> <span class="s">curl -L https://raw.githubusercontent.com/mh-cbon/go-bin-deb/master/create-pkg.sh | GH=YOUR_USERNAME/$MYAPP sh -xe</span>
+
+<span class="c1"># build the package repo on gh-pages</span>
+<span class="s">after_deploy</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">curl -L https://raw.githubusercontent.com/mh-cbon/go-bin-deb/master/setup-repository.sh | GH=YOUR_USERNAME/$MYAPP EMAIL=$MYEMAIL sh -xe</span>
+
+<span class="c1"># deploy package files into gh releases</span>
+<span class="s">deploy</span><span class="pi">:</span>
+  <span class="s">provider</span><span class="pi">:</span> <span class="s">releases</span>
+  <span class="s">api_key</span><span class="pi">:</span>
+    <span class="s">secure</span><span class="pi">:</span> <span class="s">GH_TOKEN xxxx</span>
+  <span class="s">file_glob</span><span class="pi">:</span> <span class="s">true</span>
+  <span class="s">file</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">$MYAPP-386.deb</span>
+    <span class="pi">-</span> <span class="s">$MYAPP-amd64.deb</span>
+  <span class="s">skip_cleanup</span><span class="pi">:</span> <span class="s">true</span>
+  <span class="s">on</span><span class="pi">:</span>
+    <span class="s">tags</span><span class="pi">:</span> <span class="s">true</span>
+</code></pre>
+</div>
+
+<h3 id="useful-deb-commands">useful deb commands</h3>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="c"># Install required dependencies to build a package</span>
+sudo apt-get install build-essential lintian -y
+<span class="c"># build a bin package</span>
+dpkg-deb --build debian hello.deb
+<span class="c"># show info of a package</span>
+dpkg-deb --show hello.deb
+<span class="c"># list contents of a package</span>
+dpkg-deb --contents hello.deb
+</code></pre>
+</div>
+
+<h3 id="release-the-project">Release the project</h3>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>gump patch -d <span class="c"># check</span>
+gump patch <span class="c"># bump</span>
+</code></pre>
+</div>
+
+<h1 id="history">History</h1>
+
+<p><a href="CHANGELOG.md">CHANGELOG</a>
+[32m ✔ Success[0m</p>
+
+
+      <footer class="site-footer">
+  <span class="site-footer-owner"><a href="">go-bin-deb</a> is maintained by <a href="https://github.com/mh-cbon">mh-cbon</a>.</span>
+  <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+</footer>
+
+
+    </section>
+
+  </body>
+</html>
