@@ -5,24 +5,6 @@ Installed-Size: 3.5 kB
 Maintainer: mh-cbon <mh-cbon@users.noreply.github.com>
 Architecture: i386
 Source: go-bin-deb
-Version: 0.0.19-beta
-Filename: pool/contrib/g/go-bin-deb/go-bin-deb-0.0.19-beta_386.deb
-Size: 1073866
-MD5sum: 6ab93b4a660d30f06563ce4ec03c5b14
-SHA1: 5130cceceb506adf778e32c40895f1627eeae5bd
-SHA256: d13de79761fbb34bcc16abd79de0b1b7f8502a3adcd918ef8b6ada1e05a0ebd8
-SHA512: c1815b4f0a35b5317a370372e3ae8c485e0408e22442dd2233374f3df9bbe11f8f89ac962f1f93762eeb920b1cab453875dff5b7773a4378e5f6f679302e497f
-Description: Create binary package for debian system
-Homepage: http://github.com/mh-cbon/go-bin-deb
-Package-Type: deb
-
-Package: go-bin-deb
-Priority: extra
-Section: unknown
-Installed-Size: 3.5 kB
-Maintainer: mh-cbon <mh-cbon@users.noreply.github.com>
-Architecture: i386
-Source: go-bin-deb
 Version: 0.0.18
 Filename: pool/contrib/g/go-bin-deb/go-bin-deb-0.0.18_386.deb
 Size: 1073534
@@ -33,94 +15,4 @@ SHA512: 7536367cea01289c7745e8fc20045fce9f7b7d2df37ba93a2cb3a20bc23dd7ca8a479e6c
 Description: Create binary package for debian system
 Homepage: http://github.com/mh-cbon/go-bin-deb
 Package-Type: deb
-
-Package: go-bin-deb
-Priority: extra
-Section: unknown
-Installed-Size: 3.5 kB
-Maintainer: mh-cbon <mh-cbon@users.noreply.github.com>
-Architecture: i386
-Source: go-bin-deb
-Version: 0.0.17
-Filename: pool/contrib/g/go-bin-deb/go-bin-deb-0.0.17_386.deb
-Size: 1072948
-MD5sum: 0e170b8c8d8d2b7164565e926edc1087
-SHA1: 97e23a7c00f9462f0b354ae0954142a4694c7447
-SHA256: 801ac25885d2bc780bc1193c007d815d43b5f635394c6302c7a3024688c1aff4
-SHA512: 66350d008e63829ec3e24928440bba9b088a49fc979ded3c920feb49b600cd9448ce23d5c86b662ce8134017fb3f600b05d91931e96e6693d74821006dd245d0
-Description: Create binary package for debian system
-Package-Type: deb
-Homepage: http://github.com/mh-cbon/go-bin-deb
-
-Package: go-bin-deb
-Priority: extra
-Section: unknown
-Installed-Size: 3.8 kB
-Maintainer: mh-cbon <mh-cbon@users.noreply.github.com>
-Architecture: i386
-Source: go-bin-deb
-Version: 0.0.16
-Filename: pool/contrib/g/go-bin-deb/go-bin-deb-0.0.16_386.deb
-Size: 1193042
-MD5sum: 7f0d33f1d8372fc944e46b6f3a0c5b46
-SHA1: 925644781b96342928f5b0ed0b2bf154384cc90c
-SHA256: 05c69f114556e1e5ca0442f633667c55891fdbe282da59b869ad3a5095d762e1
-SHA512: db00bfcfd6a3db0b2e799ba9395b06bb177da4382279fda15d0f855c57947561716195277647ca0a5b703c25152c0d6b6fd4cc54dbec7990884e48dd3e0d3662
-Description: Create binary package for debian system
-Homepage: http://github.com/mh-cbon/go-bin-deb
-Package-Type: deb
-
-Package: go-bin-deb
-Priority: extra
-Section: unknown
-Installed-Size: 3.8 kB
-Maintainer: mh-cbon <mh-cbon@users.noreply.github.com>
-Architecture: i386
-Source: go-bin-deb
-Version: 0.0.15
-Filename: pool/contrib/g/go-bin-deb/go-bin-deb-0.0.15_386.deb
-Size: 1379452
-MD5sum: cc06e0f3086071aedf45b6e53be68b23
-SHA1: 3edd7bdc668e1e74662e520e888e64a22aff5a53
-SHA256: fefc998157ef240528297e693433d64d5192aa0f393241f6d2b7c4d6099b19a5
-SHA512: 8bbfd45764e95d4b37ede39de866069429431dfe20a5c4bdc19ac1c2855bf7931a3a8f51300c98ff897697aea9201e23bf0192a2670dbbbdfc481669f9e423e3
-Description: Create binary package for debian system
-Package-Type: deb
-Homepage: http://github.com/mh-cbon/go-bin-deb
-
-Package: go-bin-deb
-Priority: extra
-Section: unknown
-Installed-Size: 3.8 kB
-Maintainer: mh-cbon <mh-cbon@users.noreply.github.com>
-Architecture: i386
-Source: go-bin-deb
-Version: 0.0.14
-Filename: pool/contrib/g/go-bin-deb/go-bin-deb-0.0.14_386.deb
-Size: 1378688
-MD5sum: 9f8b7b655deac742e1541d46207c6cc6
-SHA1: 3e29176dc77ea85b31f966dd0fbfd361d430f2c1
-SHA256: 7c4d4195f8d339dce8c8572bbd5cfbe8964cd7db98a2eedcce3527d878213662
-SHA512: 8547cfe489eed10f0c8c388086c13759793c801bf6a98db17242521ef82f80379b4aecedc50c9c7c069746fcfa3b9cc0b02cc2779cffb7aec0fe9c40c343f229
-Description: Create binary package for debian system
-Package-Type: deb
-Homepage: http://github.com/mh-cbon/go-bin-deb
-
-Package: go-bin-deb
-Priority: extra
-Section: unknown
-Installed-Size: 3.8 kB
-Maintainer: mh-cbon <mh-cbon@users.noreply.github.com>
-Architecture: i386
-Source: go-bin-deb
-Version: 0.0.13
-Filename: pool/contrib/g/go-bin-deb/go-bin-deb-0.0.13_386.deb
-Size: 1378584
-MD5sum: 1c34f082d29b3a37f6a3f76af283499e
-SHA1: b123efffe8d6bfe8f1ce0a789554be08bc6b020f
-SHA256: d8c82e8e430030e65f1d3c69c351679879cc56cae01c147d8e2482cc6e27c170
-SHA512: becd53261f08a5dbc7169d603802b58c5f382b174a88eaff7c81ee3f42993ccca1c28017ffd993172a65d544755d41b43f9f0a3dd554622f6946420d200048c6
-Description: Create binary package for debian system
-Package-Type: deb
-Homepage: http://github.com/mh-cbon/go-bin-deb
 
