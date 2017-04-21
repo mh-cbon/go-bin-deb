@@ -1,9 +1,26 @@
 # Changelog - go-bin-deb
 
+### 0.0.19-beta
+
+__Changes__
+
+- support: updated all support script
+- release: repo setup: remove dlded packages
+- travis: update deploy token
+
+__Contributors__
+
+- mh-cbon
+
+Released by mh-cbon, Thu 20 Apr 2017 -
+[see the diff](https://github.com/mh-cbon/go-bin-deb/compare/0.0.18...0.0.19-beta#diff)
+______________
+
 ### 0.0.18
 
 __Changes__
 
+- support: updated all support script
 - go vet
 - fix apt repository
 
@@ -93,6 +110,8 @@ __Changes__
 
 - conffiles is not created if there is no configuration files,
   ensure correct debian arch when control.arch field is 386
+
+
 
 
 
