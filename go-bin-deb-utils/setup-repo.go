@@ -75,6 +75,8 @@ func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push, 
 	mkdirAll(dlDir)
 	exec(`gh-api-cli dl-assets -t %q -o %v -r %v -g '*deb' -out '%v/%%r-%%v_%%a.deb'`, ghToken, user, name, dlDir)
 
+	removeAll(outbuild) //todo: find out how to update the repo with aptly rather than re creating new repo all the time.
+
 	if !isDir(outbuild) {
 		mkdirAll(outbuild)
 		chdir(outbuild)

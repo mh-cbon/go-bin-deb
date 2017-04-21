@@ -99,6 +99,8 @@ func SetupPpa(reposlug, ghToken, email, version, archs, srepos, outbuild string,
 	}
 	cct.wait()
 
+	removeAll(outbuild) //todo: find out how to update the repo with aptly rather than re creating new repo all the time.
+
 	if !isDir(outbuild) {
 		mkdirAll(outbuild)
 		chdir(outbuild)
