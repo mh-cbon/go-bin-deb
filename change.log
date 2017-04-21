@@ -1,6 +1,19 @@
 
+UNRELEASED
+
+  * support: updated all support script
+  * release: repo setup: remove dlded packages
+  * travis: update deploy token
+
+  - mh-cbon <mh-cbon@users.noreply.github.com>
+
+-- mh-cbon <mh-cbon@users.noreply.github.com>; Thu, 20 Apr 2017 13:12:36 +0200
+
+
+
 0.0.18
 
+  * support: updated all support script
   * go vet
   * fix apt repository
 
@@ -70,6 +83,7 @@
 
   * conffiles is not created if there is no configuration files,
     ensure correct debian arch when control.arch field is 386
+
 
 
 
@@ -199,5 +213,3 @@
   - mh-cbon <mh-cbon@users.noreply.github.com>
 
 -- mh-cbon <mh-cbon@users.noreply.github.com>; Mon, 11 Jul 2016 14:49:41 +0200
-
-
