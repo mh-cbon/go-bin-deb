@@ -54,11 +54,12 @@ else
   curl https://glide.sh/get | sh
 fi
 
-cd $GOPATH/src/github.com/$REPO
-git checkout master
-git reset HEAD --hard
-[ -d "$GOPATH/src/github.com/$REPO/vendor" ] || glide install
+cd $GOPATH/src/github.com/$REPO/go-bin-deb-utils
 go install
+
+cd $GOPATH/src/github.com/$REPO
+[ -d "$GOPATH/src/github.com/$REPO/vendor" ] || glide install
+go build
 
 # build the binaries
 BINBUILD_DIR="$GOPATH/src/github.com/$REPO/build"
@@ -66,6 +67,9 @@ rm -fr "$BINBUILD_DIR"
 mkdir -p "$BINBUILD_DIR/{386,amd64}"
 
 PKGBUILD_DIR="$GOPATH/src/github.com/$REPO/apt"
+PPABUILD_DIR="$GOPATH/src/github.com/$REPO/ppa"
+
+rm -fr $PKGBUILD_DIR $PPABUILD_DIR
 
 # build the packages
 set +x
@@ -76,14 +80,21 @@ set -x
 f="-X main.VERSION=${VERSION}"
 GOOS=linux GOARCH=386 go build --ldflags "$f" -o "$BINBUILD_DIR/386/go-bin-deb" $k
 GOOS=linux GOARCH=amd64 go build --ldflags "$f" -o "$BINBUILD_DIR/amd64/go-bin-deb" $k
-go run /vagrant/*go create-packages -push -repo=$REPO
+go-bin-deb-utils create-packages -repo=$REPO
 
 set +x
 echo ""
 echo "# =================================================="
 echo "# =================================================="
 set -x
-go run /vagrant/*go setup-repository -out="${PKGBUILD_DIR}" -push -repo=$REPO
+go-bin-deb-utils setup-repository -out="${PKGBUILD_DIR}" -repo=$REPO
+
+set +x
+echo ""
+echo "# =================================================="
+echo "# =================================================="
+set -x
+go-bin-deb-utils setup-ppa -out="${PPABUILD_DIR}" -push -repo=$REPO -repos="mh-cbon/go-bin-deb,mh-cbon/go-bin-rpm"
 
 set +x
 echo ""

@@ -17,6 +17,7 @@ func main() {
 	var ghToken string
 	var version string
 	var archs string
+	var repos string
 	var out string
 
 	flag.StringVar(&reposlug, "repo", "", "The repo slug such USER/REPO.")
@@ -24,6 +25,7 @@ func main() {
 	flag.StringVar(&email, "email", "", "Your gh email.")
 	flag.StringVar(&version, "version", "", "The package version.")
 	flag.StringVar(&archs, "archs", "386,amd64", "The archs to build.")
+	flag.StringVar(&repos, "repos", "", "The list of repository to put in your PPA.")
 	flag.StringVar(&out, "out", "", "The out build directory.")
 	push := flag.Bool("push", false, "Push the new assets")
 	keep := flag.Bool("keep", false, "Keep the new assets")
@@ -75,5 +77,9 @@ func main() {
 
 	} else if action == "setup-repository" {
 		SetupRepo(reposlug, ghToken, email, version, archs, out, *push, *keep)
+
+	} else if action == "setup-ppa" {
+		SetupPpa(reposlug, ghToken, email, version, archs, repos, out, *push, *keep)
+
 	}
 }

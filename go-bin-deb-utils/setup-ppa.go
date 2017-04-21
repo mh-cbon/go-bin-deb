@@ -2,13 +2,27 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
 )
 
-// SetupRepo creates a debian repository
-func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push, keep bool) {
+// SetupPpa creates a debian repository
+func SetupPpa(reposlug, ghToken, email, version, archs, srepos, outbuild string, push, keep bool) {
+
+	repos := []string{}
+	for _, repo := range strings.Split(srepos, ",") {
+		if strings.TrimSpace(repo) == "" {
+			log.Printf("Ignored repo %q\n", repo)
+		} else {
+			repos = append(repos, repo)
+		}
+	}
+	if len(repos) < 1 {
+		fmt.Println("-repo argument is required (example: user/repo1, user/repo2)")
+		os.Exit(1)
+	}
 
 	x := strings.Split(reposlug, "/")
 	user := x[0]
@@ -71,7 +85,27 @@ func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push, 
 	}`
 	writeFile(aptlyConf, conf)
 
-	exec(`gh-api-cli dl-assets -t %q -o %v -r %v -g '*deb' -out '%v/%%r-%%v_%%a.deb'`, ghToken, user, name, outbuild)
+	t := make(chan string, 2)
+	d := make(chan bool)
+	go func() {
+		for cmd := range t {
+			go func(c string) {
+				exec(c)
+				d <- true
+			}(cmd)
+		}
+	}()
+
+	outP := "%%r-%%v_%%a.deb"
+	for _, repo := range repos {
+		y := strings.Split(strings.TrimSpace(repo), "/")
+		t <- fmt.Sprintf(`gh-api-cli dl-assets -t %q -o %v -r %v -g '*deb' -out '%v/%v'`, ghToken, y[0], y[1], outbuild, outP)
+	}
+	close(t)
+	for range repos {
+		<-d
+	}
+	close(d)
 
 	mkdirAll(outbuild)
 	chdir(outbuild)
