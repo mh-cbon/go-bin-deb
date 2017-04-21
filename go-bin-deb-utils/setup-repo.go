@@ -84,7 +84,7 @@ func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push, 
 		exec(`%v publish -component=contrib -config=%v repo %v`, aptlyBin, aptlyConf, reposlug)
 	} else {
 		chdir(outbuild)
-		exec(`%v repo add -config=%v %v %v`, aptlyBin, aptlyConf, reposlug, dlDir)
+		tryexec(`%v repo add -config=%v %v %v`, aptlyBin, aptlyConf, reposlug, dlDir)
 		exec(`%v publish update -component=contrib -config=%v repo %v`, aptlyBin, aptlyConf, reposlug)
 	}
 	exec(`%v repo show -config=%v -with-packages %v`, aptlyBin, aptlyConf, reposlug)
