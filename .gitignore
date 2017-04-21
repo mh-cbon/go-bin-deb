@@ -1,9 +1,0 @@
-/vendor/
-.vagrant/
-/build/
-/demo/build
-/go-bin-deb
-/demo/*.deb
-/demo/.vagrant
-/demo/pkg-build
-.glide/
