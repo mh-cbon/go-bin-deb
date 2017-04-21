@@ -1,3 +1,4 @@
+emd gen -in go-bin-deb-utils/README.e.md
 # go-bin-deb
 
 [![MIT License](http://img.shields.io/badge/License-MIT-yellow.svg)](../LICENSE)
@@ -42,3 +43,4 @@ vagrant destroy -f
 
 https://askubuntu.com/a/138327/544699
 https://github.com/mh-cbon/go-bin-deb#recipes
+[32m ✔ Success[0m
