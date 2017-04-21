@@ -22,6 +22,10 @@ vagrant ssh -c 'curl -L https://raw.githubusercontent.com/mh-cbon/latest/master/
 vagrant ssh -c 'go-bin-deb -v'
 vagrant ssh -c 'which go-bin-deb'
 vagrant ssh -c 'sudo apt-get remove go-bin-deb -y'
+vagrant ssh -c 'curl -L https://raw.githubusercontent.com/mh-cbon/latest/master/source.sh | GH=mh-cbon/go-bin-deb sh -xe'
+vagrant ssh -c 'go-bin-deb -v'
+vagrant ssh -c 'which go-bin-deb'
+vagrant ssh -c 'sudo apt-get remove go-bin-deb -y'
 
 vagrant destroy -f
 ```
