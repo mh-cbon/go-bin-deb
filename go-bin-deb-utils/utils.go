@@ -105,6 +105,12 @@ func readEnv(c string, k ...string) string {
 	return c
 }
 
+func isDir(f string) bool {
+	x, err := os.Stat(f)
+	fmt.Println("isDir", x.IsDir() && !os.IsNotExist(err))
+	return x.IsDir() && !os.IsNotExist(err)
+}
+
 func mkdirAll(f string) error {
 	fmt.Println("mkdirAll", f)
 	return os.MkdirAll(f, os.ModePerm)

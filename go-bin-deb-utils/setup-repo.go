@@ -73,12 +73,35 @@ func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push, 
 
 	exec(`gh-api-cli dl-assets -t %q -o %v -r %v -g '*deb' -out '%v/%%r-%%v_%%a.deb'`, ghToken, user, name, outbuild)
 
-	mkdirAll(outbuild)
-	chdir(outbuild)
+	/*
+	   -# execute aptly
+	   -if [ ! -d "apt" ]; then
+	   -  mkdir apt
+	   -  cd apt
+	   -  $APTLY repo create -config=${APTLYCONF} -distribution=all -component=main ${REPO}
+	   -  $APTLY repo add -config=${APTLYCONF} ${REPO} ../pkg
+	   -  $APTLY publish -component=contrib -config=${APTLYCONF} repo ${REPO}
+	   -  $APTLY repo show -config=${APTLYCONF} -with-packages ${REPO}
+	   -
+	   -else
+	   -  cd apt
+	   -  $APTLY repo add -config=${APTLYCONF} ${REPO} ../pkg
+	   -  $APTLY publish -config=${APTLYCONF} update all
+	   -  $APTLY repo show -config=${APTLYCONF} -with-packages ${REPO}
+	   -fi
+	*/
+	if !isDir(outbuild) {
+		mkdirAll(outbuild)
+		chdir(outbuild)
 
-	exec(`%v repo create -config=%v -distribution=all -component=main %v`, aptlyBin, aptlyConf, reposlug)
-	exec(`%v repo add -config=%v %v %v`, aptlyBin, aptlyConf, reposlug, outbuild)
-	exec(`%v publish -component=contrib -config=%v repo %v`, aptlyBin, aptlyConf, reposlug)
+		exec(`%v repo create -config=%v -distribution=all -component=main %v`, aptlyBin, aptlyConf, reposlug)
+		exec(`%v repo add -config=%v %v %v`, aptlyBin, aptlyConf, reposlug, outbuild)
+		exec(`%v publish -component=contrib -config=%v repo %v`, aptlyBin, aptlyConf, reposlug)
+	} else {
+		chdir(outbuild)
+		exec(`%v repo add -config=%v %v %v`, aptlyBin, aptlyConf, reposlug, outbuild)
+		exec(`%v publish update -component=contrib -config=%v repo %v`, aptlyBin, aptlyConf, reposlug)
+	}
 	exec(`%v repo show -config=%v -with-packages %v`, aptlyBin, aptlyConf, reposlug)
 
 	listFile := fmt.Sprintf(`%v/%v.list`, outbuild, name)
