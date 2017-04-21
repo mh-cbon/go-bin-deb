@@ -109,7 +109,7 @@ func SetupPpa(reposlug, ghToken, email, version, archs, srepos, outbuild string,
 	} else {
 		chdir(outbuild)
 		tryexec(`%v repo add -config=%v %v %v`, aptlyBin, aptlyConf, reposlug, dlDir)
-		exec(`%v publish update -component=contrib -config=%v repo %v`, aptlyBin, aptlyConf, reposlug)
+		exec(`%v publish update -config=%v all %v`, aptlyBin, aptlyConf, reposlug)
 	}
 	exec(`%v repo show -config=%v -with-packages %v`, aptlyBin, aptlyConf, reposlug)
 
