@@ -5,11 +5,11 @@ Vagrant.configure("2") do |config|
 
   config.ssh.forward_env = ["GH_TOKEN"]
 
-    config.vm.box = "debian/jessie64"
-    config.vm.synced_folder "../", "/gopath/src/github.com/mh-cbon/go-bin-deb", type: "rsync",
-      rsync__chown:false,
-      rsync__auto:true
-    config.vm.provision "shell",
-      inline: "sudo apt-get install wget curl git -y"
+  config.vm.box = "debian/jessie64"
+  config.vm.synced_folder "../", "/gopath/src/github.com/mh-cbon/go-bin-deb", type: "rsync",
+    rsync__chown:false,
+    rsync__auto:true
+  config.vm.provision "shell",
+    inline: "sudo apt-get install wget curl git -y"
 
 end
