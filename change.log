@@ -1,4 +1,24 @@
 
+0.0.19
+
+  * close #3: document tokens
+  * demo: update scripts
+  * close #5: ensure an empty changelog file exits in the dest package
+  * code review
+  * bump script
+  * apt: force install fakeroot
+  * utils: improve aptly repo generation to correctly handle re-publishing
+  * utils: improve aptly repo generation to correctly handle re-publishing
+  * utils: improve aptly repo generation to correctly handle re-publishing
+  * utils: improve aptly repo generation to correctly handle re-publishing
+  * utils: improve aptly repo generation to correctly handle re-publishing
+
+  - mh-cbon <mh-cbon@users.noreply.github.com>
+
+-- mh-cbon <mh-cbon@users.noreply.github.com>; Thu, 24 Aug 2017 16:27:38 +0200
+
+
+
 0.0.19-beta
 
   * support: updated all support script
@@ -83,6 +103,8 @@
 
   * conffiles is not created if there is no configuration files,
     ensure correct debian arch when control.arch field is 386
+
+
 
 
 
