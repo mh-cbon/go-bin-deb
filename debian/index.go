@@ -290,12 +290,12 @@ func (d *Package) GenerateFiles(sourceDir string, pkgDir string) error {
 
 	// compute file size
 	var size uint64
-	if s, err := d.ComputeSize(pkgDir); err != nil {
+	s, err := d.ComputeSize(pkgDir)
+	if err != nil {
 		m := fmt.Sprintf("Could not compute install size: %s", err.Error())
 		return errors.New(m)
-	} else {
-		size = uint64(s)
 	}
+	size = uint64(s)
 	logger.Printf("size=%d\n", size)
 
 	// generate the control file
@@ -460,18 +460,18 @@ func (d *Package) ImportFiles(sourceDir string) error {
 		var fperm int32
 		var dperm int32 = 0755
 		if fileInst.Fperm != "" {
-			if p, err := strconv.ParseInt(fileInst.Fperm, 8, 32); err != nil {
+			p, err := strconv.ParseInt(fileInst.Fperm, 8, 32)
+			if err != nil {
 				return err
-			} else {
-				fperm = int32(p)
 			}
+			fperm = int32(p)
 		}
 		if fileInst.Dperm != "" {
-			if p, err := strconv.ParseInt(fileInst.Dperm, 8, 32); err != nil {
+			p, err := strconv.ParseInt(fileInst.Dperm, 8, 32)
+			if err != nil {
 				return err
-			} else {
-				dperm = int32(p)
 			}
+			dperm = int32(p)
 		}
 		items, err := zglob.Glob(fileInst.From)
 		logger.Printf("fileInst.From=%q\n", fileInst.From)
@@ -536,7 +536,7 @@ func (d *Package) ImportFiles(sourceDir string) error {
 
 // ComputeSize returns size of a directory
 func (d *Package) ComputeSize(sourceDir string) (int64, error) {
-	var size int64 = 0
+	var size int64
 
 	// exclDir := filepath.Join(sourceDir)
 	walkFn := func(path string, info os.FileInfo, err error) error {
@@ -617,11 +617,11 @@ func (d *Package) WriteCopyrightFile(debianDir string) error {
 	content += strAppend("Format-Specification", d.CopyrightSpecURL)
 	content += strAppend("Name", d.Name)
 	content += strAppend("Maintainer", d.Maintainer)
-	sourcesUrl := d.SourcesURL
-	if sourcesUrl == "" {
-		sourcesUrl = d.Homepage
+	sourcesURL := d.SourcesURL
+	if sourcesURL == "" {
+		sourcesURL = d.Homepage
 	}
-	content += strAppend("Source", sourcesUrl)
+	content += strAppend("Source", sourcesURL)
 	content += "\n"
 
 	// write the copyrights
@@ -666,8 +666,6 @@ func (d *Package) WriteCronFiles(debianDir string) error {
 			file := filepath.Join(debianDir, d.Name+"-c.cron."+k)
 			if err := ioutil.WriteFile(file, []byte(content), 0644); err != nil {
 				return err
-			} else {
-				fmt.Printf("cron job '%s' is empty!\n", k)
 			}
 		}
 	}
@@ -703,6 +701,8 @@ func (d *Package) WriteChangelogFile(debianDir string) error {
 		if err := ioutil.WriteFile(file, []byte(content), 0644); err != nil {
 			return err
 		}
+	} else {
+		ioutil.WriteFile(file, []byte(""), 0644) // force empty changelog
 	}
 
 	oCmd := exec.Command("gzip", "--best", file)
