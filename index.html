@@ -23,8 +23,7 @@
 
     <section class="main-content">
       
-      <p>emd gen -in README.e.md</p>
-<h1 id="go-bin-deb">go-bin-deb</h1>
+      <h1 id="go-bin-deb">go-bin-deb</h1>
 
 <p><a href="https://travis-ci.org/mh-cbon/go-bin-deb"><img src="https://travis-ci.org/mh-cbon/go-bin-deb.svg?branch=master" alt="travis Status" /></a> <a href="https://goreportcard.com/report/github.com/mh-cbon/go-bin-deb"><img src="https://goreportcard.com/badge/github.com/mh-cbon/go-bin-deb" alt="Go Report Card" /></a> <a href="http://godoc.org/github.com/mh-cbon/go-bin-deb"><img src="https://godoc.org/github.com/mh-cbon/go-bin-deb?status.svg" alt="GoDoc" /></a> <a href="../LICENSE"><img src="http://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT License" /></a></p>
 
@@ -51,7 +50,8 @@ then check it with the help of <code class="highlighter-rouge">lintian</code>.</
   <li><a href="#usage">Usage</a>
     <ul>
       <li><a href="#workflow-overview">Workflow overview</a></li>
-      <li><a href="#json-file">Json file</a></li>
+      <li><a href="#json-file">JSON file</a></li>
+      <li><a href="#json-tokens">JSON tokens</a></li>
     </ul>
   </li>
   <li><a href="#cli">CLI</a>
@@ -120,13 +120,44 @@ https://raw.githubusercontent.com/mh-cbon/latest/master/install.sh <span class="
   <li>create deb repositories on <code class="highlighter-rouge">travis</code> hosted on <code class="highlighter-rouge">gh-pages</code> using this <a href="setup-repository.sh">script</a></li>
 </ul>
 
-<h2 id="json-file">Json file</h2>
+<h2 id="json-file">JSON file</h2>
 
 <p>For a reference of all fields, see <a href="deb-example.json">this</a></p>
 
 <p>For a real world example including service, shortcuts, env, see <a href="demo/deb.json">this</a></p>
 
 <p>For a casual example to provide a simple binary, see <a href="deb.json">this</a></p>
+
+<h2 id="json-tokens">JSON tokens</h2>
+
+<p>Several tokens are provided to consume into the JSON file.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>description</th>
+      <th>example</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>!version!</strong></td>
+      <td>The <code class="highlighter-rouge">version</code> number provided in the command line, or in the JSON file.</td>
+      <td>1.0.2</td>
+    </tr>
+    <tr>
+      <td><strong>!arch!</strong></td>
+      <td>The <code class="highlighter-rouge">architecture</code> short name provided in the command line or in the JSON file.</td>
+      <td>amd64</td>
+    </tr>
+    <tr>
+      <td><strong>!name!</strong></td>
+      <td>The <code class="highlighter-rouge">name</code> of the project provided in the JSON file.</td>
+      <td>hello</td>
+    </tr>
+  </tbody>
+</table>
 
 <h1 id="cli">CLI</h1>
 <p>go-bin-deb -help</p>
@@ -295,8 +326,7 @@ gump patch <span class="c"># bump</span>
 
 <h1 id="history">History</h1>
 
-<p><a href="CHANGELOG.md">CHANGELOG</a>
-[32m ✔ Success[0m</p>
+<p><a href="CHANGELOG.md">CHANGELOG</a></p>
 
 
       <footer class="site-footer">
