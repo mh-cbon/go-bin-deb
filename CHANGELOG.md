@@ -1,5 +1,29 @@
 # Changelog - go-bin-deb
 
+### 0.0.19
+
+__Changes__
+
+- close #3: document tokens
+- demo: update scripts
+- close #5: ensure an empty changelog file exits in the dest package
+- code review
+- bump script
+- apt: force install fakeroot
+- utils: improve aptly repo generation to correctly handle re-publishing
+- utils: improve aptly repo generation to correctly handle re-publishing
+- utils: improve aptly repo generation to correctly handle re-publishing
+- utils: improve aptly repo generation to correctly handle re-publishing
+- utils: improve aptly repo generation to correctly handle re-publishing
+
+__Contributors__
+
+- mh-cbon
+
+Released by mh-cbon, Thu 24 Aug 2017 -
+[see the diff](https://github.com/mh-cbon/go-bin-deb/compare/0.0.19-beta...0.0.19#diff)
+______________
+
 ### 0.0.19-beta
 
 __Changes__
@@ -110,6 +134,8 @@ __Changes__
 
 - conffiles is not created if there is no configuration files,
   ensure correct debian arch when control.arch field is 386
+
+
 
 
 
