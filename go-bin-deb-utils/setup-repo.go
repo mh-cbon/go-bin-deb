@@ -77,18 +77,18 @@ func SetupRepo(reposlug, ghToken, email, version, archs, outbuild string, push, 
 
 	removeAll(outbuild) //todo: find out how to update the repo with aptly rather than re creating new repo all the time.
 
-	if !isDir(outbuild) {
-		mkdirAll(outbuild)
-		chdir(outbuild)
+	// if !isDir(outbuild) { //commented until previous comment is solved.
+	mkdirAll(outbuild)
+	chdir(outbuild)
 
-		exec(`%v repo create -config=%v -distribution=all -component=main %v`, aptlyBin, aptlyConf, reposlug)
-		exec(`%v repo add -config=%v %v %v`, aptlyBin, aptlyConf, reposlug, dlDir)
-		exec(`%v publish -component=contrib -config=%v repo %v`, aptlyBin, aptlyConf, reposlug)
-	} else {
-		chdir(outbuild)
-		tryexec(`%v repo add -config=%v %v %v`, aptlyBin, aptlyConf, reposlug, dlDir)
-		exec(`%v publish update -config=%v all %v`, aptlyBin, aptlyConf, reposlug)
-	}
+	exec(`%v repo create -config=%v -distribution=all -component=main %v`, aptlyBin, aptlyConf, reposlug)
+	exec(`%v repo add -config=%v %v %v`, aptlyBin, aptlyConf, reposlug, dlDir)
+	exec(`%v publish -component=contrib -config=%v repo %v`, aptlyBin, aptlyConf, reposlug)
+	// } else {
+	// 	chdir(outbuild)
+	// 	tryexec(`%v repo add -config=%v %v %v`, aptlyBin, aptlyConf, reposlug, dlDir)
+	// 	exec(`%v publish update -config=%v all %v`, aptlyBin, aptlyConf, reposlug)
+	// }
 	exec(`%v repo show -config=%v -with-packages %v`, aptlyBin, aptlyConf, reposlug)
 
 	listFile := fmt.Sprintf(`%v/%v.list`, outbuild, name)
