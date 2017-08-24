@@ -7,9 +7,9 @@ PREVERSION=
   666 go run main.go -v
   666 changelog finalize --version !newversion!
   666 commit -q -m "changelog: !newversion!" -f change.log
-  666 emd gen -in README.e.md > README.md
+  666 emd gen -in README.e.md -out README.md
   666 commit -q -m "README: !newversion!" -f README.md
-  666 emd gen -in go-bin-deb-utils/README.e.md > go-bin-deb-utils/README.md
+  666 emd gen -in go-bin-deb-utils/README.e.md -out go-bin-deb-utils/README.md
   666 commit -q -m "README: !newversion!" -f go-bin-deb-utils/README.md
   666 changelog md -o CHANGELOG.md --vars='{"name":"go-bin-deb"}'
   666 commit -q -m "changelog: !newversion!" -f CHANGELOG.md
