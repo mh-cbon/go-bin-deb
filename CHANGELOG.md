@@ -5,16 +5,9 @@
 __Changes__
 
 - close #3: document tokens
-- demo: update scripts
 - close #5: ensure an empty changelog file exits in the dest package
-- code review
-- bump script
-- apt: force install fakeroot
-- utils: improve aptly repo generation to correctly handle re-publishing
-- utils: improve aptly repo generation to correctly handle re-publishing
-- utils: improve aptly repo generation to correctly handle re-publishing
-- utils: improve aptly repo generation to correctly handle re-publishing
-- utils: improve aptly repo generation to correctly handle re-publishing
+- demo: update
+- dev: code review, bump script
 
 __Contributors__
 
