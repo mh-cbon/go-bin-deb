@@ -49,11 +49,8 @@ deploy:
       - $GH_APP-amd64.deb
       - $GH_APP-386.rpm
       - $GH_APP-amd64.rpm
-    on:
-      tags: false
     skip_cleanup: true
     all_branches: true
-    edge: true
   - provider: bintray
     api_key:
       secure: I6A4/FnOVgtONv1Cvy9soIH4f+gfuXSqvE6JqGwwerjcK8Fcl1LebDy2ipcK8j9EoYlJZ88Vh1/Vf6Z1L7+eV1Lc9PfKOJOSkAq4gr4vAb4rdO8L+M/ZTw+LH88Cu6J64Q6Hkx1aKDiTHCZbaVc8QeTH6zob1clSvx8h7oCz81N3VY25QvhiB2/eAh4NKBYN/9yz1TgTVYu3fNvF24tNewcH+56HBZm5d4uDnfDrAhgLGBJCqhxXpnQh2ALiQeqEgmyGwslcGCQ4bAL3cx7HgrkEdpoFusisoNOs11G6+yhiwjFyNNE/obwbMlV1teZ1JpjZicPTG7o5CEXD6/UKez4nwQsa4veNxlPAU7hU2GcnVJvCWmzzQjNuDUkVv5q+McTQA82sGrFkYxUFHkQfHoqvLRNANuMRiY14isoT2chzIK/YhsB2BJnWqooB0OGqda30DQu8Ir8Ro9K++5NoqgdWpilY5LWhko8Sd72KiUmI/wgiU8UHUZ0lxEePL1rn8wi8QOhnaPQ7SYhWwuvMoyMG1zt15PUCa9ya/ugYDlquj+zGFX3D/AhaEUT4hEhRGz3Lng1rqH1QmpHj4yAAgIzmdxiXbTOuess4i9QzzUlMNugiw/c51GVpI4ypC/8h/7xHEfqugX/e+GMIORdk6vb+eJp3u5TJB2mWrrx9BKw=
@@ -63,8 +60,5 @@ deploy:
       - $GH_APP-amd64.deb
       - $GH_APP-386.rpm
       - $GH_APP-amd64.rpm
-    on:
-      tags: false
     all_branches: true
     skip_cleanup: true
-    edge: true
