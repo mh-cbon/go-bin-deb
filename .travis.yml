@@ -41,7 +41,7 @@ before_deploy:
   - go-bin-deb generate --file deb.json -a $OSARCH --version $VERSION -o $GH_APP-$OSARCH-$VERSION.deb
   - curl -fL https://getcli.jfrog.io | sh
   - ./jfrog bt config --user $GH_USER --key $BTKEY --licenses MIT
-  - ./jfrog bt upload --override=true --publish=true --deb=unstable/main/$OSARCH $GH_APP-$OSARCH-$VERSION.deb $GH_USER/$GH_APP/$GH_APP/$VERSION pool/g/$GH_APP/
+  - ./jfrog bt upload --override=true --publish=true --deb=unstable/main/$OSARCH $GH_APP-$OSARCH-$VERSION.deb $GH_USER/$GH_APP/$VERSION pool/g/$GH_APP/
 
 deploy:
   provider: releases
