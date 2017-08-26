@@ -24,7 +24,7 @@ env:
 before_install:
   - sudo add-apt-repository 'deb https://dl.bintray.com/bincrafters/public-deb unstable main'
   - sudo apt-get -qq update
-  - sudo apt-get install --allow-unauthenticated changelog
+  - sudo apt-get install --allow-unauthenticated changelog fakeroot
   - mkdir -p ${GOPATH}/bin
   - cd ~
   - curl https://glide.sh/get | sh
