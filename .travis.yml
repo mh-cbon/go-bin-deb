@@ -17,6 +17,7 @@ env:
     - GH_USER=${TRAVIS_REPO_SLUG%/*}
     - GH_APP=${TRAVIS_REPO_SLUG#*/}
     - secure: OdrfCMHcIrnlTT3WTubTMklx2b00U9nKDQe0aTjRDkNCNB0nB/fTvvIhhJ8+LDChcBcl0SBiy7Ok/pOEqlvreT1ri+XrPyXQq00sIz7qclxAsPcWsDQiFu8s1R3xuTc/7UG4e8V+WQOFf8bz5Hz1+tlgpHGINKidKQ6eMtFXJE1yLU7ZIyu27cumfdVgcYbBa9ut7h9oqc8VHT43/KM90BXE9mEtoisZnj1jeayZHfYNhr/WbMpj+39rkb50RMnPl+oQBEAL1Jovh0gINcCfQPdRDDlgKhSqaSFpvVWS1w2LlXcxYfbdhhtKkHGJ3ilUfWRHIGFyE1yQKbAL5SEUYPNkwdXF15uP+S0M9wmsQ5Tl48qgzJK+PbMQklc66EXobEPE8kvDiLxX3uHPLwUCR75H5Q6+3HEvEh9v7V46BNHHBS0uElq0kjr5/vYuYvljxf/hWWmZf8UbAYqV84UqwqPicmOB0ec7UJj4Ug9nF8H10bxOLDNiSl1Z+0Ha6LmO1kCRRTv4l5Yc+z21/eXGUq/h18r9ilY6KKoL3Cvlczx4uj4H4S4+46ww28cMlKYlKkoJNuwoFCqa4y4zlYmWHjDuc0rFro+cCaQ0FG3pl1szCEIh1NGcSlBFlrmzkquZop6M4S5wfWsH+zmYlaFTZ1tufo6lnaf8J008pWL6Ok8=
+    - secure: NyzHwBgTVSFN4siMPEEerAuZ1JM7rQURnXg7OqIQ4+wt3238/BdmBt3NYjU5v7W3EeafzQwnu70k1386HFuFHl4uuMFNfyby8tgRPsl90Yh6vhavNY4lXv6WIAsDYEGiS3IxiSYEMwgvwY4k2XuDA9/urEfFNBuF7ih4d623ei07mGSWDU0+NqQdYdqR3DI2jNs6AdL77Rk0brqqd1d/iNQw8gvfv5UaT0x4LXIpWbaLj9xuai+NUaxHNNQlk3n/Of9I1XS92Tblc0zpg9oniRarEw4/lJELSmV3fQNZzQ25ftTpBmFcXwy00CWsth5NDRgvrqeJ0Nyal4CpkMETXAHO9DF2IMCrj2aeuF4IitXplGxUo3DJbruVnguOr11mVYj4Ofynys8jIwzXF3ArYeuLcJ/yQmtPMYgzjU9AguaSpyg00rm0hTwc1jP27HlEWeUeLiMm3WRuPLJ6mUgjnSo7gAggVL9LWJ+Jwbk5RjGB71lEyIT5l9zURvN/YBp9dkN07ACUKNGTq+dnG/00LHCV+MUXUnhNUErJKV+az1iu62hOGQzaB1oXnGnH0gZ6fYMYm+/Sm59gdgE56gNaCQ8VocdA4t0xjZbV5/6vHvop00kwsZIUDN+SWi6kUjtRsT++f4jlbnzAJEbjmAPfpUlLoRDpf6wdGSCOhZnFy58=
 
 before_install:
   - sudo add-apt-repository 'deb https://dl.bintray.com/bincrafters/public-deb unstable main'
@@ -36,24 +37,16 @@ script:
   - GOOS=linux GOARCH=$GOARCH go build --ldflags "-X main.VERSION=$VERSION" -o build/$OSARCH/$GH_APP main.go
   - go-bin-deb generate --file deb.json -a $OSARCH --version $VERSION -o $GH_APP-$OSARCH-$VERSION.deb
 
+before_deploy:
+  - curl -fL https://getcli.jfrog.io | sh
+  - ./jfrog bt config --user $GH_USER --key $BTKEY --licenses MIT
+  - ./jfrog bt upload --override=true --publish=true --deb=unstable/main/$OSARCH $APP-$OSARCH-$VERSION.deb $GH_USER/$GH_APP/$GH_APP/$VERSION pool/g/$GH_APP/
+
 deploy:
   - provider: releases
     api_key:
       secure: H64/VU6sWHdR4q6jo1C6vVuENALn6vWLi36MRKdhnLfcHBHDnSPCEcf3L5kUYHpAksMTKigofWYAEjyEVhzCm7CI1YHR3F4JRH6MUw/0jqoE5Nm5Ms6v8siIRdhWA+2e+Fg6CTDBfEV5FHLHEVTW3wSCyMz4g4U03aUfP5bz9g2SqLp3mwR0iPQmBkLzgDp8ju5tG25aTNSJC2eU/RGSC4CF7ZW7Z1/DB0p9ufbNxWiEpR7HwrwXCwS9lys9V/D+rWecu9BUinqfUgaYAsUHEKwns5FwYsTymFBRwYGif846/WPFOI/sDQFoyhHH9K23mHVYm3c5aRvKUqRMNbV2sRudCvI9Fl4FUlPO06jw7rhzM8ubHYn039pqE2wvPYYvKVmWudWayrdvlcKyz4eI3o4X1Cth0Owb+rXMXTsiSjOpIAiiLGjCrzfD/wfTJwANn/6Y22l6vqXfxQQjt43Q1wD7m50wDss2wXL8SdfeLBCioA3AHq3zMMUAsXA0rpC5q7Wl0wo5BaWatBO/VCmHIIIaZWA0tcQOJppwfSeq2GhgU+GIklJUifZwbuwd/OWzcbHJxSqc3quqMGzGTrklBHRHYWjkmRlFU1SycxizuhtEika6oO2H/WXPHfpLYBRCQtQEznPdviTpHQs3rL8YoHATUD2tKcOEWEoilL/fLo0=
     file_glob: true
-    file:
-      - $GH_APP-386.deb
-      - $GH_APP-amd64.deb
-      - $GH_APP-386.rpm
-      - $GH_APP-amd64.rpm
-    on:
-      tags: true
-    skip_cleanup: true
-  - provider: bintray
-    key:
-      secure: I6A4/FnOVgtONv1Cvy9soIH4f+gfuXSqvE6JqGwwerjcK8Fcl1LebDy2ipcK8j9EoYlJZ88Vh1/Vf6Z1L7+eV1Lc9PfKOJOSkAq4gr4vAb4rdO8L+M/ZTw+LH88Cu6J64Q6Hkx1aKDiTHCZbaVc8QeTH6zob1clSvx8h7oCz81N3VY25QvhiB2/eAh4NKBYN/9yz1TgTVYu3fNvF24tNewcH+56HBZm5d4uDnfDrAhgLGBJCqhxXpnQh2ALiQeqEgmyGwslcGCQ4bAL3cx7HgrkEdpoFusisoNOs11G6+yhiwjFyNNE/obwbMlV1teZ1JpjZicPTG7o5CEXD6/UKez4nwQsa4veNxlPAU7hU2GcnVJvCWmzzQjNuDUkVv5q+McTQA82sGrFkYxUFHkQfHoqvLRNANuMRiY14isoT2chzIK/YhsB2BJnWqooB0OGqda30DQu8Ir8Ro9K++5NoqgdWpilY5LWhko8Sd72KiUmI/wgiU8UHUZ0lxEePL1rn8wi8QOhnaPQ7SYhWwuvMoyMG1zt15PUCa9ya/ugYDlquj+zGFX3D/AhaEUT4hEhRGz3Lng1rqH1QmpHj4yAAgIzmdxiXbTOuess4i9QzzUlMNugiw/c51GVpI4ypC/8h/7xHEfqugX/e+GMIORdk6vb+eJp3u5TJB2mWrrx9BKw=
-    file_glob: true
-    user: ${GH_USER}
     file:
       - $GH_APP-386.deb
       - $GH_APP-amd64.deb
