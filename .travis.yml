@@ -33,17 +33,18 @@ install:
   - go install
 
 script:
+  - echo "pass"
+
+before_deploy:
   - mkdir -p build/$OSARCH
   - GOOS=linux GOARCH=$GOARCH go build --ldflags "-X main.VERSION=$VERSION" -o build/$OSARCH/$GH_APP main.go
   - go-bin-deb generate --file deb.json -a $OSARCH --version $VERSION -o $GH_APP-$OSARCH-$VERSION.deb
-
-before_deploy:
   - curl -fL https://getcli.jfrog.io | sh
   - ./jfrog bt config --user $GH_USER --key $BTKEY --licenses MIT
   - ./jfrog bt upload --override=true --publish=true --deb=unstable/main/$OSARCH $APP-$OSARCH-$VERSION.deb $GH_USER/$GH_APP/$GH_APP/$VERSION pool/g/$GH_APP/
 
 deploy:
-  - provider: releases
+  provider: releases
     api_key:
       secure: H64/VU6sWHdR4q6jo1C6vVuENALn6vWLi36MRKdhnLfcHBHDnSPCEcf3L5kUYHpAksMTKigofWYAEjyEVhzCm7CI1YHR3F4JRH6MUw/0jqoE5Nm5Ms6v8siIRdhWA+2e+Fg6CTDBfEV5FHLHEVTW3wSCyMz4g4U03aUfP5bz9g2SqLp3mwR0iPQmBkLzgDp8ju5tG25aTNSJC2eU/RGSC4CF7ZW7Z1/DB0p9ufbNxWiEpR7HwrwXCwS9lys9V/D+rWecu9BUinqfUgaYAsUHEKwns5FwYsTymFBRwYGif846/WPFOI/sDQFoyhHH9K23mHVYm3c5aRvKUqRMNbV2sRudCvI9Fl4FUlPO06jw7rhzM8ubHYn039pqE2wvPYYvKVmWudWayrdvlcKyz4eI3o4X1Cth0Owb+rXMXTsiSjOpIAiiLGjCrzfD/wfTJwANn/6Y22l6vqXfxQQjt43Q1wD7m50wDss2wXL8SdfeLBCioA3AHq3zMMUAsXA0rpC5q7Wl0wo5BaWatBO/VCmHIIIaZWA0tcQOJppwfSeq2GhgU+GIklJUifZwbuwd/OWzcbHJxSqc3quqMGzGTrklBHRHYWjkmRlFU1SycxizuhtEika6oO2H/WXPHfpLYBRCQtQEznPdviTpHQs3rL8YoHATUD2tKcOEWEoilL/fLo0=
     file_glob: true
