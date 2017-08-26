@@ -13,12 +13,9 @@ env:
     - GOARCH=amd64 OSARCH=amd64
     - GOARCH=386 OSARCH=i386
   global:
-    - TRAVIS_TAG=0.0.19
     - VERSION=${TRAVIS_TAG}
     - GH_USER=${TRAVIS_REPO_SLUG%/*}
     - GH_APP=${TRAVIS_REPO_SLUG#*/}
-    - BT_SUBJECT=${GH_USER}
-    - BT_REPO_DEB=${APP}
     - secure: OdrfCMHcIrnlTT3WTubTMklx2b00U9nKDQe0aTjRDkNCNB0nB/fTvvIhhJ8+LDChcBcl0SBiy7Ok/pOEqlvreT1ri+XrPyXQq00sIz7qclxAsPcWsDQiFu8s1R3xuTc/7UG4e8V+WQOFf8bz5Hz1+tlgpHGINKidKQ6eMtFXJE1yLU7ZIyu27cumfdVgcYbBa9ut7h9oqc8VHT43/KM90BXE9mEtoisZnj1jeayZHfYNhr/WbMpj+39rkb50RMnPl+oQBEAL1Jovh0gINcCfQPdRDDlgKhSqaSFpvVWS1w2LlXcxYfbdhhtKkHGJ3ilUfWRHIGFyE1yQKbAL5SEUYPNkwdXF15uP+S0M9wmsQ5Tl48qgzJK+PbMQklc66EXobEPE8kvDiLxX3uHPLwUCR75H5Q6+3HEvEh9v7V46BNHHBS0uElq0kjr5/vYuYvljxf/hWWmZf8UbAYqV84UqwqPicmOB0ec7UJj4Ug9nF8H10bxOLDNiSl1Z+0Ha6LmO1kCRRTv4l5Yc+z21/eXGUq/h18r9ilY6KKoL3Cvlczx4uj4H4S4+46ww28cMlKYlKkoJNuwoFCqa4y4zlYmWHjDuc0rFro+cCaQ0FG3pl1szCEIh1NGcSlBFlrmzkquZop6M4S5wfWsH+zmYlaFTZ1tufo6lnaf8J008pWL6Ok8=
 
 before_install:
@@ -49,16 +46,19 @@ deploy:
       - $GH_APP-amd64.deb
       - $GH_APP-386.rpm
       - $GH_APP-amd64.rpm
+    on:
+      tags: true
     skip_cleanup: true
-    all_branches: true
   - provider: bintray
     api_key:
       secure: I6A4/FnOVgtONv1Cvy9soIH4f+gfuXSqvE6JqGwwerjcK8Fcl1LebDy2ipcK8j9EoYlJZ88Vh1/Vf6Z1L7+eV1Lc9PfKOJOSkAq4gr4vAb4rdO8L+M/ZTw+LH88Cu6J64Q6Hkx1aKDiTHCZbaVc8QeTH6zob1clSvx8h7oCz81N3VY25QvhiB2/eAh4NKBYN/9yz1TgTVYu3fNvF24tNewcH+56HBZm5d4uDnfDrAhgLGBJCqhxXpnQh2ALiQeqEgmyGwslcGCQ4bAL3cx7HgrkEdpoFusisoNOs11G6+yhiwjFyNNE/obwbMlV1teZ1JpjZicPTG7o5CEXD6/UKez4nwQsa4veNxlPAU7hU2GcnVJvCWmzzQjNuDUkVv5q+McTQA82sGrFkYxUFHkQfHoqvLRNANuMRiY14isoT2chzIK/YhsB2BJnWqooB0OGqda30DQu8Ir8Ro9K++5NoqgdWpilY5LWhko8Sd72KiUmI/wgiU8UHUZ0lxEePL1rn8wi8QOhnaPQ7SYhWwuvMoyMG1zt15PUCa9ya/ugYDlquj+zGFX3D/AhaEUT4hEhRGz3Lng1rqH1QmpHj4yAAgIzmdxiXbTOuess4i9QzzUlMNugiw/c51GVpI4ypC/8h/7xHEfqugX/e+GMIORdk6vb+eJp3u5TJB2mWrrx9BKw=
     file_glob: true
+    user: ${GH_USER}
     file:
       - $GH_APP-386.deb
       - $GH_APP-amd64.deb
       - $GH_APP-386.rpm
       - $GH_APP-amd64.rpm
-    all_branches: true
+    on:
+      tags: true
     skip_cleanup: true
