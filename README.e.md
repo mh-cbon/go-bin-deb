@@ -27,7 +27,7 @@ See [the demo](demo/).
 {{template "glide/install" .}}
 
 #### linux rpm/deb repository
-{{template "linux/gh_src_repo" .}}
+{{template "linux/bintray_repo" .}}
 
 #### linux rpm/deb standalone package
 {{template "linux/gh_pkg" .}}

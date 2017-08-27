@@ -49,10 +49,10 @@ go install
 
 #### linux rpm/deb repository
 ```sh
-wget -O - https://raw.githubusercontent.com/mh-cbon/latest/master/source.sh \
+wget -O - https://raw.githubusercontent.com/mh-cbon/latest/master/bintray.sh \
 | GH=mh-cbon/go-bin-deb sh -xe
 # or
-curl -L https://raw.githubusercontent.com/mh-cbon/latest/master/source.sh \
+curl -L https://raw.githubusercontent.com/mh-cbon/latest/master/bintray.sh \
 | GH=mh-cbon/go-bin-deb sh -xe
 ```
 
