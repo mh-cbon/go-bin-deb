@@ -23,42 +23,31 @@ env:
     - secure: j01Vs74XTn2EQ17K4CdRWY/FJVgDdFFd+QEbZo4T03cFzydbzivNAsQtkZyKO9K6Nq3ElVaTSP9a4gq6HMT+x6Rp6zVssWOXFv6gRRzPq3sBYQhx4GetMQtcKOhLjOTIg06TpJjkXjuGOJw00GUBcBfA+OIFkAHyX+4KQ2fM6fo8m69ZShN8LaiLK1PZjAu1j/0cYopxCoI88V8nbBPPYBdsq3porPyhhEbZgERVzs0hveDzhtRyoNKQhRViGMKw6MzMLqXek3ixVlusmpDLrLce/38bKXoXXLUpiMd8dSTYlh89yFCTp0us4iEM23b47yGySP8Tt0grD1PKUEf5y+6Pm/4VQuG/IcNMqkQzP08jJVK8Ai6iu27mHGRR/LOGcGf57ZRPJuQHJD01DjVJ/WctPeZg5SX/YasHf08kMeooCoNZb3E4Q9PRxI/bvjvv8wtVSb4roT9c3LQ5rmEM6PZFh+SBQOIsyAT5xBFVPrWA0QEbVkaLMYElsf/fuu8LMWpV9SqrPAgnDY58c8RgfJQ9Iq7V02vXoxC9qNiXBETmAy8cvnBkoN/D7cue4Fa++YGVCbDDDN6eysYVwIZWW2bjSvpekqTJU/i8RbVuNWP++e43dJDrwfhYZAA3MyO6nRz40cczVabL0AjSUREDKII0ZwMpsiIHkhOkGFcRUcc=
 
 before_install:
-  - echo "$OKARCH"
   - sudo add-apt-repository 'deb https://dl.bintray.com/bincrafters/public-deb unstable main'
   - sudo apt-get -qq update
   - sudo apt-get install --allow-unauthenticated changelog fakeroot
   - mkdir -p ${GOPATH}/bin
   - cd ~
   - curl https://glide.sh/get | sh
-  - echo "$OKARCH"
 
 install:
-  - echo "$OKARCH"
   - cd $GOPATH/src/github.com/$TRAVIS_REPO_SLUG
   - glide install
   - go install
-  - echo "$OKARCH"
 
 script:
-  - echo "$OKARCH"
   - echo "pass"
-  - echo "$OKARCH"
 
 before_deploy:
-  - echo "$OKARCH"
   - mkdir -p build/$OSARCH
-  - GOOS=linux go build --ldflags "-X main.VERSION=$VERSION" -o build/$OSARCH/$GH_APP main.go
-  - echo "$OKARCH"
+  - GOOS=linux GOARCH=$OKARCH go build --ldflags "-X main.VERSION=$VERSION" -o build/$OSARCH/$GH_APP main.go
   - go-bin-deb generate --file deb.json -a $OSARCH --version $VERSION -o $GH_APP-$OSARCH-$VERSION.deb
   - cp $GH_APP-$OSARCH-$VERSION.deb $GH_APP-$OKARCH.deb
-  - echo "$OKARCH"
   - curl -fL https://getcli.jfrog.io | sh
-  - echo "$OKARCH"
   - ./jfrog bt pc --key=$BTKEY --user=$GH_USER --licenses=MIT --vcs-url=https://github.com/$GH_USER/deb $GH_USER/deb/$GH_APP || echo "package already exists"
   - ./jfrog bt upload --override=true --key $BTKEY --publish=true --deb=unstable/main/$OSARCH $GH_APP-$OSARCH-$VERSION.deb $GH_USER/deb/$GH_APP/$VERSION pool/g/$GH_APP/
   - ls -alh
   - ls -alh $GH_APP-$OKARCH.deb
-  - echo "$OKARCH"
 
 deploy:
   provider: releases
