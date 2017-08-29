@@ -1,5 +1,5 @@
 
-0.0.19
+UNRELEASED
 
   * close #3: document tokens
   * close #5: ensure an empty changelog file exits in the dest package
@@ -96,6 +96,7 @@
 
   * conffiles is not created if there is no configuration files,
     ensure correct debian arch when control.arch field is 386
+
 
 
 
