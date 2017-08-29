@@ -16,6 +16,7 @@ env:
     - VERSION=${TRAVIS_TAG}
     - GH_USER=${TRAVIS_REPO_SLUG%/*}
     - GH_APP=${TRAVIS_REPO_SLUG#*/}
+    - JFROG_CLI_OFFER_CONFIG=false
     # GH TOKEN
     - secure: fbxLs9ALbBZEwJn4HPlOn9P4RO2bX1rXDc2y6TSp+r6wARLU+HBj2xwK6aW7GQpbi94ZK2F7Lgsb1TQYMcvA8pRmKCRIfGfd/AlVE7jgAz+YVxhg1diE9JycjUbBC3XyIVmRaXX7M/6va/Pe0DesgCaf3sclBzenxF28aSzFoAnaS3/t0PItyKtfiGbaJV6ODzm4LgWhf8GdUALFrWyRC3bR1TWrJGgX2EIJ0OkPDaOfoMJXtb6COjJ2N2KRfyFIaO4TkcCrFAlK14MavfS9ibR9MYtyM/gVtqPGUuTu3mMprkU0AgqwzfUp/waOLW6110/cFiKtWLvCuYe7nXyjy39mzDfr6iA4SeNg55equyhlz88s6mqHAeJ+XEcXX150fwOJbyDh7Fs2Ovfmi4Awc9XW87HkwoyKJYkwdfmAxEUkBZVS+doIuPn3wt49OkCtHGGTmkZZsp0q4gpq0wWwpegH+1XLfesMFWCflN7jTRm9SlSu/TES+pP1caVDxP0arXPoPrBjVwcL6M9o4tA8WD5cKgRQ/PJ8rk8fjD0b5hyDTKki/lViuu96KDYFE7BKu4fH8P8ZJ2nUBJX50IU625dJiaU3QzuVXocqo92jxMwWFkBf3Rz8ms6gFoYA6BHvMlyNKlG/YJ7FZfEfGpX4LN4qc+rny/bK5Fxo1BMvrh4=
     # BINTRAY TOKEN
@@ -43,7 +44,7 @@ before_deploy:
   - go-bin-deb generate --file deb.json -a $OSARCH --version $VERSION -o $GH_APP-$OSARCH-$VERSION.deb
   - cp $GH_APP-$OSARCH-$VERSION.deb $GH_APP-$OSARCH.deb
   - curl -fL https://getcli.jfrog.io | sh
-  - (yes n | ./jfrog bt pc --key=$BTKEY --user=$GH_USER --licenses=MIT --vcs-url=https://github.com/$GH_USER/deb $GH_USER/deb/$GH_APP) || echo "package already exists"
+  - ./jfrog bt pc --key=$BTKEY --user=$GH_USER --licenses=MIT --vcs-url=https://github.com/$GH_USER/deb $GH_USER/deb/$GH_APP || echo "package already exists"
   - ./jfrog bt upload --override=true --key $BTKEY --publish=true --deb=unstable/main/$OSARCH $GH_APP-$OSARCH-$VERSION.deb $GH_USER/deb/$GH_APP/$VERSION pool/g/$GH_APP/
 
 deploy:
