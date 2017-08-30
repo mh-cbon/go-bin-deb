@@ -1,3 +1,6 @@
+# deprecated
+
+
 # go-bin-deb
 
 [![MIT License](http://img.shields.io/badge/License-MIT-yellow.svg)](../LICENSE)

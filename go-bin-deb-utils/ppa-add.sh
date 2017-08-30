@@ -1,5 +1,9 @@
 #!/bin/sh -e
 
+# deprecated script.
+
+echo "You are using a deprecated script. please update your build with latest changes on go-github-release"
+
 # this is an helper
 # to install a source repo
 # hosted on gh-pages
