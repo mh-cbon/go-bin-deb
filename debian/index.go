@@ -205,14 +205,14 @@ func (d *Package) Normalize(debianDir string, version string, arch string) {
 	}
 
 	if d.InitFile != "" && contains(d.Conffiles, d.InitFile) == false {
-		d.Conffiles = append(d.Conffiles, filepath.Join("etc", "init.d", d.Name+".sh"))
+		d.Conffiles = append(d.Conffiles, filepath.Join("etc", "init.d", d.Name))
 	}
 	if d.DefaultFile != "" && contains(d.Conffiles, d.DefaultFile) == false {
-		d.Conffiles = append(d.Conffiles, filepath.Join("etc", "default", d.Name+".sh"))
+		d.Conffiles = append(d.Conffiles, filepath.Join("etc", "default", d.Name))
 	}
 
 	if len(d.Envs) > 0 {
-		d.Conffiles = append(d.Conffiles, filepath.Join("etc", "profile.d", d.Name+".sh"))
+		d.Conffiles = append(d.Conffiles, filepath.Join("etc", "profile.d", d.Name))
 	}
 }
 
@@ -447,7 +447,7 @@ func (d *Package) WriteEnvProfile(debianDir string) error {
 	if content == "" {
 		return nil
 	}
-	f := filepath.Join(debianDir, "etc", "profile.d", d.Name+".sh")
+	f := filepath.Join(debianDir, "etc", "profile.d", d.Name)
 	if err := os.MkdirAll(filepath.Dir(f), 0755); err != nil {
 		return err
 	}
@@ -838,7 +838,7 @@ func (d *Package) WriteUnitFile(dataDir string) error {
 // WriteInitFile writes the etc/init.d file.
 func (d *Package) WriteInitFile(dataDir string) error {
 	if d.InitFile != "" {
-		f := filepath.Join(dataDir, "etc", "init.d", d.Name+".sh")
+		f := filepath.Join(dataDir, "etc", "init.d", d.Name)
 		if err := os.MkdirAll(filepath.Dir(f), 0755); err != nil {
 			return err
 		}
@@ -853,7 +853,7 @@ func (d *Package) WriteInitFile(dataDir string) error {
 // WriteDefaultInitFile writes the etc/default file.
 func (d *Package) WriteDefaultInitFile(dataDir string) error {
 	if d.DefaultFile != "" {
-		f := filepath.Join(dataDir, "etc", "default", d.Name+".sh")
+		f := filepath.Join(dataDir, "etc", "default", d.Name)
 		if err := os.MkdirAll(filepath.Dir(f), 0755); err != nil {
 			return err
 		}
