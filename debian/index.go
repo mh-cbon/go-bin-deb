@@ -12,7 +12,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/dustin/go-humanize"
 	"github.com/mattn/go-zglob"
 	"github.com/mh-cbon/go-bin-deb/stringexec"
 	"github.com/mh-cbon/verbose"
@@ -599,7 +598,7 @@ func (d *Package) WriteControlFile(debianDir string, size uint64) error {
 	P += strAppend("Provides", d.Provides)
 	P += strAppend("Replaces", d.Replaces)
 	P += strAppend("Built-Using", d.BuiltUsing)
-	P += strAppend("Installed-Size", humanize.Bytes(size))
+	P += strAppend("Installed-Size", strconv.FormatUint(size,10))
 	P += strAppend("Package-Type", d.PackageType)
 
 	controlContent := []byte(P)
