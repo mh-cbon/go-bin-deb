@@ -81,7 +81,7 @@ type Package struct {
 	Enhances            []string           `json:"enhances"`             // Enhancement list
 	PreDepends          []string           `json:"pre-depends"`          // Pre-dependency list
 	Breaks              []string           `json:"breaks"`               // Breaks list
-	Conflicts           []string           `json:"conflits"`             // Conflicts list
+	Conflicts           []string           `json:"conflicts"`            // Conflicts list
 	Envs                map[string]string  `json:"envs"`                 // Environment variables to define
 	Provides            string             `json:"provides"`             // Provides
 	Replaces            string             `json:"replaces"`             // Replaces
