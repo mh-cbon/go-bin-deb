@@ -6,13 +6,13 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"math"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
 
-	"github.com/dustin/go-humanize"
 	"github.com/mattn/go-zglob"
 	"github.com/mh-cbon/go-bin-deb/stringexec"
 	"github.com/mh-cbon/verbose"
@@ -296,7 +296,7 @@ func (d *Package) GenerateFiles(sourceDir string, pkgDir string) error {
 		return errors.New(m)
 	}
 	size = uint64(s)
-	logger.Printf("size=%d\n", size)
+	logger.Printf("size=%d kB\n", size)
 
 	// generate the control file
 	if err := d.WriteControlFile(debianDir, uint64(size)); err != nil {
@@ -557,7 +557,7 @@ func (d *Package) ComputeSize(sourceDir string) (int64, error) {
 	if err != nil {
 		return size, err
 	}
-	return size / 1024, nil
+	return int64(math.Ceil( float64(size) / 1024)), nil
 }
 
 // WriteControlFile writes the control file.
@@ -599,7 +599,7 @@ func (d *Package) WriteControlFile(debianDir string, size uint64) error {
 	P += strAppend("Provides", d.Provides)
 	P += strAppend("Replaces", d.Replaces)
 	P += strAppend("Built-Using", d.BuiltUsing)
-	P += strAppend("Installed-Size", humanize.Bytes(size))
+	P += strAppend("Installed-Size", fmt.Sprintf("%d", size))
 	P += strAppend("Package-Type", d.PackageType)
 
 	controlContent := []byte(P)
