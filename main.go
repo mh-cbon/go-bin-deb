@@ -140,10 +140,11 @@ func testPkg(c *cli.Context) error {
 }
 
 func buildPackage(wd string, output string, extraArgs []string) error {
-	args := []string{"dpkg-deb", "--build", "debian", output}
+	args := []string{"dpkg-deb"}
 	if len(extraArgs) > 0 {
 		args = append(args, extraArgs...)
 	}
+	args = append(args, "--build", "debian", output)
 	oCmd := exec.Command("fakeroot", args...)
 	oCmd.Dir = wd
 	oCmd.Stdout = os.Stdout
