@@ -106,10 +106,10 @@ NAME:
 
 USAGE:
    go-bin-deb <cmd> <options>
-   
+
 VERSION:
    0.0.0
-   
+
 COMMANDS:
      generate  Generate the contents of the package
      test      Test the package json file
@@ -130,11 +130,12 @@ USAGE:
    go-bin-deb generate [command options] [arguments...]
 
 OPTIONS:
-   --wd value, -w value      Working directory to prepare the package (default: "pkg-build")
-   --output value, -o value  Output directory for the debian package files
-   --file value, -f value    Path to the deb.json file (default: "deb.json")
-   --version value           Version of the package
-   --arch value, -a value    Arch of the package
+   --wd value, -w value           Working directory to prepare the package (default: "pkg-build")
+   --output value, -o value       Output directory for the debian package files
+   --file value, -f value         Path to the deb.json file (default: "deb.json")
+   --version value                Version of the package
+   --arch value, -a value         Arch of the package
+   --compression value, -z value  Compression to use (via dpkg-deb -Z)
 ```
 
 ### test

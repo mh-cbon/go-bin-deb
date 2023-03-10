@@ -1,0 +1,14 @@
+github.com/fatih/color v1.0.0 h1:4zdNjpoprR9fed2QRCPb2VTPU4UFXEtJc9Vc+sgXkaQ=
+github.com/fatih/color v1.0.0/go.mod h1:Zm6kSWBoL9eyXnKyktHP6abPY2pDugNf5KwzbycvMj4=
+github.com/mattn/go-colorable v0.0.5 h1:X1IeP+MaFWC+vpbhw3y426rQftzXSj+N7eJFnBEMBfE=
+github.com/mattn/go-colorable v0.0.5/go.mod h1:9vuHe8Xs5qXnSaW/c/ABM9alt+Vo+STaOChaDxuIBZU=
+github.com/mattn/go-isatty v0.0.0-20151211000621-56b76bdf51f7 h1:owMyzMR4QR+jSdlfkX9jPU3rsby4++j99BfbtgVr6ZY=
+github.com/mattn/go-isatty v0.0.0-20151211000621-56b76bdf51f7/go.mod h1:M+lRXTBqGeGNdLjl/ufCoiOlB5xdOkqRJdNxMWT7Zi4=
+github.com/mattn/go-zglob v0.0.0-20160607002833-2dbd7f37a45e h1:CKUOoFXxmNBWmFTR23znmpAl2WMnDWd/FMjHuSw6mNg=
+github.com/mattn/go-zglob v0.0.0-20160607002833-2dbd7f37a45e/go.mod h1:9fxibJccNxU2cnpIKLRRFA7zX7qhkJIQWBb449FYHOo=
+github.com/mh-cbon/verbose v0.0.0-20160711150219-2b8e4118ca07 h1:TY5IdR1j46GCDiVVfs7Oc9JgpJoA2AmNPRH4oF9cX+g=
+github.com/mh-cbon/verbose v0.0.0-20160711150219-2b8e4118ca07/go.mod h1:oCHJllkeMGmtEJYsuGRMCY0XbgXHyOSZPxKD6O+rHoo=
+github.com/urfave/cli v1.18.0 h1:m9MfmZWX7bwr9kUcs/Asr95j0IVXzGNNc+/5ku2m26Q=
+github.com/urfave/cli v1.18.0/go.mod h1:70zkFmudgCuE/ngEzBv17Jvp/497gISqfk5gWijbERA=
+golang.org/x/sys v0.0.0-20160704031755-a408501be4d1 h1:QtO5ZFD1u7KisZhuRLL2GaZAZDdJqUcTdjFJj8OEePA=
+golang.org/x/sys v0.0.0-20160704031755-a408501be4d1/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
